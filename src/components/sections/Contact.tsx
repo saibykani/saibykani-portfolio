@@ -135,12 +135,9 @@ export default function Contact() {
                       <span className="text-xs font-bold text-white tracking-wider">Open in Gmail</span>
                     </a>
                   </div>
-              </div>
             </div>
           </div>
-
         </div>
-
       </div>
     </section>
   );
