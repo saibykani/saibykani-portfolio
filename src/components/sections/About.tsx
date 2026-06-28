@@ -111,11 +111,10 @@ export default function About() {
               <div className="relative w-[320px] h-[420px] sm:w-[360px] sm:h-[480px] rounded-2xl overflow-hidden border border-white/[0.08] shadow-2xl shadow-black/50 bg-[#0a0a0a]">
 
                 {/* Portrait */}
-                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/portrait.png"
                   alt="Sai Krishna Bykani"
-                  className="w-full h-full object-contain object-bottom transition-transform duration-700 hover:scale-[1.03]"
+                  className="w-full h-full object-cover object-top transition-transform duration-700 hover:scale-[1.03]"
                   style={{ filter: "contrast(1.05) brightness(0.95)" }}
                 />
               </div>

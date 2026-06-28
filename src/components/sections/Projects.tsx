@@ -43,7 +43,7 @@ export default function Projects() {
           </h2>
           <div className="h-1 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full w-24 my-2" />
           <p className="text-sm text-slate-400 max-w-xl leading-relaxed">
-            A deep dive into the architecture, testing strategies, and business impact of the core platforms I have engineered automation for.
+            A deep dive into automation, manual testing, performance engineering, API validation, and the business impact of the core platforms I have engineered.
           </p>
         </div>
 
