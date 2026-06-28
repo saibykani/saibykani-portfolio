@@ -345,7 +345,6 @@ export default function Skills() {
         },
       ],
     },
-    },
   ];
 
   const metrics = [
