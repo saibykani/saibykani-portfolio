@@ -1,5 +1,6 @@
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/sections/Hero";
+import About from "@/components/sections/About";
 import Skills from "@/components/sections/Skills";
 import Projects from "@/components/sections/Projects";
 import Experience from "@/components/sections/Experience";
@@ -12,12 +13,15 @@ import AIChatbot from "@/components/AIChatbot";
 
 export default function Home() {
   return (
-    <main className="min-h-screen relative overflow-hidden bg-[#050816]">
+    <main className="min-h-screen relative overflow-hidden bg-black">
       {/* Sticky Pill Navigation Header */}
       <Navbar />
 
-      {/* Hero Intro Section & Drift Tech Badges */}
+      {/* Hero Intro Section */}
       <Hero />
+
+      {/* About Me Section with Portrait */}
+      <About />
 
       {/* Skills Orbit Grid */}
       <div id="skills">
