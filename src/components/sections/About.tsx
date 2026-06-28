@@ -28,7 +28,7 @@ export default function About() {
                   src="/portrait.png" 
                   alt="Sai Krishna Bykani"
                   fill
-                  className="object-cover object-top grayscale hover:grayscale-0 transition-all duration-500"
+                  className="object-cover object-top transition-all duration-500"
                   sizes="(max-width: 768px) 192px, 256px"
                 />
               </div>
@@ -36,8 +36,8 @@ export default function About() {
             <h3 className="text-3xl font-extrabold text-white tracking-tight mb-2 text-center lg:text-left">
               {resumeData.personal.name}
             </h3>
-            <p className="text-blue-400 font-bold text-sm uppercase tracking-widest text-center lg:text-left">
-              {resumeData.personal.title}
+            <p className="text-[#60A5FA] font-bold text-[11px] uppercase tracking-widest text-center lg:text-left leading-relaxed">
+              SOFTWARE DEVELOPMENT ENGINEER IN TEST (SDET)
             </p>
           </motion.div>
 
@@ -51,7 +51,7 @@ export default function About() {
           >
             <div className="space-y-4">
               <h2 className="text-sm font-bold tracking-widest uppercase text-slate-500">
-                01 // Professional Summary
+                Professional Summary
               </h2>
               <p className="text-lg text-slate-300 leading-relaxed font-medium">
                 {resumeData.personal.summary}

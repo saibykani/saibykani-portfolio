@@ -59,12 +59,12 @@ const TypewriterText = () => {
   }, [displayText, isDeleting, roleIndex]);
 
   return (
-    <span className="text-[#60A5FA] font-semibold text-[18px] sm:text-[22px] md:text-[26px] lg:text-[32px] flex items-center">
+    <span className="text-[#60A5FA] font-black tracking-tight text-[32px] sm:text-[48px] md:text-[60px] lg:text-[70px] leading-tight flex items-center justify-center flex-wrap max-w-[90vw]">
       {displayText}
       <motion.span
         animate={{ opacity: [1, 0] }}
         transition={{ duration: 0.8, repeat: Infinity, repeatType: "reverse" }}
-        className="inline-block w-0.5 h-6 sm:h-8 bg-[#60A5FA] ml-1"
+        className="inline-block w-1 md:w-2 h-[40px] sm:h-[60px] md:h-[70px] lg:h-[80px] bg-[#60A5FA] ml-2"
       />
     </span>
   );
@@ -99,37 +99,22 @@ export default function Hero() {
           👋 Hi, I&apos;m Sai Krishna Bykani
         </motion.div>
 
-        {/* Main Heading */}
-        <div className="mb-6">
-          {headingLines.map((line, idx) => (
-            <div key={idx} className="overflow-hidden">
-              <motion.h1 
-                initial={{ opacity: 0, y: "100%" }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.2 + idx * 0.1, ease: [0.16, 1, 0.3, 1] }}
-                className="text-[48px] sm:text-[70px] md:text-[90px] lg:text-[120px] font-[900] tracking-tighter leading-[0.95] text-transparent bg-clip-text bg-gradient-to-b from-white to-slate-400"
-              >
-                {line}
-              </motion.h1>
-            </div>
-          ))}
+        {/* Typewriter Role as Main Focus */}
+        <div className="mb-12 mt-16 min-h-[120px] flex items-center justify-center">
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+          >
+            <TypewriterText />
+          </motion.div>
         </div>
-
-        {/* Typewriter Role */}
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="mb-8 min-h-[40px] flex items-center justify-center"
-        >
-          <TypewriterText />
-        </motion.div>
 
         {/* Description */}
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.7, ease: "easeOut" }}
+          transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
           className="text-base sm:text-lg md:text-xl text-slate-400 max-w-[700px] mx-auto leading-relaxed font-medium mb-12"
         >
           Building enterprise-grade automation frameworks, validating mission-critical payment systems, and delivering reliable software through UI automation, API testing, backend validation, and performance engineering.
@@ -139,8 +124,8 @@ export default function Hero() {
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.8, ease: "easeOut" }}
-          className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4 mb-20"
+          transition={{ duration: 0.8, delay: 0.7, ease: "easeOut" }}
+          className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4"
         >
           <Link
             href="#projects"
@@ -159,36 +144,6 @@ export default function Hero() {
             <Download className="ml-2 w-4 h-4 group-hover:-translate-y-1 transition-transform" />
           </a>
         </motion.div>
-
-        {/* Floating Technology Chips */}
-        <div className="relative w-full max-w-4xl mx-auto flex flex-wrap justify-center gap-3">
-          {TECHNOLOGIES.map((tech, idx) => (
-            <motion.div
-              key={tech}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{
-                duration: 0.6,
-                delay: 1 + idx * 0.05,
-                ease: "easeOut"
-              }}
-            >
-              <motion.div
-                animate={{ y: [0, -5, 0] }}
-                transition={{
-                  duration: 4 + Math.random() * 2,
-                  repeat: Infinity,
-                  repeatType: "reverse",
-                  ease: "easeInOut",
-                  delay: Math.random() * 2
-                }}
-                className="px-4 py-2 rounded-xl border border-white/5 bg-white/[0.02] backdrop-blur-md text-slate-300 text-xs font-medium shadow-sm hover:border-white/20 transition-colors"
-              >
-                {tech}
-              </motion.div>
-            </motion.div>
-          ))}
-        </div>
 
       </div>
     </section>

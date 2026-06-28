@@ -12,22 +12,22 @@ type Project = typeof resumeData.projects[0];
 const SvgArchitecture = ({ type, nodes }: { type: string, nodes: string[] }) => {
   // We simulate an animated glowing data packet flowing through nodes
   return (
-    <div className="w-full bg-[#0a0a0c] border border-white/10 rounded-2xl p-8 relative overflow-hidden my-8">
+    <div className="w-full bg-[#0a0a0c] border border-white/10 rounded-2xl p-4 sm:p-6 relative overflow-hidden my-4">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-white/[0.03] via-transparent to-transparent pointer-events-none" />
       
-      <div className="flex flex-col items-center space-y-6 relative z-10">
+      <div className="flex flex-col items-center space-y-2 relative z-10">
         {nodes.map((node, index) => (
           <div key={node} className="flex flex-col items-center relative">
             <motion.div 
               whileHover={{ scale: 1.05 }}
-              className="px-6 py-3 rounded-lg border border-white/20 bg-white/[0.02] backdrop-blur-md shadow-[0_0_15px_rgba(255,255,255,0.05)] text-sm font-semibold tracking-wide text-white min-w-[200px] text-center relative overflow-hidden group"
+              className="px-4 py-2 rounded-lg border border-white/20 bg-white/[0.02] backdrop-blur-md shadow-[0_0_15px_rgba(255,255,255,0.05)] text-xs font-semibold tracking-wide text-white min-w-[180px] text-center relative overflow-hidden group"
             >
               <div className="absolute inset-0 bg-white/5 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
               <span className="relative z-10">{node}</span>
             </motion.div>
 
             {index < nodes.length - 1 && (
-              <div className="h-10 w-px bg-white/10 relative my-1">
+              <div className="h-6 w-px bg-white/10 relative my-1">
                 {/* Glowing Data Packet Animation */}
                 <motion.div
                   initial={{ top: 0, opacity: 0 }}
@@ -38,7 +38,7 @@ const SvgArchitecture = ({ type, nodes }: { type: string, nodes: string[] }) => 
                     ease: "linear",
                     delay: index * 0.2 // Stagger the flow
                   }}
-                  className="absolute left-1/2 -translate-x-1/2 w-1.5 h-3 rounded-full bg-blue-400 shadow-[0_0_10px_rgba(96,165,250,0.8)]"
+                  className="absolute left-1/2 -translate-x-1/2 w-1.5 h-2 rounded-full bg-blue-400 shadow-[0_0_10px_rgba(96,165,250,0.8)]"
                 />
               </div>
             )}
@@ -64,7 +64,7 @@ export default function Projects() {
           className="mb-16 text-center sm:text-left"
         >
           <h2 className="text-sm font-bold tracking-widest uppercase text-slate-500 mb-2">
-            03 // Case Studies
+            Projects
           </h2>
           <h3 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
             Engineering Platforms.

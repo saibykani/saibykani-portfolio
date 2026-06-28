@@ -30,10 +30,10 @@ export default function Experience() {
           className="mb-16"
         >
           <h2 className="text-sm font-bold tracking-widest uppercase text-slate-500 mb-2">
-            02 // Timeline
+            Timeline
           </h2>
           <h3 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-            Professional Experience.
+            Experience.
           </h3>
         </motion.div>
 
