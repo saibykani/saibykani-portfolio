@@ -117,7 +117,7 @@ export default function AIChatbot() {
       {/* Floating Toggle Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 right-6 z-50 p-4 rounded-full bg-gradient-to-tr from-orange-500 to-red-600 text-white shadow-xl shadow-orange-500/20 hover:shadow-orange-500/40 hover:scale-105 active:scale-95 transition-all duration-300 focus:outline-none"
+        className="fixed bottom-6 right-6 z-50 p-4 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 text-white shadow-xl shadow-blue-500/20 hover:shadow-blue-500/40 hover:scale-105 active:scale-95 transition-all duration-300 focus:outline-none"
       >
         {isOpen ? <X className="w-5 h-5" /> : <MessageSquare className="w-5 h-5" />}
         <span className="absolute top-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-400 border border-slate-900 animate-pulse" />
@@ -125,11 +125,11 @@ export default function AIChatbot() {
 
       {/* Chat Drawer Dialog */}
       {isOpen && (
-        <div className="fixed bottom-24 right-6 w-[360px] max-w-[90vw] h-[480px] rounded-2xl glass-premium z-50 flex flex-col overflow-hidden animate-in slide-in-from-bottom-5 duration-300">
+        <div className="fixed bottom-24 right-6 w-[360px] max-w-[90vw] h-[480px] rounded-2xl bg-[#09090b] border border-white/[0.06] z-50 flex flex-col overflow-hidden animate-in slide-in-from-bottom-5 duration-300 shadow-2xl shadow-black/80">
           {/* Header */}
-          <div className="px-5 py-4 bg-[#0a0f20]/90 border-b border-white/5 flex items-center justify-between">
+          <div className="px-5 py-4 bg-[#050508]/90 border-b border-white/[0.06] flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 rounded-full bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-400">
+              <div className="w-8 h-8 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
                 <Bot className="w-4 h-4" />
               </div>
               <div>
@@ -152,14 +152,14 @@ export default function AIChatbot() {
                 <div
                   className={`max-w-[85%] rounded-2xl px-4 py-2.5 leading-relaxed ${
                     msg.sender === "user"
-                      ? "bg-gradient-to-r from-orange-500 to-red-650 text-white rounded-br-none"
-                      : "bg-white/5 border border-white/5 text-slate-200 rounded-bl-none"
+                      ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-br-none"
+                      : "bg-white/[0.04] border border-white/[0.06] text-slate-200 rounded-bl-none"
                   }`}
                 >
                   <p className="whitespace-pre-line leading-relaxed text-xs">
                     {msg.text}
                   </p>
-                  <span className="block text-[8px] text-slate-550 text-right mt-1.5 uppercase font-bold tracking-wider">
+                  <span className="block text-[8px] text-slate-500 text-right mt-1.5 uppercase font-bold tracking-wider">
                     {msg.timestamp}
                   </span>
                 </div>
@@ -168,7 +168,7 @@ export default function AIChatbot() {
 
             {isTyping && (
               <div className="flex justify-start">
-                <div className="bg-white/5 border border-white/5 rounded-2xl rounded-bl-none px-4 py-3 flex items-center space-x-1">
+                <div className="bg-white/[0.04] border border-white/[0.06] rounded-2xl rounded-bl-none px-4 py-3 flex items-center space-x-1">
                   <span className="w-1 h-1 rounded-full bg-slate-400 animate-bounce" />
                   <span className="w-1 h-1 rounded-full bg-slate-400 animate-bounce delay-75" />
                   <span className="w-1 h-1 rounded-full bg-slate-400 animate-bounce delay-150" />
@@ -180,12 +180,12 @@ export default function AIChatbot() {
 
           {/* Quick suggestions */}
           {messages.length === 1 && (
-            <div className="p-3 border-t border-white/5 bg-[#0a0f20]/20 flex flex-wrap gap-2">
+            <div className="p-3 border-t border-white/[0.06] bg-[#050508]/20 flex flex-wrap gap-2">
               {quickQuestions.map((qq) => (
                 <button
                   key={qq.label}
                   onClick={() => handleSend(qq.query)}
-                  className="px-3 py-1 rounded-full bg-white/5 hover:bg-white/10 border border-white/5 text-[10px] text-orange-400 font-bold transition-all font-sans"
+                  className="px-3 py-1 rounded-full bg-white/[0.03] hover:bg-white/[0.08] border border-white/[0.06] text-[10px] text-blue-400 font-bold transition-all font-sans"
                 >
                   {qq.label}
                 </button>
@@ -194,18 +194,18 @@ export default function AIChatbot() {
           )}
 
           {/* Input Panel */}
-          <div className="p-3.5 border-t border-white/5 bg-[#0a0f20]/90 flex items-center space-x-2">
+          <div className="p-3.5 border-t border-white/[0.06] bg-[#050508]/90 flex items-center space-x-2">
             <input
               type="text"
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSend(inputValue)}
               placeholder="Ask a question..."
-              className="flex-1 min-w-0 bg-black/40 border border-white/5 rounded-full px-4 py-2 text-xs text-slate-200 placeholder-slate-550 focus:outline-none focus:border-orange-500/60 focus:ring-1 focus:ring-orange-500/20"
+              className="flex-1 min-w-0 bg-black/40 border border-white/[0.06] rounded-full px-4 py-2 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500/60 focus:ring-1 focus:ring-blue-500/20"
             />
             <button
               onClick={() => handleSend(inputValue)}
-              className="p-2 rounded-full bg-gradient-to-r from-orange-500 to-red-600 text-white transition-colors"
+              className="p-2 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white transition-colors"
             >
               <Send className="w-3.5 h-3.5" />
             </button>

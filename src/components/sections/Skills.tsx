@@ -156,26 +156,6 @@ export default function Skills() {
             </svg>
           ),
         },
-        {
-          name: "JSON",
-          progress: "w-[92%]",
-          barColor: "bg-[#a0a0a0]",
-          icon: (
-            <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none">
-              <text x="12" y="16" textAnchor="middle" fill="#a0a0a0" fontSize="7" fontWeight="bold" fontFamily="monospace">{`{}`}</text>
-            </svg>
-          ),
-        },
-        {
-          name: "XML",
-          progress: "w-[85%]",
-          barColor: "bg-[#f0ad4e]",
-          icon: (
-            <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none">
-              <text x="12" y="16" textAnchor="middle" fill="#f0ad4e" fontSize="6" fontWeight="bold" fontFamily="monospace">{`</>`}</text>
-            </svg>
-          ),
-        },
       ],
     },
     {
@@ -365,33 +345,6 @@ export default function Skills() {
         },
       ],
     },
-    {
-      title: "Test Management",
-      label: "MANAGEMENT",
-      skills: [
-        {
-          name: "Jira",
-          progress: "w-[90%]",
-          barColor: "bg-[#0052cc]",
-          icon: (
-            <svg className="w-8 h-8" viewBox="0 0 24 24" fill="#0052cc">
-              <path d="M12.005 2c-5.263 8.304-1.456 12 0 13.456C13.456 14 17.263 10.304 12.005 2zM5.5 16.5L12 10l6.5 6.5c-3.5 3.5-9.5 3.5-13 0z"/>
-            </svg>
-          ),
-        },
-        {
-          name: "Spira",
-          progress: "w-[82%]",
-          barColor: "bg-[#6366f1]",
-          icon: (
-            <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none">
-              <rect x="3" y="3" width="18" height="18" rx="4" fill="#6366f1" opacity="0.12"/>
-              <path d="M8 8h8M8 12h6M8 16h4" stroke="#6366f1" strokeWidth="2" strokeLinecap="round"/>
-              <circle cx="18" cy="16" r="2" fill="#6366f1"/>
-            </svg>
-          ),
-        },
-      ],
     },
   ];
 
@@ -399,7 +352,6 @@ export default function Skills() {
     { title: "Technologies", value: "28+ Core Tools", icon: Wrench, color: "text-[#a78bfa] bg-[#a78bfa]/10" },
     { title: "Frameworks", value: "4+ Custom Built", icon: Rocket, color: "text-[#fb7185] bg-[#fb7185]/10" },
     { title: "Experience", value: "3+ Years Professional", icon: Zap, color: "text-[#fb923c] bg-[#fb923c]/10" },
-    { title: "Quality", value: "Enterprise-Grade", icon: Shield, color: "text-[#22d3ee] bg-[#22d3ee]/10" },
   ];
 
   return (
@@ -482,7 +434,7 @@ export default function Skills() {
         </div>
 
         {/* Summary Metrics */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-16">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-16">
           {metrics.map((m) => {
             const Icon = m.icon;
             return (

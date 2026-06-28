@@ -17,35 +17,37 @@ export default function Contact() {
     e.preventDefault();
     if (!formData.name || !formData.email || !formData.message) return;
 
-    setStatus("sending");
-    
-    setTimeout(() => {
-      setStatus("success");
-      setFormData({ name: "", email: "", subject: "", message: "" });
-    }, 1500);
+    // Use mailto to send email natively with user's client
+    const mailtoUrl = `mailto:${resumeData.personal.email}?subject=${encodeURIComponent(
+      formData.subject || `Portfolio Contact from ${formData.name}`
+    )}&body=${encodeURIComponent(
+      `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
+    )}`;
+    window.location.href = mailtoUrl;
+
+    setStatus("success");
+    setFormData({ name: "", email: "", subject: "", message: "" });
   };
 
   return (
     <section id="contact" className="py-24 relative overflow-hidden">
       
       {/* Background radial glow */}
-      <div className="absolute top-[10%] left-[-10%] w-[350px] h-[350px] rounded-full bg-orange-500/5 filter blur-3xl pointer-events-none" />
+      <div className="absolute top-[10%] left-[-10%] w-[350px] h-[350px] rounded-full bg-blue-500/[0.04] filter blur-[120px] pointer-events-none" />
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Title Header */}
         <div className="max-w-3xl mb-16 text-center sm:text-left space-y-3">
-          <div className="text-orange-500 text-[10px] font-bold tracking-widest uppercase">
-            Start a Conversation
+          <div className="text-[10px] text-gray-600 font-bold uppercase tracking-[0.3em]">
+            07
           </div>
-          <h2 className="text-3xl sm:text-4.5xl font-extrabold tracking-tight text-white leading-tight">
-            <span className="bg-gradient-to-r from-orange-500 to-red-650 bg-clip-text text-transparent">
-              Contact Me
-            </span>
+          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white leading-tight">
+            Contact Me
           </h2>
-          <div className="h-1 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full w-24 my-2" />
-          <p className="text-sm text-slate-400 max-w-xl leading-relaxed">
-            Please submit a request to schedule a technical interview session or discuss framework architectures.
+          <div className="w-12 h-[2px] bg-gradient-to-r from-blue-500 to-indigo-500 my-4" />
+          <p className="text-sm text-gray-500 max-w-xl leading-relaxed">
+            Please submit a request to schedule a technical interview session or discuss automation frameworks.
           </p>
         </div>
 
@@ -54,22 +56,22 @@ export default function Contact() {
           
           {/* Left panel: Info anchors */}
           <div className="lg:col-span-5 space-y-6">
-            <div className="p-8 rounded-2xl glass-premium h-full flex flex-col justify-between">
+            <div className="p-8 rounded-2xl bg-[#09090b] border border-white/[0.06] h-full flex flex-col justify-between">
               
               <div className="space-y-6 text-xs text-slate-400">
-                <div className="border-b border-white/5 pb-4 mb-4">
+                <div className="border-b border-white/[0.06] pb-4 mb-4">
                   <span className="text-[9px] text-slate-500 tracking-widest uppercase font-bold">Contact details</span>
                   <h3 className="text-sm font-extrabold text-white mt-1">Sai Krishna Bykani</h3>
                 </div>
 
                 {/* Email */}
                 <div className="flex items-start space-x-3.5">
-                  <div className="w-8 h-8 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-400 shrink-0">
+                  <div className="w-8 h-8 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 shrink-0">
                     <Mail className="w-4 h-4" />
                   </div>
                   <div className="space-y-1">
                     <span className="text-[9px] text-slate-500 block uppercase font-bold tracking-wider">Email Address</span>
-                    <a href={`mailto:${resumeData.personal.email}`} className="text-white hover:text-orange-500 transition-colors text-xs font-semibold">
+                    <a href={`mailto:${resumeData.personal.email}`} className="text-white hover:text-blue-400 transition-colors text-xs font-semibold">
                       {resumeData.personal.email}
                     </a>
                   </div>
@@ -77,12 +79,12 @@ export default function Contact() {
 
                 {/* Phone */}
                 <div className="flex items-start space-x-3.5">
-                  <div className="w-8 h-8 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-400 shrink-0">
+                  <div className="w-8 h-8 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 shrink-0">
                     <Phone className="w-4 h-4" />
                   </div>
                   <div className="space-y-1">
-                    <span className="text-[9px] text-slate-550 block uppercase font-bold tracking-wider">Phone number</span>
-                    <a href={`tel:${resumeData.personal.phone}`} className="text-white hover:text-orange-500 transition-colors text-xs font-semibold">
+                    <span className="text-[9px] text-slate-500 block uppercase font-bold tracking-wider">Phone number</span>
+                    <a href={`tel:${resumeData.personal.phone}`} className="text-white hover:text-blue-400 transition-colors text-xs font-semibold">
                       {resumeData.personal.phone}
                     </a>
                   </div>
@@ -90,11 +92,11 @@ export default function Contact() {
 
                 {/* Location */}
                 <div className="flex items-start space-x-3.5">
-                  <div className="w-8 h-8 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-400 shrink-0">
+                  <div className="w-8 h-8 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 shrink-0">
                     <MapPin className="w-4 h-4" />
                   </div>
                   <div className="space-y-1">
-                    <span className="text-[9px] text-slate-550 block uppercase font-bold tracking-wider">Base Location</span>
+                    <span className="text-[9px] text-slate-500 block uppercase font-bold tracking-wider">Base Location</span>
                     <p className="text-white text-xs font-semibold">
                       {resumeData.personal.location}
                     </p>
@@ -103,12 +105,12 @@ export default function Contact() {
               </div>
 
               {/* Social links row */}
-              <div className="border-t border-white/5 pt-6 mt-8 flex items-center space-x-4">
+              <div className="border-t border-white/[0.06] pt-6 mt-8 flex items-center space-x-4">
                 <a
                   href={resumeData.personal.linkedin}
                   target="_blank"
                   rel="noreferrer"
-                  className="flex items-center space-x-1.5 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-[10px] font-bold text-slate-400 hover:text-white transition-all hover:bg-orange-500/10 hover:border-orange-500/20"
+                  className="flex items-center space-x-1.5 px-4 py-2 rounded-full bg-white/[0.03] border border-white/[0.06] text-[10px] font-bold text-slate-400 hover:text-white transition-all hover:bg-blue-500/10 hover:border-blue-500/20"
                 >
                   <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
@@ -121,7 +123,7 @@ export default function Contact() {
                   href={resumeData.personal.github}
                   target="_blank"
                   rel="noreferrer"
-                  className="flex items-center space-x-1.5 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-[10px] font-bold text-slate-400 hover:text-white transition-all hover:bg-orange-500/10 hover:border-orange-500/20"
+                  className="flex items-center space-x-1.5 px-4 py-2 rounded-full bg-white/[0.03] border border-white/[0.06] text-[10px] font-bold text-slate-400 hover:text-white transition-all hover:bg-blue-500/10 hover:border-blue-500/20"
                 >
                   <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
@@ -136,7 +138,7 @@ export default function Contact() {
 
           {/* Right panel: Submission Form */}
           <div className="lg:col-span-7">
-            <div className="p-8 rounded-2xl glass-premium h-full flex flex-col justify-center overflow-hidden">
+            <div className="p-8 rounded-2xl bg-[#09090b] border border-white/[0.06] h-full flex flex-col justify-center overflow-hidden">
               
               {status === "success" ? (
                 // Success trigger state
@@ -148,18 +150,18 @@ export default function Contact() {
                   </div>
                   
                   <h3 className="text-sm font-bold text-white uppercase tracking-wider">
-                    Message Dispatched
+                    Message Prepared
                   </h3>
                   
                   <p className="text-xs text-slate-400 max-w-sm mx-auto leading-relaxed">
-                    Thank you! Your message payload has been successfully dispatched. Sai will review and respond to you shortly.
+                    Thank you! Your email client has been opened with your message. Please send it to connect with me.
                   </p>
 
                   <button
                     onClick={() => setStatus("idle")}
-                    className="px-4 py-2 rounded-full bg-white/5 border border-white/5 hover:bg-white/10 text-xs font-bold text-orange-400 transition-all font-sans"
+                    className="px-4 py-2 rounded-full bg-white/[0.03] border border-white/[0.06] hover:bg-white/[0.08] text-xs font-bold text-blue-400 transition-all font-sans"
                   >
-                    Send Another Message
+                    Draft Another Message
                   </button>
                 </div>
               ) : (
@@ -176,7 +178,7 @@ export default function Contact() {
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         placeholder="E.g. Hiring Manager"
-                        className="w-full bg-[#050508]/60 border border-white/5 rounded-xl px-4 py-3 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-orange-500/60 focus:ring-1 focus:ring-orange-500/20 transition-all"
+                        className="w-full bg-[#050508]/60 border border-white/[0.06] rounded-xl px-4 py-3 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500/60 focus:ring-1 focus:ring-blue-500/20 transition-all"
                       />
                     </div>
                     {/* Email */}
@@ -188,7 +190,7 @@ export default function Contact() {
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         placeholder="E.g. manager@company.com"
-                        className="w-full bg-[#050508]/60 border border-white/5 rounded-xl px-4 py-3 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-orange-500/60 focus:ring-1 focus:ring-orange-500/20 transition-all"
+                        className="w-full bg-[#050508]/60 border border-white/[0.06] rounded-xl px-4 py-3 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500/60 focus:ring-1 focus:ring-blue-500/20 transition-all"
                       />
                     </div>
                   </div>
@@ -201,7 +203,7 @@ export default function Contact() {
                       value={formData.subject}
                       onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
                       placeholder="E.g. Technical Interview Schedule"
-                      className="w-full bg-[#050508]/60 border border-white/5 rounded-xl px-4 py-3 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-orange-500/60 focus:ring-1 focus:ring-orange-500/20 transition-all"
+                      className="w-full bg-[#050508]/60 border border-white/[0.06] rounded-xl px-4 py-3 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500/60 focus:ring-1 focus:ring-blue-500/20 transition-all"
                     />
                   </div>
 
@@ -214,17 +216,16 @@ export default function Contact() {
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                       placeholder="Compose message..."
-                      className="w-full bg-[#050508]/60 border border-white/5 rounded-xl px-4 py-3 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-orange-500/60 focus:ring-1 focus:ring-orange-500/20 transition-all resize-none"
+                      className="w-full bg-[#050508]/60 border border-white/[0.06] rounded-xl px-4 py-3 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500/60 focus:ring-1 focus:ring-blue-500/20 transition-all resize-none"
                     />
                   </div>
 
                   {/* Send Button */}
                   <button
                     type="submit"
-                    disabled={status === "sending"}
-                    className="w-full py-3 rounded-full bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white font-bold tracking-wider uppercase transition-all flex items-center justify-center space-x-2 shadow-lg shadow-orange-500/10 hover:scale-[1.01]"
+                    className="w-full py-3 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold tracking-wider uppercase transition-all flex items-center justify-center space-x-2 shadow-lg shadow-blue-500/20 hover:scale-[1.01]"
                   >
-                    <span>{status === "sending" ? "Sending..." : "Send Message"}</span>
+                    <span>Open in Email Client</span>
                     <Send className="w-3.5 h-3.5" />
                   </button>
 
