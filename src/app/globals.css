@@ -64,7 +64,7 @@ body {
 .glass-premium:hover {
   background: rgba(255, 255, 255, 0.05);
   border-color: rgba(255, 255, 255, 0.12);
-  box-shadow: 0 30px 60px -12px rgba(249, 115, 22, 0.08);
+  box-shadow: 0 30px 60px -12px rgba(255, 255, 255, 0.05);
 }
 
 .glass-pill {
@@ -90,15 +90,15 @@ body {
   position: absolute;
   inset: 0;
   transition: all 2s ease-linear;
-  background: radial-gradient(circle at 20% 50%, rgb(11, 13, 7) 0%, transparent 80%),
-              radial-gradient(circle at 80% 20%, rgb(5, 10, 5) 0%, transparent 80%),
-              linear-gradient(135deg, rgb(2, 2, 4) 0%, rgb(1, 2, 2) 100%);
+  background: radial-gradient(circle at 20% 50%, rgba(30, 30, 35, 0.4) 0%, transparent 80%),
+              radial-gradient(circle at 80% 20%, rgba(20, 20, 25, 0.4) 0%, transparent 80%),
+              linear-gradient(135deg, rgb(5, 5, 5) 0%, rgb(0, 0, 0) 100%);
 }
 
 .aurora-ambiance {
   position: absolute;
   inset: 0;
-  opacity: 0.12;
+  opacity: 0.15;
 }
 
 .aurora-sphere-1 {
@@ -106,7 +106,7 @@ body {
   width: 250px;
   height: 250px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgb(31, 58, 71) 0%, transparent 85%);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, transparent 85%);
   filter: blur(80px);
   left: 20%;
   top: 25%;
@@ -117,7 +117,7 @@ body {
   width: 400px;
   height: 400px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgb(65, 31, 71) 0%, transparent 85%);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.04) 0%, transparent 85%);
   filter: blur(95px);
   left: 65%;
   top: 45%;

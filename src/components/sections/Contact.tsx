@@ -6,10 +6,6 @@ import resumeData from "@/data/resumeData.json";
 export default function Contact() {
   return (
     <section id="contact" className="py-24 relative overflow-hidden">
-      
-      {/* Background radial glow */}
-      <div className="absolute top-[10%] left-[-10%] w-[350px] h-[350px] rounded-full bg-blue-500/[0.04] filter blur-[120px] pointer-events-none" />
-
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Title Header */}
@@ -160,7 +156,7 @@ export default function Contact() {
 
                 <button 
                   type="submit"
-                  className="w-full py-4 mt-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-extrabold tracking-widest uppercase transition-all shadow-lg shadow-blue-500/20"
+                  className="w-full py-4 mt-2 bg-white text-black hover:bg-slate-200 rounded-xl text-xs font-extrabold tracking-widest uppercase transition-all"
                 >
                   Send Message
                 </button>

@@ -10,9 +10,6 @@ export default function Footer() {
 
   return (
     <footer className="relative border-t border-white/5 bg-[#050508]/90 backdrop-blur-xl py-12 z-20 overflow-hidden font-sans">
-      {/* Background radial glow */}
-      <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-orange-500/10 to-transparent" />
-      
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="flex flex-col md:flex-row justify-between items-center gap-6">
           
@@ -21,7 +18,7 @@ export default function Footer() {
             <span className="text-sm font-extrabold tracking-wider text-white">
               SAI KRISHNA BYKANI
             </span>
-            <span className="w-1.5 h-1.5 rounded-full bg-orange-500" />
+            <span className="w-1.5 h-1.5 rounded-full bg-slate-400" />
             <span className="text-[10px] text-slate-500 tracking-wider font-semibold uppercase pl-2 border-l border-white/10">
               SDET & Quality Architect
             </span>
@@ -30,9 +27,9 @@ export default function Footer() {
           {/* Nav tags */}
           <div className="flex items-center space-x-6 text-[10px] font-bold tracking-widest uppercase">
             <Link href="#about" className="text-slate-400 hover:text-white transition-colors">About</Link>
-            <Link href="#skills" className="text-slate-400 hover:text-white transition-colors">Skills</Link>
+            <Link href="#experience" className="text-slate-400 hover:text-white transition-colors">Experience</Link>
+            <Link href="#skills" className="text-slate-400 hover:text-white transition-colors">Tech</Link>
             <Link href="#projects" className="text-slate-400 hover:text-white transition-colors">Projects</Link>
-            <Link href="/resume" className="text-slate-400 hover:text-white transition-colors">Resume</Link>
           </div>
 
           {/* Socials */}
@@ -41,7 +38,7 @@ export default function Footer() {
               href={resumeData.personal.linkedin}
               target="_blank"
               rel="noreferrer"
-              className="w-8 h-8 rounded-full border border-white/10 bg-white/5 hover:bg-orange-600 hover:border-orange-500/30 flex items-center justify-center text-slate-400 hover:text-white transition-all duration-300"
+              className="w-8 h-8 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 hover:border-white/30 flex items-center justify-center text-slate-400 hover:text-white transition-all duration-300"
             >
               <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
@@ -53,7 +50,7 @@ export default function Footer() {
               href={resumeData.personal.github}
               target="_blank"
               rel="noreferrer"
-              className="w-8 h-8 rounded-full border border-white/10 bg-white/5 hover:bg-orange-600 hover:border-orange-500/30 flex items-center justify-center text-slate-400 hover:text-white transition-all duration-300"
+              className="w-8 h-8 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 hover:border-white/30 flex items-center justify-center text-slate-400 hover:text-white transition-all duration-300"
             >
               <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />

@@ -1,132 +1,73 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
+import resumeData from "@/data/resumeData.json";
+import { Terminal, Database, Code2 } from "lucide-react";
 
 export default function About() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) setIsVisible(true);
-      },
-      { threshold: 0.2 }
-    );
-    if (sectionRef.current) observer.observe(sectionRef.current);
-    return () => observer.disconnect();
-  }, []);
-
-  const stats = [
-    { value: "3+", label: "Years Experience" },
-    { value: "2000+", label: "Automated Test Cases" },
-    { value: "1250+", label: "APIs Validated" },
-  ];
-
   return (
-    <section
-      id="about"
-      ref={sectionRef}
-      className="relative py-24 px-4 sm:px-6 lg:px-8 bg-black overflow-hidden"
-    >
-      {/* Subtle ambient glow */}
-      <div className="absolute top-1/2 right-0 w-[400px] h-[400px] bg-blue-500/[0.02] rounded-full blur-[120px] pointer-events-none" />
-
-      <div className="max-w-6xl mx-auto">
-        {/* Section Label */}
-        <div className="mb-16">
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white mt-2">
-            About Me
-          </h2>
-          <div className="w-12 h-[2px] bg-gradient-to-r from-cyan-500 to-blue-500 mt-4" />
-        </div>
-
-        {/* Content Grid: Text Left, Image Right */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          {/* Left: Text Content */}
-          <div
-            className={`space-y-6 transition-all duration-1000 ${
-              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-            }`}
+    <section id="about" className="py-24 relative border-t border-white/5">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
+          
+          {/* Left Column: Section Title */}
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8 }}
+            className="lg:col-span-4"
           >
-            <p className="text-[15px] text-gray-300 leading-[1.8]">
-              I&apos;m a Software Development Engineer in Test (SDET) with over 3 years
-              of experience building scalable automation frameworks and ensuring
-              software quality for enterprise payment applications. My expertise
-              spans UI automation, API testing, backend validation, and
-              performance engineering, helping deliver reliable and secure digital
-              payment solutions.
-            </p>
+            <h2 className="text-sm font-bold tracking-widest uppercase text-slate-500 mb-2">
+              01 // Profile
+            </h2>
+            <h3 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+              Professional <br /> Summary.
+            </h3>
+          </motion.div>
 
-            <p className="text-[15px] text-gray-400 leading-[1.8]">
-              Throughout my journey at Toucan Payments, I&apos;ve worked on
-              mission-critical payment systems, automating end-to-end workflows
-              using Java, Selenium WebDriver, Cucumber, REST Assured, Postman,
-              and Apache JMeter. I enjoy transforming complex testing challenges
-              into robust automation solutions that improve release quality and
-              reduce manual effort.
-            </p>
-
-            <p className="text-[15px] text-gray-400 leading-[1.8]">
-              I believe quality is not just about finding defects — it&apos;s about
-              engineering confidence into every release. By combining automation,
-              API validation, database verification, and performance testing, I
-              help teams ship faster while maintaining stability, scalability,
-              and exceptional user experiences.
-            </p>
-
-            {/* Stats Row */}
-            <div
-              className={`flex items-center gap-10 pt-6 border-t border-white/[0.06] transition-all duration-1000 delay-300 ${
-                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-              }`}
-            >
-              {stats.map((st, i) => (
-                <div key={st.label} className="space-y-1">
-                  <span
-                    className={`text-2xl sm:text-3xl font-extrabold block ${
-                      i === 1
-                        ? "text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400"
-                        : "text-white"
-                    }`}
-                  >
-                    {st.value}
-                  </span>
-                  <span className="text-[10px] text-gray-500 uppercase tracking-[0.15em] font-semibold block">
-                    {st.label}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Right: Portrait Image */}
-          <div
-            className={`flex justify-center lg:justify-end transition-all duration-1000 delay-200 ${
-              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-            }`}
+          {/* Right Column: Content */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="lg:col-span-8 space-y-8"
           >
-            <div className="relative">
-              {/* Image Container */}
-              <div className="relative w-[320px] h-[420px] sm:w-[360px] sm:h-[480px] rounded-2xl overflow-hidden border border-white/[0.08] shadow-2xl shadow-black/50 bg-[#0a0a0a]">
+            <p className="text-lg text-slate-300 leading-relaxed font-medium">
+              {resumeData.personal.summary}
+            </p>
 
-                {/* Portrait */}
-                <img
-                  src="/portrait.png"
-                  alt="Sai Krishna Bykani"
-                  className="w-full h-full object-cover object-top transition-transform duration-700 hover:scale-[1.03]"
-                  style={{ filter: "contrast(1.05) brightness(0.95)" }}
-                />
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-8 border-t border-white/10">
+              
+              <div className="space-y-3">
+                <Terminal className="w-5 h-5 text-emerald-400" />
+                <h4 className="text-xs font-bold text-white tracking-wider uppercase">Architecture</h4>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Building scalable Page Object Model frameworks for both UI and headless API tests.
+                </p>
               </div>
 
-              {/* Floating name tag */}
-              <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 px-6 py-2 rounded-full bg-black/80 backdrop-blur-xl border border-white/[0.08] shadow-xl z-20">
-                <span className="text-[11px] font-semibold text-gray-300 tracking-wide">
-                  Sai Krishna Bykani
-                </span>
+              <div className="space-y-3">
+                <Database className="w-5 h-5 text-blue-400" />
+                <h4 className="text-xs font-bold text-white tracking-wider uppercase">Validation</h4>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Deep assertions checking database ledger synchronicity and payload contracts.
+                </p>
               </div>
+
+              <div className="space-y-3">
+                <Code2 className="w-5 h-5 text-purple-400" />
+                <h4 className="text-xs font-bold text-white tracking-wider uppercase">Performance</h4>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Load injection simulating peak production volumes to trace system bottlenecks.
+                </p>
+              </div>
+
             </div>
-          </div>
+
+          </motion.div>
         </div>
       </div>
     </section>

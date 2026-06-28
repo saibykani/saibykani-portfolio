@@ -1,141 +1,171 @@
 "use client";
 
-import { Calendar, MapPin, Briefcase, ChevronRight, Award } from "lucide-react";
+import { motion } from "framer-motion";
+import CountUp from "react-countup";
+import Image from "next/image";
 import resumeData from "@/data/resumeData.json";
+import { Briefcase, Calendar, MapPin, Building2, CheckCircle2 } from "lucide-react";
 
 export default function Experience() {
   const exp = resumeData.experience[0];
 
-  const milestones = [
-    {
-      title: "UI Automation & Web Validation",
-      desc: "Designed and maintained scalable UI regression scripts using Selenium, Java, Cucumber, and TestNG. Automated merchant onboarding flow redirects, improving release cycle regressions by 40%.",
-      tech: "Java, Selenium, Cucumber, TestNG, POM"
-    },
-    {
-      title: "API Verification & Signature Checks",
-      desc: "Validated transaction callback channels and payout APIs using REST Assured. Integrated deep assertions checking dynamic payload contracts and SHA-256 HMAC encryption signatures.",
-      tech: "REST Assured, Postman, Newman, JSON Schema"
-    },
-    {
-      title: "Performance Load & Stress Injectors",
-      desc: "Analyzed backend latencies and resolved transactional database lock issues. Simulated load generation pipelines scaling concurrency up to 3x peak volumes using JMeter master-slave setups.",
-      tech: "Apache JMeter, Distributed Testing, Grafana"
-    },
-    {
-      title: "Database Reconciliation Checks",
-      desc: "Conducted automated ledger reconciliation checks checking data sync across UI frontends, API endpoints, MySQL transactional tables, and MongoDB collections.",
-      tech: "MySQL, MongoDB, JDBC validation"
-    }
+  const kpiData = [
+    { label: "Automated Test Cases", value: 1000, suffix: "+" },
+    { label: "APIs Tested", value: 750, suffix: "+" },
+    { label: "Years Experience", value: 3, suffix: "+" },
+    { label: "Regression Time Reduced", value: 40, suffix: "%" },
+    { label: "Release Stability", value: 99.8, suffix: "%", decimals: 1 },
+    { label: "Peak Load Testing", value: 3, suffix: "×" },
   ];
 
   return (
-    <section id="experience" className="py-24 relative overflow-hidden">
-      
-      {/* Background Glow */}
-      <div className="absolute top-[30%] right-[-10%] w-[350px] h-[350px] rounded-full bg-orange-500/5 filter blur-3xl pointer-events-none" />
-
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <section id="experience" className="py-24 relative border-t border-white/5">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Title Header */}
-        <div className="max-w-3xl mb-16 text-center sm:text-left space-y-3">
-          <div className="text-orange-500 text-[10px] font-bold tracking-widest uppercase">
-            Professional Timeline
-          </div>
-          <h2 className="text-3xl sm:text-4.5xl font-extrabold tracking-tight text-white leading-tight">
-            <span className="bg-gradient-to-r from-orange-500 to-red-600 bg-clip-text text-transparent">
-              Work Experience
-            </span>
+        {/* Section Header */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mb-16"
+        >
+          <h2 className="text-sm font-bold tracking-widest uppercase text-slate-500 mb-2">
+            02 // Timeline
           </h2>
-          <div className="h-1 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full w-24 my-2" />
-          <p className="text-sm text-slate-400 max-w-xl leading-relaxed">
-            Leading QA engineering and automation strategies at Toucan Payments.
-          </p>
-        </div>
+          <h3 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+            Professional Experience.
+          </h3>
+        </motion.div>
 
-        {/* Experience layout grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+        <div className="grid grid-cols-1 xl:grid-cols-12 gap-10">
           
-          {/* Left panel: Company details */}
-          <div className="lg:col-span-5">
-            <div className="p-8 rounded-2xl glass-premium space-y-6">
+          {/* Left Column: Company & KPIs */}
+          <div className="xl:col-span-5 space-y-8">
+            
+            {/* Company Card */}
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              className="p-8 rounded-2xl glass-premium relative overflow-hidden group"
+            >
+              {/* Subtle background glow */}
+              <div className="absolute top-0 right-0 w-32 h-32 bg-white/[0.03] rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none transition-all duration-500 group-hover:bg-white/[0.05]" />
               
-              <div className="space-y-2">
-                <span className="text-[10px] text-orange-500 font-bold uppercase tracking-widest">// CURRENT_ROLE</span>
-                <h3 className="text-xl font-extrabold text-white tracking-tight">
-                  {exp.role}
-                </h3>
-                <h4 className="text-sm font-semibold text-slate-450">
-                  {exp.company}
-                </h4>
+              <div className="flex items-center space-x-4 mb-6">
+                <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center p-2">
+                  <Image 
+                    src="/toucan-logo.png" 
+                    alt="Toucan Logo" 
+                    width={40} 
+                    height={40} 
+                    className="object-contain"
+                  />
+                </div>
+                <div>
+                  <h4 className="text-lg font-bold text-white tracking-tight">{exp.company}</h4>
+                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">{exp.industry}</p>
+                </div>
               </div>
 
-              {/* Location/Date tags */}
-              <div className="flex flex-col space-y-2 text-xs text-slate-400">
-                <div className="flex items-center space-x-2">
-                  <Calendar className="w-4 h-4 text-slate-500" />
-                  <span className="font-semibold text-white">{exp.duration}</span>
+              <div className="space-y-4 text-sm text-slate-300">
+                <div className="flex items-center">
+                  <Briefcase className="w-4 h-4 mr-3 text-slate-500" />
+                  <span className="font-semibold text-white">{exp.role}</span>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <MapPin className="w-4 h-4 text-slate-500" />
+                <div className="flex items-center">
+                  <Calendar className="w-4 h-4 mr-3 text-slate-500" />
+                  <span>{exp.duration}</span>
+                </div>
+                <div className="flex items-center">
+                  <MapPin className="w-4 h-4 mr-3 text-slate-500" />
                   <span>{exp.location}</span>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <Briefcase className="w-4 h-4 text-slate-500" />
-                  <span>Quality Assurance & SDET</span>
-                </div>
               </div>
 
-              <p className="text-xs text-slate-450 leading-relaxed border-t border-white/5 pt-4">
-                Responsible for full-lifecycle test planning, code analysis, framework building, load script injections, database validations, and weekly release sign-offs in payments environments.
-              </p>
-
-              {/* Key Highlight */}
-              <div className="p-4 rounded-xl bg-orange-500/5 border border-orange-500/10 flex items-start space-x-3">
-                <Award className="w-5 h-5 text-orange-400 mt-0.5 shrink-0" />
-                <div className="space-y-1">
-                  <h5 className="text-[10px] font-bold text-white uppercase tracking-wider">Stability Milestone</h5>
-                  <p className="text-[10px] text-slate-450 leading-relaxed font-normal">
-                    Improved core regression pipeline runs reliability by 40% and verified high-volume transaction pathways.
-                  </p>
-                </div>
+              <div className="mt-8 pt-6 border-t border-white/5">
+                <h5 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3">Domain Focus</h5>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  {exp.domain}
+                </p>
               </div>
+            </motion.div>
 
-            </div>
-          </div>
-
-          {/* Right panel: Vertical Timeline List */}
-          <div className="lg:col-span-7 space-y-6">
-            <h4 className="text-[10px] font-bold tracking-widest text-slate-500 uppercase">
-              Core Technical Contributions
-            </h4>
-
-            <div className="space-y-6 relative pl-6 border-l border-white/10">
-              {milestones.map((ms, index) => (
-                <div key={ms.title} className="relative space-y-2 group">
-                  {/* Circle dot marker */}
-                  <div className="absolute -left-[31px] top-1 w-2.5 h-2.5 rounded-full bg-[#050508] border-2 border-white/20 group-hover:border-orange-500 group-hover:bg-orange-500 transition-colors" />
-
-                  <h5 className="text-sm font-bold text-white group-hover:text-orange-450 transition-colors">
-                    {ms.title}
-                  </h5>
-                  
-                  <p className="text-xs text-slate-450 leading-relaxed font-normal">
-                    {ms.desc}
-                  </p>
-
-                  <div className="flex items-center space-x-1.5 text-[9px] text-slate-500 font-bold uppercase pt-1">
-                    <ChevronRight className="w-3 h-3 text-orange-500" />
-                    <span>Tech:</span>
-                    <span className="text-slate-400 tracking-wider font-semibold">{ms.tech}</span>
+            {/* KPI Counters */}
+            <div className="grid grid-cols-2 gap-4">
+              {kpiData.map((kpi, index) => (
+                <motion.div
+                  key={kpi.label}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                  className="p-5 rounded-xl bg-white/[0.02] border border-white/[0.05] flex flex-col justify-center"
+                >
+                  <div className="text-2xl font-extrabold text-white mb-1">
+                    <CountUp 
+                      end={kpi.value} 
+                      suffix={kpi.suffix} 
+                      decimals={kpi.decimals || 0}
+                      duration={2.5} 
+                      enableScrollSpy 
+                      scrollSpyOnce
+                    />
                   </div>
-                </div>
+                  <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                    {kpi.label}
+                  </div>
+                </motion.div>
               ))}
             </div>
+
+          </div>
+
+          {/* Right Column: Engineering Contributions */}
+          <div className="xl:col-span-7 space-y-6">
+            {Object.entries(exp.contributions).map(([category, items], idx) => (
+              <motion.div
+                key={category}
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.1 }}
+                className="p-6 rounded-2xl glass-premium"
+              >
+                <h4 className="text-sm font-bold text-white uppercase tracking-widest border-b border-white/10 pb-3 mb-4 flex items-center">
+                  <span className="w-1.5 h-1.5 rounded-full bg-slate-400 mr-2" />
+                  {category}
+                </h4>
+                <ul className="space-y-3">
+                  {items.map((item, i) => (
+                    <li key={i} className="flex items-start text-sm text-slate-300 leading-relaxed">
+                      <CheckCircle2 className="w-4 h-4 text-slate-500 mr-3 shrink-0 mt-0.5" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+            ))}
+
+            {/* Tech Chips */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="pt-4 flex flex-wrap gap-2"
+            >
+              {exp.technologies.map(tech => (
+                <span 
+                  key={tech} 
+                  className="px-3 py-1.5 rounded-md bg-white/[0.03] border border-white/[0.08] text-xs font-semibold text-slate-300 transition-colors hover:bg-white/[0.08] hover:text-white"
+                >
+                  {tech}
+                </span>
+              ))}
+            </motion.div>
           </div>
 
         </div>
-
       </div>
     </section>
   );

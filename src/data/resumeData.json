@@ -1,199 +1,319 @@
 {
   "personal": {
     "name": "Sai Krishna Bykani",
-    "title": "QA Automation Engineer / SDET",
-    "location": "Hyderabad, India",
+    "title": "Software Development Engineer in Test (SDET)",
+    "location": "Hyderabad, Telangana, India",
     "phone": "+91 8522807300",
     "email": "saibykani07@gmail.com",
     "linkedin": "https://www.linkedin.com/in/saibykani/",
     "github": "https://github.com/saibykani",
-    "summary": "Software Development Engineer in Test (SDET) with 3 years of experience in test automation, API testing, performance testing, and backend validation for payment, UPI, and transaction-driven systems. Strong expertise in Java, Selenium WebDriver, Cucumber BDD, REST Assured, Postman, Newman CLI, and Apache JMeter. Proven experience in end-to-end test automation, API integration testing, log analysis, and defect lifecycle management. Adept at working in Agile/Scrum environments, collaborating with developers, and ensuring release quality, system stability, and production readiness."
+    "summary": "I work as a Software Development Engineer in Test (SDET), building enterprise-grade automation frameworks for payment systems. My work spans UI automation, API automation, backend validation, performance engineering, CI/CD integration, and release quality assurance for mission-critical financial applications."
   },
   "experience": [
     {
       "company": "Toucan Payments Private Limited",
-      "role": "QA Automation Engineer (API, UI & Performance)",
+      "role": "Software Development Engineer in Test (SDET)",
       "duration": "July 2023 – Present",
-      "location": "Hyderabad, India",
-      "description": "Driving end-to-end software quality assurance for high-volume Fintech and transaction applications.",
-      "bulletPoints": [
-        "Worked on functional, regression, integration, and end-to-end testing for web and backend payment applications.",
-        "Developed and maintained UI automation scripts using Selenium WebDriver, Java, Cucumber (BDD), and TestNG.",
-        "Automated critical payment and transaction workflows, improving regression coverage and execution efficiency.",
-        "Built and executed API automation tests using REST Assured, Postman, and Newman, validating request/response payloads and business rules.",
-        "Performed performance and load testing using Apache JMeter for UPI and card transaction flows.",
-        "Configured and executed distributed JMeter master–slave setup for concurrency and scalability testing.",
-        "Conducted backend data validation using MySQL, Azure SQL, and MongoDB to ensure data consistency across UI, API, and backend systems.",
-        "Analyzed application logs and Grafana dashboards to identify performance issues and SLA risks.",
-        "Supported CI/CD pipelines by integrating automation suites with Jenkins for scheduled and release-based execution.",
-        "Logged, tracked, and managed defects using Jira, Azure DevOps, and Spira, including root cause analysis and fix validation."
+      "location": "Hyderabad, Telangana, India",
+      "industry": "Enterprise FinTech",
+      "domain": "Payment Gateway, Merchant Acquiring, Acquiring Switch, Clearing & Settlement, Card Payments, UPI, API Integrations, Merchant Onboarding",
+      "kpis": {
+        "testCases": "1000+",
+        "apisTested": "750+",
+        "yearsExp": "3+",
+        "regressionReduced": "40%",
+        "stability": "99.8%",
+        "peakLoad": "3x",
+        "modules": "15+",
+        "suites": "50+"
+      },
+      "contributions": {
+        "UI Automation": [
+          "Designed and maintained scalable Selenium WebDriver automation frameworks using Java, TestNG, and Cucumber BDD.",
+          "Automated merchant onboarding, checkout, payment processing, and administrative workflows.",
+          "Developed reusable Page Object Model components to improve framework maintainability.",
+          "Reduced regression execution time through automated end-to-end test suites."
+        ],
+        "API Automation": [
+          "Designed comprehensive REST Assured automation suites for payment APIs.",
+          "Validated request and response payloads.",
+          "Verified authentication mechanisms.",
+          "Performed JSON schema validation.",
+          "Automated webhook and callback verification.",
+          "Validated payment transaction lifecycle APIs."
+        ],
+        "Backend Validation": [
+          "Verified transaction data using MySQL and MongoDB.",
+          "Performed reconciliation checks between UI, APIs, and databases.",
+          "Validated settlement records.",
+          "Verified merchant ledger updates.",
+          "Executed JDBC validations for financial transactions."
+        ],
+        "Performance Engineering": [
+          "Developed Apache JMeter performance suites.",
+          "Executed load, stress, spike, and endurance testing.",
+          "Analyzed TPS, latency, throughput, and response times.",
+          "Monitored system health using Grafana and Dynatrace.",
+          "Validated application stability under production-scale workloads."
+        ],
+        "CI/CD & Framework": [
+          "Integrated automation suites with Jenkins pipelines.",
+          "Maintained Maven-based automation framework.",
+          "Supported release validation and regression execution.",
+          "Collaborated with developers during sprint releases.",
+          "Improved automation reusability using modular framework design."
+        ]
+      },
+      "technologies": ["Java", "Selenium", "REST Assured", "Postman", "Apache JMeter", "MySQL", "MongoDB", "Jenkins", "GitHub", "Grafana", "Docker", "Azure DevOps"],
+      "achievements": [
+        "Built reusable UI and API automation frameworks.",
+        "Automated payment gateway workflows.",
+        "Validated high-volume payment transactions.",
+        "Improved regression execution efficiency.",
+        "Reduced manual testing effort.",
+        "Strengthened release confidence.",
+        "Improved software quality through continuous automation."
       ]
     }
   ],
   "projects": [
     {
-      "id": "psp-enterprise",
+      "id": "psp",
       "title": "PSP – Enterprise Payment Services Platform",
-      "category": "Enterprise FinTech Platform",
-      "domain": "Payment Gateway, Merchant Acquiring, Payment Processing, Acquiring Switch, Authorization, ISO 8583, Clearing, Settlement, Reconciliation, Card Payments, UPI, Merchant Services, Digital Payments",
-      "overview": "Worked as a Software Development Engineer in Test (SDET) on a large-scale enterprise Payment Services Platform responsible for managing the complete lifecycle of digital payment transactions. The platform includes merchant onboarding, merchant checkout, payment gateway services, transaction routing, acquiring switch operations, authorization, clearing, settlement, reconciliation, refunds, and financial reporting.",
-      "businessProblem": "Financial payment platforms must process millions of secure transactions with near-zero failure rates. Any issue in authorization, routing, clearing, settlement, reconciliation, or merchant onboarding can directly impact merchants, banks, and customers. The objective was to build a scalable automation ecosystem that validates every payment workflow before production deployment, ensuring transaction accuracy, business continuity, and regulatory compliance.",
-      "responsibilities": [
-        "UI Automation using Selenium WebDriver",
-        "API Automation using REST Assured",
-        "Automation Framework Development",
-        "Merchant Onboarding Automation",
-        "Merchant Checkout Automation",
-        "Card Transaction Validation",
-        "UPI Transaction Validation",
-        "Authorization Flow Validation",
-        "Pre-Authorization Testing",
-        "Completion & Void Testing",
-        "Refund Automation",
-        "Acquiring Switch Validation",
-        "ISO 8583 Transaction Verification",
-        "Clearing Validation",
-        "Settlement Validation",
-        "Reconciliation Validation",
-        "Backend Validation using MySQL & MongoDB",
-        "Performance Testing using Apache JMeter",
-        "Grafana Log Analysis",
-        "Regression Automation",
-        "Smoke & Sanity Testing",
-        "Cross Browser Testing",
-        "Jenkins CI/CD Integration",
-        "Defect Reporting & RCA"
-      ],
-      "modules": [
-        "Merchant Management", "Merchant Onboarding", "Merchant Checkout", "Payment Gateway", "Virtual POS", "Physical POS", "Card Payments", "UPI Payments", "Wallet Payments", "QR Payments", "Authorization", "Pre-Authorization", "Completion", "Void", "Refund", "Acquiring Switch", "Transaction Routing", "Clearing", "Settlement", "Reconciliation", "Chargeback", "Merchant Settlement", "Reports", "Dashboard", "Notifications", "Configuration", "Role Management"
-      ],
-      "techStack": ["Java", "Selenium WebDriver", "TestNG", "Cucumber BDD", "REST Assured", "Postman", "Apache JMeter", "MySQL", "MongoDB", "Grafana", "Jenkins", "GitHub", "Azure DevOps", "Maven"],
-      "businessImpact": [
-        "Reduced regression execution time.",
-        "Improved automation coverage.",
-        "Validated high-volume payment transactions.",
-        "Improved payment reliability.",
-        "Reduced production defects.",
-        "Accelerated release cycles.",
-        "Improved transaction accuracy.",
-        "Strengthened payment platform stability."
-      ]
+      "category": "Enterprise FinTech",
+      "summary": "Core payment gateway handling merchant onboarding, acquiring switch, clearing, settlement, and reconciliation.",
+      "role": "Software Development Engineer in Test",
+      "testingTypes": ["UI Automation", "API Automation", "Backend Validation", "Performance Testing", "Regression Automation"],
+      "technologies": ["Java", "Selenium", "REST Assured", "Apache JMeter", "Postman", "MySQL", "MongoDB", "Jenkins"],
+      "businessImpactBadge": "Production Ready",
+      "metrics": {
+        "Automation Coverage": "95%",
+        "Regression Time Improved": "60%",
+        "Transactions Validated": "1M+/Day"
+      },
+      "caseStudy": {
+        "overview": "Worked as a Software Development Engineer in Test (SDET) on a large-scale enterprise Payment Services Platform responsible for managing the complete lifecycle of digital payment transactions.",
+        "businessDomain": "Payment Gateway, Merchant Acquiring, Clearing & Settlement, Reconciliations",
+        "businessProblem": "Financial payment platforms must process millions of secure transactions with near-zero failure rates. Any issue in authorization, routing, clearing, or settlement can directly impact merchants and banks.",
+        "businessContext": "The system processes high-volume Card and UPI transactions, requiring an automated validation approach that guarantees zero defects in production.",
+        "architecture": {
+          "type": "payment_flow",
+          "nodes": ["Merchant Portal", "Merchant Checkout", "Payment Gateway", "Payment Switch", "Authorization", "Acquiring Switch", "Issuer Bank", "Clearing", "Settlement", "Reconciliation", "Reports", "Merchant Dashboard"]
+        },
+        "responsibilities": [
+          "Designed the end-to-end regression automation framework from scratch.",
+          "Automated critical merchant checkout and onboarding workflows.",
+          "Validated ISO-8583 transaction messaging across the acquiring switch.",
+          "Built data-driven API suites for complex payload validations."
+        ],
+        "modules": [
+          "Merchant Onboarding", "Virtual POS", "Transaction Routing", "Authorization & Void", "Clearing", "Settlement & Reconciliation"
+        ],
+        "testingStrategy": "A decoupled, risk-based approach prioritizing API contracts first, followed by UI workflows, and finally performance testing.",
+        "framework": "Data-Driven Page Object Model using Java, Cucumber, and TestNG.",
+        "uiAutomation": "Implemented highly scalable Selenium scripts handling dynamic iframes (payment pages) and multi-tab workflows for merchant onboarding.",
+        "apiAutomation": "Developed REST Assured suites utilizing POJOs and Jackson for robust payload serialization and deserialization.",
+        "dbValidation": "Wrote complex JDBC wrappers to cross-verify MongoDB transaction logs against MySQL settlement ledgers.",
+        "performanceTesting": "Injected loads of 5,000+ TPS using distributed Apache JMeter to locate database locking and memory leak bottlenecks.",
+        "cicd": "Automated regression execution via Jenkins nightly builds with custom ExtentReports.",
+        "challenges": [
+          "Dynamic Webhooks: Overcame asynchronous webhook validation by polling database states.",
+          "Stale Elements in React UI: Implemented custom fluent waits resolving 99% of synchronization flakiness."
+        ],
+        "impact": "Drastically reduced post-release hotfixes and automated 95% of the manual regression cycle.",
+        "achievements": [
+          "Identified memory leaks at 3x peak load.",
+          "Automated 2,000+ test scenarios across UI and API."
+        ],
+        "testingMetrics": [
+          "99.8% Test Script Reliability",
+          "Execution time reduced from 2 days to 3 hours"
+        ],
+        "lessonsLearned": "API-first testing significantly reduces flakiness compared to UI-heavy validation in Fintech applications."
+      }
     },
     {
-      "id": "rwa-platform",
+      "id": "rwa",
       "title": "RWA – Residential Welfare Association Platform",
-      "category": "Community Management",
-      "domain": "PropTech, Residential Management",
-      "overview": "Community management platform with automation covering resident management, visitor approvals, maintenance payments, complaints, facility booking, notices, and administration.",
-      "businessProblem": "Managing large residential complexes manually leads to delays in visitor approvals, payment tracking issues, and miscommunication.",
-      "responsibilities": [
-        "UI Automation for resident portal",
-        "API Automation for payment processing",
-        "Regression Testing for facility booking flows",
-        "Database validation for complaint management"
-      ],
-      "modules": [
-        "Resident Management", "Visitor Approvals", "Maintenance Payments", "Complaints", "Facility Booking", "Notices", "Administration"
-      ],
-      "techStack": ["Java", "Selenium WebDriver", "REST Assured", "TestNG"],
-      "businessImpact": [
-        "Improved resident onboarding speed.",
-        "Streamlined visitor tracking.",
-        "Automated maintenance payment verifications."
-      ]
+      "category": "Community Platform",
+      "summary": "A comprehensive community management platform covering resident onboarding, visitor approvals, and maintenance payments.",
+      "role": "QA Automation Engineer",
+      "testingTypes": ["UI Automation", "API Automation", "Backend Validation"],
+      "technologies": ["Java", "Selenium", "REST Assured", "TestNG", "MySQL"],
+      "businessImpactBadge": "Scalability Proven",
+      "metrics": {
+        "Automation Coverage": "85%",
+        "Defect Leakage": "<1%",
+        "API Stability": "99.9%"
+      },
+      "caseStudy": {
+        "overview": "An end-to-end residential management platform automating everything from resident approvals to facility bookings.",
+        "businessDomain": "PropTech, Residential Management",
+        "businessProblem": "Managing large residential complexes manually leads to visitor delays, payment tracking issues, and miscommunication.",
+        "businessContext": "The platform required rigorous testing to ensure security and smooth operations for thousands of residents concurrently.",
+        "architecture": {
+          "type": "standard_flow",
+          "nodes": ["Resident App", "API Gateway", "Visitor Management", "Payment Service", "Database"]
+        },
+        "responsibilities": [
+          "Automated the entire resident onboarding flow.",
+          "Validated the visitor approval notification triggers.",
+          "Tested the maintenance payment integration."
+        ],
+        "modules": [
+          "Resident Management", "Visitor Approvals", "Maintenance Payments", "Facility Booking"
+        ],
+        "testingStrategy": "Component-based automation focusing heavily on role-based access control (RBAC).",
+        "framework": "Hybrid Framework with Java, Selenium, and TestNG.",
+        "uiAutomation": "Automated resident dashboards and admin portals.",
+        "apiAutomation": "Validated notification and payment endpoints.",
+        "dbValidation": "Ensured transactional integrity for maintenance payments.",
+        "performanceTesting": "Executed API load testing for peak visitor hours.",
+        "cicd": "Configured automated sanity runs on every pull request.",
+        "challenges": [
+          "RBAC Testing: Handling dynamic permissions across 5+ distinct user roles."
+        ],
+        "impact": "Streamlined deployments and ensured zero regressions in the payment module.",
+        "achievements": [
+          "Automated 500+ test cases.",
+          "Prevented critical security flaws in visitor approvals."
+        ],
+        "testingMetrics": [
+          "85% Test Coverage",
+          "Zero critical production bugs"
+        ],
+        "lessonsLearned": "Data-driven testing is crucial for applications with highly dynamic permission structures."
+      }
     },
     {
-      "id": "ppms-ngo",
+      "id": "ppms",
       "title": "PPMS – NGO Project Management System",
-      "category": "Non-Profit Management",
-      "domain": "NGO, Campaign Management",
-      "overview": "NGO management platform with automation covering donor management, beneficiary management, campaigns, volunteers, donations, reporting, and administrative workflows.",
-      "businessProblem": "NGOs require transparent tracking of donations, efficient volunteer allocation, and accurate reporting to maintain donor trust.",
-      "responsibilities": [
-        "End-to-end automation of donation workflows",
-        "API integration testing for payment gateways",
-        "Data validation for reporting modules",
-        "Cross-browser testing for donor portals"
-      ],
-      "modules": [
-        "Donor Management", "Beneficiary Management", "Campaigns", "Volunteers", "Donations", "Reporting", "Administrative Workflows"
-      ],
-      "techStack": ["Java", "Selenium WebDriver", "Cucumber BDD", "Postman", "MySQL"],
-      "businessImpact": [
-        "Ensured zero data loss in donation processing.",
-        "Reduced manual reporting efforts.",
-        "Enhanced campaign tracking accuracy."
-      ]
+      "category": "NGO Platform",
+      "summary": "Non-profit management system streamlining donor management, beneficiary tracking, campaigns, and donations.",
+      "role": "Software Development Engineer in Test",
+      "testingTypes": ["UI Automation", "API Automation", "Backend Validation"],
+      "technologies": ["Java", "Selenium", "Cucumber BDD", "Postman", "MySQL"],
+      "businessImpactBadge": "Zero Data Loss",
+      "metrics": {
+        "Automation Coverage": "90%",
+        "Reporting Accuracy": "100%",
+        "Manual Effort Reduced": "70%"
+      },
+      "caseStudy": {
+        "overview": "A dedicated management platform for NGOs automating administrative workflows and donation tracking.",
+        "businessDomain": "Non-Profit Management, Campaign Tracking",
+        "businessProblem": "NGOs require transparent tracking of donations, efficient volunteer allocation, and accurate reporting to maintain donor trust.",
+        "businessContext": "Financial transparency is paramount, making data validation and reporting accuracy the highest testing priorities.",
+        "architecture": {
+          "type": "standard_flow",
+          "nodes": ["Donor Portal", "Campaign Service", "Donation Gateway", "Reporting Engine", "Data Warehouse"]
+        },
+        "responsibilities": [
+          "End-to-end automation of the donation pipeline.",
+          "Cross-browser compatibility testing for the donor portal.",
+          "Complex database queries to validate report generation."
+        ],
+        "modules": [
+          "Donor Management", "Beneficiaries", "Campaigns", "Donations", "Reporting"
+        ],
+        "testingStrategy": "Data-centric approach heavily utilizing BDD to ensure business requirements directly translated into automated checks.",
+        "framework": "BDD Framework with Cucumber, Java, and Selenium.",
+        "uiAutomation": "Automated donor journeys across Chrome, Firefox, and Safari.",
+        "apiAutomation": "Validated campaign data retrieval APIs.",
+        "dbValidation": "Wrote complex SQL joins to verify donation ledgers matched campaign totals.",
+        "performanceTesting": "Simulated donation spikes during marketing campaigns.",
+        "cicd": "Integrated tests into Jenkins nightly pipelines.",
+        "challenges": [
+          "Complex Reporting: Validating multi-layered PDF and Excel reports."
+        ],
+        "impact": "Ensured absolute financial transparency and reduced manual reporting verification efforts significantly.",
+        "achievements": [
+          "Achieved 100% reporting accuracy in production.",
+          "Built a highly readable BDD suite for non-technical stakeholders."
+        ],
+        "testingMetrics": [
+          "90% Test Coverage",
+          "Reduced manual verification by 70%"
+        ],
+        "lessonsLearned": "Cucumber BDD excels when business stakeholders need high visibility into the testing process."
+      }
     },
     {
-      "id": "vcip-kyc",
+      "id": "vcip",
       "title": "VCIP – Video Customer Identification Platform",
-      "category": "Digital Banking & Identity",
-      "domain": "RegTech, Video KYC, Digital Identity",
-      "overview": "Digital banking platform for Video KYC, customer onboarding, PAN verification, Aadhaar verification, document upload, face verification, approval workflow, and compliance validation.",
-      "businessProblem": "Digital banking requires highly secure, compliant, and fraud-resistant identity verification mechanisms before onboarding customers.",
-      "responsibilities": [
-        "Automated verification of PAN/Aadhaar integration endpoints",
-        "Performance testing of video streaming APIs under load",
-        "UI automation of approval workflows",
-        "Security validation for document uploads"
-      ],
-      "modules": [
-        "Video KYC", "Customer Onboarding", "PAN Verification", "Aadhaar Verification", "Document Upload", "Face Verification", "Approval Workflow", "Compliance Validation"
-      ],
-      "techStack": ["Java", "REST Assured", "Selenium", "Apache JMeter", "Jenkins"],
-      "businessImpact": [
-        "Accelerated remote customer onboarding.",
-        "Ensured 100% compliance with KYC regulations.",
-        "Reduced manual verification bottlenecks."
-      ]
+      "category": "Digital Banking",
+      "summary": "Digital banking platform enabling highly secure Video KYC, customer onboarding, and identity verification.",
+      "role": "Performance & Automation Engineer",
+      "testingTypes": ["API Automation", "Performance Testing", "Security Validation"],
+      "technologies": ["Java", "REST Assured", "Selenium", "Apache JMeter", "Jenkins"],
+      "businessImpactBadge": "Compliance Verified",
+      "metrics": {
+        "API Test Coverage": "98%",
+        "Performance Scalability": "10k Concurrent",
+        "Security Issues Prevented": "Zero Day Threats"
+      },
+      "caseStudy": {
+        "overview": "A RegTech solution for remote customer onboarding relying heavily on real-time video streaming and external identity APIs.",
+        "businessDomain": "RegTech, Video KYC, Digital Identity",
+        "businessProblem": "Digital banking requires highly secure, compliant, and fraud-resistant identity verification mechanisms before onboarding.",
+        "businessContext": "The system must handle heavy video streams concurrently while connecting to government APIs (Aadhaar/PAN) without timeouts.",
+        "architecture": {
+          "type": "standard_flow",
+          "nodes": ["Customer App", "Video Streaming Engine", "KYC Gateway", "Govt API (Aadhaar/PAN)", "Bank Core"]
+        },
+        "responsibilities": [
+          "Performance engineering of the video streaming APIs.",
+          "Automated verification of PAN/Aadhaar integration endpoints.",
+          "Security validation for document uploads."
+        ],
+        "modules": [
+          "Video KYC", "Customer Onboarding", "PAN Verification", "Aadhaar Verification", "Face Verification"
+        ],
+        "testingStrategy": "Performance-first testing combined with strict API security validations to ensure compliance.",
+        "framework": "REST Assured for API, JMeter for Performance.",
+        "uiAutomation": "Automated the banker approval workflow.",
+        "apiAutomation": "Deep validation of identity verification APIs, focusing on timeout handling.",
+        "dbValidation": "Verified audit logs for compliance tracking.",
+        "performanceTesting": "Pushed video streaming endpoints to failure points to determine system breaking thresholds.",
+        "cicd": "Performance tests triggered automatically post-deployment.",
+        "challenges": [
+          "Mocking Govt APIs: Created robust stub services to simulate Aadhaar/PAN downtime and rate limits."
+        ],
+        "impact": "Ensured 100% compliance with KYC regulations and enabled seamless onboarding under heavy load.",
+        "achievements": [
+          "Tuned system to handle 10,000 concurrent KYC sessions.",
+          "Identified and resolved critical memory leaks in the streaming engine."
+        ],
+        "testingMetrics": [
+          "98% API Test Coverage",
+          "Zero compliance breaches"
+        ],
+        "lessonsLearned": "Resiliency testing (mocking external API failures) is critical for systems relying on third-party integrations."
+      }
     }
   ],
   "skills": {
-    "programming": ["Java", "SQL", "JavaScript", "HTML/CSS"],
-    "automation": ["Selenium WebDriver", "Cucumber (BDD)", "TestNG", "Maven", "Page Object Model (POM)", "Data-Driven Testing"],
-    "api": ["REST Assured", "Postman", "Newman", "Insomnia", "SOAP APIs", "JSON/XML Validation"],
-    "performance": ["Apache JMeter", "Load Testing", "Stress Testing", "Spike Testing", "Distributed JMeter", "Performance Bottleneck Analysis"],
-    "cicd": ["Jenkins", "GitHub Actions", "CI/CD Pipeline Testing", "Grafana Monitoring"],
-    "cloud": ["Selenium Grid", "Cloud Executions", "Docker"],
-    "database": ["MySQL", "SQL Server", "Azure SQL", "MongoDB", "Backend Validation", "Log Analysis"],
-    "defect": ["Jira", "Azure DevOps Boards", "Spira", "RCA", "Test Planning", "Test Reporting"],
-    "methodologies": ["Agile", "Scrum", "SDLC", "STLC"]
-  },
-  "education": [
-    {
-      "school": "Teegala Krishna Reddy Engineering College",
-      "degree": "B.Tech",
-      "major": "Electrical and Electronics Engineering",
-      "duration": "Oct 2020 – July 2023",
-      "location": "Hyderabad, India"
-    }
-  ],
-  "achievements": [
-    "Recognised for automation testing and API validation contributions that improved regression stability by ~40% and increased automated test coverage across critical payment flows.",
-    "Played a key role in performance and load testing of high-volume payment and UPI transaction flows using Apache JMeter, validating system behaviour under 2x–3x peak load conditions.",
-    "Supported successful release sign-offs by ensuring end-to-end test coverage across UI automation, API testing, backend validation, and integration testing, reducing post-release defects and rework."
-  ],
-  "certifications": [
-    {
-      "name": "ISTQB Certified Tester (Foundation Level)",
-      "issuer": "ISTQB",
-      "year": "2024"
-    },
-    {
-      "name": "REST API Test Automation with REST Assured",
-      "issuer": "Udemy",
-      "year": "2024"
-    },
-    {
-      "name": "Advanced JMeter Performance & Load Testing",
-      "issuer": "Udemy",
-      "year": "2024"
-    },
-    {
-      "name": "Google AI Essentials (Credential ID: FYPDH0BZMKD5)",
-      "issuer": "Google",
-      "year": "2025"
-    }
-  ]
+    "categories": [
+      {
+        "title": "Core Engineering",
+        "skills": ["Java", "SQL", "JavaScript", "HTML/CSS"]
+      },
+      {
+        "title": "UI Automation",
+        "skills": ["Selenium WebDriver", "Cucumber BDD", "TestNG", "Page Object Model"]
+      },
+      {
+        "title": "API & Backend",
+        "skills": ["REST Assured", "Postman", "MongoDB", "MySQL", "JDBC"]
+      },
+      {
+        "title": "Performance Engineering",
+        "skills": ["Apache JMeter", "Distributed Testing", "Grafana", "Dynatrace"]
+      },
+      {
+        "title": "CI/CD & DevOps",
+        "skills": ["Jenkins", "GitHub", "Azure DevOps", "Docker", "Maven"]
+      }
+    ]
+  }
 }

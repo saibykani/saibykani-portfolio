@@ -3,24 +3,21 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, Home, User, Briefcase, Code2, FolderKanban, Mail } from "lucide-react";
+import { motion } from "framer-motion";
 
-const COLOR_PALETTES = [
-  { from: "#f97316", to: "#ef4444" },   // orange → red
-  { from: "#06b6d4", to: "#3b82f6" },   // cyan → blue
-  { from: "#a855f7", to: "#ec4899" },   // purple → pink
-  { from: "#10b981", to: "#06b6d4" },   // emerald → cyan
-  { from: "#f59e0b", to: "#f97316" },   // amber → orange
-  { from: "#8b5cf6", to: "#6366f1" },   // violet → indigo
-  { from: "#14b8a6", to: "#22d3ee" },   // teal → cyan
-  { from: "#f43f5e", to: "#e879f9" },   // rose → fuchsia
+const navLinks = [
+  { name: "Overview", href: "/", id: "home" },
+  { name: "About Me", href: "#about", id: "about" },
+  { name: "Professional Experience", href: "#experience", id: "experience" },
+  { name: "Tech Stack", href: "#skills", id: "skills" },
+  { name: "Case Studies", href: "#projects", id: "projects" },
+  { name: "Contact", href: "#contact", id: "contact" },
 ];
 
 export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
-  const [colorIndex, setColorIndex] = useState(0);
+  const [hoveredSection, setHoveredSection] = useState<string | null>(null);
   const pathname = usePathname();
 
   // Scroll detection
@@ -32,18 +29,9 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Color cycling every 5 seconds
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setColorIndex((prev) => (prev + 1) % COLOR_PALETTES.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, []);
-
   // Section observer for active nav link
   useEffect(() => {
     if (pathname !== "/") return;
-    const sections = ["home", "about", "skills", "projects", "experience", "contact"];
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -54,24 +42,21 @@ export default function Navbar() {
       },
       { threshold: 0.3, rootMargin: "-80px 0px 0px 0px" }
     );
-    sections.forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
+    
+    navLinks.forEach((link) => {
+      if (link.id !== "home") {
+        const el = document.getElementById(link.id);
+        if (el) observer.observe(el);
+      }
     });
+    
+    const homeEl = document.getElementById("home");
+    if (homeEl) observer.observe(homeEl);
+
     return () => observer.disconnect();
   }, [pathname]);
 
-  const navLinks = [
-    { name: "Home", href: "/", id: "home", icon: Home },
-    { name: "About", href: "#about", id: "about", icon: User },
-    { name: "Experience", href: "#experience", id: "experience", icon: Briefcase },
-    { name: "Skills", href: "#skills", id: "skills", icon: Code2 },
-    { name: "Projects", href: "#projects", id: "projects", icon: FolderKanban },
-    { name: "Contact", href: "#contact", id: "contact", icon: Mail },
-  ];
-
   const handleLinkClick = (href: string, id: string) => {
-    setIsOpen(false);
     setActiveSection(id);
     if (href.startsWith("#")) {
       const el = document.getElementById(href.substring(1));
@@ -81,128 +66,73 @@ export default function Navbar() {
     }
   };
 
-  const isLinkActive = (link: { href: string; id: string }) => {
-    if (pathname === "/resume" || pathname === "/recruiter") {
-      return link.href === pathname;
-    }
-    if (link.id === "home" && activeSection === "home" && pathname === "/") return true;
-    return activeSection === link.id;
+  const isLinkActive = (id: string) => {
+    if (id === "home" && activeSection === "home" && pathname === "/") return true;
+    return activeSection === id;
   };
-
-  const currentPalette = COLOR_PALETTES[colorIndex];
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled ? "bg-black/80 backdrop-blur-xl shadow-2xl shadow-black/50" : "bg-transparent"
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 flex justify-center pt-6 transition-all duration-500`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-        
-        <Link href="/" className="flex items-center space-x-3 group">
-          {/* Circular Logo/Avatar */}
-          <div 
-            className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 shadow-lg transition-colors duration-[3000ms]"
-            style={{ 
-              backgroundColor: currentPalette.from,
-              boxShadow: `0 0 15px ${currentPalette.from}40`
-            }}
-          >
-            <span className="text-white font-bold text-sm tracking-widest">&lt;/&gt;</span>
-          </div>
-          {/* Name and Role */}
-          <div className="flex flex-col">
-            <span 
-              className="text-lg sm:text-xl font-bold tracking-tight leading-tight transition-colors duration-[3000ms]"
-              style={{ color: currentPalette.from }}
-            >
-              Sai Krishna Bykani
-            </span>
-            <span className="text-xs text-slate-400 font-medium transition-colors duration-[3000ms]">
-              QA Automation Engineer
-            </span>
-          </div>
-        </Link>
-
-        {/* Navigation Links — Pill Container */}
-        <div className="hidden md:flex items-center bg-white/[0.03] backdrop-blur-sm rounded-full border border-white/[0.08] px-1.5 py-1.5">
+      <div 
+        className={`flex items-center px-2 py-2 rounded-full border transition-all duration-500 ${
+          scrolled 
+            ? "bg-[#0a0a0c]/80 backdrop-blur-md border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.4)]" 
+            : "bg-transparent border-transparent"
+        }`}
+      >
+        <ul className="flex items-center space-x-1" onMouseLeave={() => setHoveredSection(null)}>
           {navLinks.map((link) => {
-            const active = isLinkActive(link);
-            const Icon = link.icon;
+            const active = isLinkActive(link.id);
+            const isHovered = hoveredSection === link.id;
+
             return (
-              <Link
-                key={link.name}
-                href={link.href}
-                onClick={() => handleLinkClick(link.href, link.id)}
-                className="relative group"
-              >
-                <div
-                  className={`flex items-center space-x-1.5 px-4 py-1.5 rounded-full text-[13px] font-medium tracking-wide transition-all duration-300 ${
-                    active
-                      ? "text-white bg-white/[0.08]"
-                      : "text-gray-400 hover:text-white hover:bg-white/[0.04]"
+              <li key={link.id} className="relative z-10">
+                <Link
+                  href={link.href}
+                  onClick={(e) => {
+                    if (link.href.startsWith("#")) {
+                      e.preventDefault();
+                    }
+                    handleLinkClick(link.href, link.id);
+                  }}
+                  onMouseEnter={() => setHoveredSection(link.id)}
+                  className={`relative block px-4 py-2 text-[11px] font-semibold tracking-widest uppercase transition-colors duration-300 ${
+                    active || isHovered ? "text-white" : "text-slate-400 hover:text-slate-200"
                   }`}
                 >
-                  <Icon className="w-3.5 h-3.5" />
-                  <span>{link.name}</span>
-                </div>
+                  {link.name}
+                </Link>
 
-                {/* Active dot indicator */}
-                {active && (
-                  <span
-                    className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full transition-all duration-[2000ms]"
-                    style={{
-                      backgroundColor: currentPalette.from,
-                      boxShadow: `0 0 6px ${currentPalette.from}`,
-                    }}
+                {/* Hover Background (Magnetic effect) */}
+                {isHovered && !active && (
+                  <motion.div
+                    layoutId="nav-hover"
+                    className="absolute inset-0 bg-white/[0.04] rounded-full -z-10"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ type: "spring", stiffness: 350, damping: 30 }}
                   />
                 )}
-              </Link>
+
+                {/* Active Indicator */}
+                {active && (
+                  <motion.div
+                    layoutId="nav-active"
+                    className="absolute inset-0 bg-white/[0.08] border border-white/[0.1] rounded-full -z-10 shadow-[0_0_15px_rgba(255,255,255,0.05)]"
+                    transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                  >
+                    {/* Glowing dot underneath */}
+                    <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.8)]" />
+                  </motion.div>
+                )}
+              </li>
             );
           })}
-        </div>
-
-        {/* Mobile menu trigger */}
-        <div className="flex md:hidden">
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="text-white p-2.5 rounded-full bg-white/[0.06] backdrop-blur-sm border border-white/[0.1] hover:bg-white/[0.1] transition-all"
-          >
-            {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
-        </div>
+        </ul>
       </div>
-
-      {/* Mobile drawer */}
-      {isOpen && (
-        <div className="md:hidden absolute top-[60px] left-4 right-4 z-40 bg-black/95 border border-white/[0.08] backdrop-blur-xl rounded-2xl p-3 shadow-2xl space-y-1">
-          {navLinks.map((link) => {
-            const active = isLinkActive(link);
-            const Icon = link.icon;
-            return (
-              <Link
-                key={link.name}
-                href={link.href}
-                onClick={() => handleLinkClick(link.href, link.id)}
-                className={`flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium tracking-wide transition-all ${
-                  active
-                    ? "text-white bg-white/[0.06]"
-                    : "text-gray-400 hover:text-white hover:bg-white/[0.04]"
-                }`}
-              >
-                <Icon className="w-4 h-4" />
-                <span>{link.name}</span>
-                {active && (
-                  <span
-                    className="ml-auto w-1.5 h-1.5 rounded-full"
-                    style={{ backgroundColor: currentPalette.from }}
-                  />
-                )}
-              </Link>
-            );
-          })}
-        </div>
-      )}
     </nav>
   );
 }
