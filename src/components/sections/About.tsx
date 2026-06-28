@@ -107,19 +107,8 @@ export default function About() {
             }`}
           >
             <div className="relative">
-              {/* Ambient glow behind image */}
-              <div className="absolute -inset-4 bg-gradient-to-br from-cyan-500/[0.08] via-transparent to-purple-500/[0.06] rounded-3xl blur-2xl" />
-
               {/* Image Container */}
               <div className="relative w-[320px] h-[420px] sm:w-[360px] sm:h-[480px] rounded-2xl overflow-hidden border border-white/[0.08] shadow-2xl shadow-black/50 bg-[#0a0a0a]">
-                {/* Corner accent lines */}
-                <div className="absolute top-0 left-0 w-16 h-[1px] bg-gradient-to-r from-cyan-500/50 to-transparent z-20" />
-                <div className="absolute top-0 left-0 w-[1px] h-16 bg-gradient-to-b from-cyan-500/50 to-transparent z-20" />
-                <div className="absolute bottom-0 right-0 w-16 h-[1px] bg-gradient-to-l from-cyan-500/50 to-transparent z-20" />
-                <div className="absolute bottom-0 right-0 w-[1px] h-16 bg-gradient-to-t from-cyan-500/50 to-transparent z-20" />
-
-                {/* Gradient overlay at bottom */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-10" />
 
                 {/* Portrait */}
                 {/* eslint-disable-next-line @next/next/no-img-element */}

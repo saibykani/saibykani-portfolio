@@ -1,45 +1,9 @@
 "use client";
 
-import { useState } from "react";
-import { Mail, Phone, MapPin, Send, CheckCircle } from "lucide-react";
+import { Mail, Phone, MapPin } from "lucide-react";
 import resumeData from "@/data/resumeData.json";
 
 export default function Contact() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
-  });
-  const [status, setStatus] = useState<"idle" | "sending" | "success">("idle");
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!formData.name || !formData.email || !formData.message) return;
-
-    setStatus("sending");
-
-    try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-
-      if (response.ok) {
-        setStatus("success");
-        setFormData({ name: "", email: "", subject: "", message: "" });
-      } else {
-        setStatus("idle");
-        alert("Failed to send message. Please try again.");
-      }
-    } catch (error) {
-      console.error(error);
-      setStatus("idle");
-      alert("An error occurred. Please try again.");
-    }
-  };
-
   return (
     <section id="contact" className="py-24 relative overflow-hidden">
       
@@ -148,103 +112,30 @@ export default function Contact() {
           <div className="lg:col-span-7">
             <div className="p-8 rounded-2xl bg-[#09090b] border border-white/[0.06] h-full flex flex-col justify-center overflow-hidden">
               
-              {status === "success" ? (
-                // Success trigger state
-                <div className="text-center space-y-4 py-8 animate-in fade-in duration-300">
-                  <div className="flex justify-center">
-                    <div className="w-12 h-12 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
-                      <CheckCircle className="w-6 h-6 animate-bounce" />
-                    </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
+                    {/* Default Mail Client */}
+                    <a
+                      href={`mailto:${resumeData.personal.email}`}
+                      className="w-full py-4 rounded-2xl bg-[#111113] border border-white/[0.06] hover:bg-white/[0.05] hover:border-white/[0.12] transition-all flex flex-col items-center justify-center space-y-2 group"
+                    >
+                      <Mail className="w-6 h-6 text-slate-400 group-hover:text-white transition-colors" />
+                      <span className="text-xs font-bold text-white tracking-wider">Default Mail App</span>
+                    </a>
+
+                    {/* Gmail Web */}
+                    <a
+                      href={`https://mail.google.com/mail/?view=cm&fs=1&to=${resumeData.personal.email}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="w-full py-4 rounded-2xl bg-[#111113] border border-white/[0.06] hover:bg-white/[0.05] hover:border-white/[0.12] transition-all flex flex-col items-center justify-center space-y-2 group"
+                    >
+                      <svg className="w-6 h-6 text-slate-400 group-hover:text-white transition-colors" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.728L12 16.632l-6.545-4.904v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L12 8.336l8.073-4.843C21.691 2.279 24 3.434 24 5.457z" />
+                      </svg>
+                      <span className="text-xs font-bold text-white tracking-wider">Open in Gmail</span>
+                    </a>
                   </div>
-                  
-                  <h3 className="text-sm font-bold text-white uppercase tracking-wider">
-                    Message Sent Successfully
-                  </h3>
-                  
-                  <p className="text-xs text-slate-400 max-w-sm mx-auto leading-relaxed">
-                    Thank you! I will get back to you as soon as possible.
-                  </p>
-
-                  <button
-                    onClick={() => setStatus("idle")}
-                    className="px-4 py-2 rounded-full bg-white/[0.03] border border-white/[0.06] hover:bg-white/[0.08] text-xs font-bold text-blue-400 transition-all font-sans"
-                  >
-                    Send Another Message
-                  </button>
-                </div>
-              ) : (
-                // Submission form panel
-                <form onSubmit={handleSubmit} className="space-y-4 text-xs font-sans">
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {/* Name */}
-                    <div className="space-y-1.5">
-                      <label className="text-[9px] text-slate-500 block uppercase font-bold tracking-wider">Your Name *</label>
-                      <input
-                        type="text"
-                        required
-                        disabled={status === "sending"}
-                        value={formData.name}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        placeholder="E.g. Hiring Manager"
-                        className="w-full bg-[#050508]/60 border border-white/[0.06] rounded-xl px-4 py-3 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500/60 focus:ring-1 focus:ring-blue-500/20 transition-all disabled:opacity-50"
-                      />
-                    </div>
-                    {/* Email */}
-                    <div className="space-y-1.5">
-                      <label className="text-[9px] text-slate-500 block uppercase font-bold tracking-wider">Your Email *</label>
-                      <input
-                        type="email"
-                        required
-                        disabled={status === "sending"}
-                        value={formData.email}
-                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        placeholder="E.g. manager@company.com"
-                        className="w-full bg-[#050508]/60 border border-white/[0.06] rounded-xl px-4 py-3 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500/60 focus:ring-1 focus:ring-blue-500/20 transition-all disabled:opacity-50"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Subject */}
-                  <div className="space-y-1.5">
-                    <label className="text-[9px] text-slate-500 block uppercase font-bold tracking-wider">Subject</label>
-                    <input
-                      type="text"
-                      disabled={status === "sending"}
-                      value={formData.subject}
-                      onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                      placeholder="E.g. Technical Interview Schedule"
-                      className="w-full bg-[#050508]/60 border border-white/[0.06] rounded-xl px-4 py-3 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500/60 focus:ring-1 focus:ring-blue-500/20 transition-all disabled:opacity-50"
-                    />
-                  </div>
-
-                  {/* Message body */}
-                  <div className="space-y-1.5">
-                    <label className="text-[9px] text-slate-500 block uppercase font-bold tracking-wider">Message *</label>
-                    <textarea
-                      required
-                      rows={4}
-                      disabled={status === "sending"}
-                      value={formData.message}
-                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                      placeholder="Compose message..."
-                      className="w-full bg-[#050508]/60 border border-white/[0.06] rounded-xl px-4 py-3 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500/60 focus:ring-1 focus:ring-blue-500/20 transition-all resize-none disabled:opacity-50"
-                    />
-                  </div>
-
-                  {/* Send Button */}
-                  <button
-                    type="submit"
-                    disabled={status === "sending"}
-                    className="w-full py-3 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold tracking-wider uppercase transition-all flex items-center justify-center space-x-2 shadow-lg shadow-blue-500/20 hover:scale-[1.01] disabled:opacity-70 disabled:cursor-wait"
-                  >
-                    <span>{status === "sending" ? "Sending..." : "Send Message Directly"}</span>
-                    <Send className="w-3.5 h-3.5" />
-                  </button>
-
-                </form>
-              )}
-
+              </div>
             </div>
           </div>
 

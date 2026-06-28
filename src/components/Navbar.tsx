@@ -103,11 +103,8 @@ export default function Navbar() {
         <Link href="/" className="flex items-center space-x-3 group">
           <div className="flex flex-col">
             <span
-              className="text-lg sm:text-xl font-extrabold tracking-wide uppercase transition-all duration-[2000ms]"
+              className="text-lg sm:text-xl font-extrabold tracking-wide uppercase text-white transition-all duration-[2000ms]"
               style={{
-                background: `linear-gradient(90deg, ${currentPalette.from}, ${currentPalette.to})`,
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
                 filter: "drop-shadow(0 0 10px rgba(255,255,255,0.1))"
               }}
             >

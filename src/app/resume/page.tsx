@@ -84,7 +84,7 @@ export default function ResumePage() {
                   LinkedIn: <a href={resumeData.personal.linkedin} target="_blank" rel="noreferrer" className="underline text-orange-500">saibykani</a>
                 </p>
                 <p className="no-print">
-                  GitHub: <a href={resumeData.personal.github} target="_blank" rel="noreferrer" className="underline text-orange-500">saibykani07</a>
+                  GitHub: <a href={resumeData.personal.github} target="_blank" rel="noreferrer" className="underline text-orange-500">saibykani</a>
                 </p>
               </div>
             </div>

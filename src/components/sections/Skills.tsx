@@ -143,19 +143,6 @@ export default function Skills() {
               <path d="M7 7h10M7 17h6" stroke="#ff6c37" strokeWidth="1.5" strokeLinecap="round" opacity="0.5"/>
             </svg>
           ),
-        },
-        {
-          name: "REST API",
-          progress: "w-[90%]",
-          barColor: "bg-[#61affe]",
-          icon: (
-            <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none">
-              <path d="M4 12h16" stroke="#61affe" strokeWidth="2" strokeLinecap="round"/>
-              <path d="M9 6l-5 6 5 6" stroke="#61affe" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M15 6l5 6-5 6" stroke="#61affe" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          ),
-        },
       ],
     },
     {
@@ -204,17 +191,6 @@ export default function Skills() {
             </svg>
           ),
         },
-        {
-          name: "Endurance Testing",
-          progress: "w-[80%]",
-          barColor: "bg-[#06b6d4]",
-          icon: (
-            <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none">
-              <circle cx="12" cy="12" r="9" stroke="#06b6d4" strokeWidth="2" fill="none"/>
-              <path d="M12 6v6h6" stroke="#06b6d4" strokeWidth="2" strokeLinecap="round"/>
-            </svg>
-          ),
-        },
       ],
     },
     {
@@ -255,18 +231,6 @@ export default function Skills() {
             </svg>
           ),
         },
-        {
-          name: "Backend Validation",
-          progress: "w-[86%]",
-          barColor: "bg-[#10b981]",
-          icon: (
-            <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none">
-              <rect x="3" y="5" width="18" height="5" rx="2" stroke="#10b981" strokeWidth="1.5"/>
-              <rect x="3" y="14" width="18" height="5" rx="2" stroke="#10b981" strokeWidth="1.5"/>
-              <circle cx="7" cy="7.5" r="1" fill="#10b981"/>
-              <circle cx="7" cy="16.5" r="1" fill="#10b981"/>
-            </svg>
-          ),
         },
         {
           name: "Log Analysis",
@@ -319,16 +283,6 @@ export default function Skills() {
             </svg>
           ),
         },
-        {
-          name: "Gitea",
-          progress: "w-[75%]",
-          barColor: "bg-[#609926]",
-          icon: (
-            <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none">
-              <circle cx="12" cy="12" r="9" fill="#609926" opacity="0.12"/>
-              <path d="M8 12l3 3 5-5" stroke="#609926" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          ),
         },
         {
           name: "Grafana",
