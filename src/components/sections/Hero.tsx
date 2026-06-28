@@ -79,8 +79,8 @@ export default function Hero() {
       <div className={`max-w-4xl mx-auto w-full relative z-10 flex flex-col items-center text-center transition-all duration-1000 transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
         
         {/* Availability Badge */}
-        <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-full bg-blue-500/[0.05] border border-blue-500/20 text-blue-400 text-[11px] font-semibold tracking-widest uppercase mb-10 shadow-[0_0_15px_rgba(59,130,246,0.1)]">
-          <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse shadow-[0_0_8px_rgba(96,165,250,0.8)]" />
+        <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-full bg-emerald-500/[0.08] border border-emerald-500/30 text-emerald-400 text-[11px] font-semibold tracking-widest uppercase mb-10 shadow-[0_0_15px_rgba(16,185,129,0.15)]">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
           <span>Available for SDET Opportunities</span>
         </div>
 

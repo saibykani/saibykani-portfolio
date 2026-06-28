@@ -33,17 +33,14 @@ export default function Projects() {
         
         {/* Title Header */}
         <div className="max-w-3xl mb-16 text-center sm:text-left space-y-3">
-          <div className="text-orange-500 text-[10px] font-bold tracking-widest uppercase">
-            Enterprise Case Studies
-          </div>
           <h2 className="text-3xl sm:text-4.5xl font-extrabold tracking-tight text-white leading-tight">
-            <span className="bg-gradient-to-r from-orange-500 to-red-600 bg-clip-text text-transparent">
-              Engineering Quality at Scale
-            </span>
+            Projects
           </h2>
           <div className="h-1 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full w-24 my-2" />
           <p className="text-sm text-slate-400 max-w-xl leading-relaxed">
-            A deep dive into automation, manual testing, performance engineering, API validation, and the business impact of the core platforms I have engineered.
+            <strong className="text-white">PSP – Enterprise Payment Services Platform</strong>
+            <br />
+            Worked as a Software Development Engineer in Test (SDET) on a large-scale enterprise Payment Services Platform responsible for high-volume transactions.
           </p>
         </div>
 
@@ -92,7 +89,7 @@ export default function Projects() {
                   onClick={() => setSelectedProject(project)}
                   className="inline-flex items-center space-x-1.5 text-xs font-bold text-orange-500 group-hover:text-orange-400 transition-colors uppercase tracking-wider"
                 >
-                  <span>Explore Case Study</span>
+                  <span>Explore Project Insights</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </button>
               </div>
@@ -111,7 +108,7 @@ export default function Projects() {
             {/* Header Toolbar */}
             <div className="px-8 py-5 bg-[#0a0f20]/95 border-b border-white/5 flex items-center justify-between">
               <div>
-                <h4 className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Case Overview</h4>
+                <h4 className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Project Overview</h4>
                 <h3 className="text-base font-extrabold text-white mt-0.5">{selectedProject.title}</h3>
               </div>
               <button
@@ -214,7 +211,7 @@ export default function Projects() {
                 onClick={() => setSelectedProject(null)}
                 className="px-6 py-2.5 rounded-full bg-white text-black hover:bg-slate-100 font-bold text-xs tracking-wider uppercase transition-all"
               >
-                Close Case Study
+                Close Project Overview
               </button>
             </div>
 

@@ -101,15 +101,24 @@ export default function Navbar() {
         
         <Link href="/" className="flex items-center space-x-3 group">
           {/* Circular Logo/Avatar */}
-          <div className="w-10 h-10 rounded-full bg-red-500 flex items-center justify-center shrink-0 shadow-lg shadow-red-500/20">
+          <div 
+            className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 shadow-lg transition-colors duration-[3000ms]"
+            style={{ 
+              backgroundColor: currentPalette.from,
+              boxShadow: `0 0 15px ${currentPalette.from}40`
+            }}
+          >
             <span className="text-white font-bold text-sm tracking-widest">&lt;/&gt;</span>
           </div>
           {/* Name and Role */}
           <div className="flex flex-col">
-            <span className="text-lg sm:text-xl font-bold text-red-400 tracking-tight leading-tight">
+            <span 
+              className="text-lg sm:text-xl font-bold tracking-tight leading-tight transition-colors duration-[3000ms]"
+              style={{ color: currentPalette.from }}
+            >
               Sai Krishna Bykani
             </span>
-            <span className="text-xs text-slate-400 font-medium">
+            <span className="text-xs text-slate-400 font-medium transition-colors duration-[3000ms]">
               QA Automation Engineer
             </span>
           </div>

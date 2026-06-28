@@ -19,7 +19,7 @@ export default function Footer() {
           {/* Logo Brand */}
           <div className="flex items-center space-x-2">
             <span className="text-sm font-extrabold tracking-wider text-white">
-              SAI KRISHNA
+              SAI KRISHNA BYKANI
             </span>
             <span className="w-1.5 h-1.5 rounded-full bg-orange-500" />
             <span className="text-[10px] text-slate-500 tracking-wider font-semibold uppercase pl-2 border-l border-white/10">
@@ -65,14 +65,8 @@ export default function Footer() {
         </div>
 
         {/* Copy Sign */}
-        <div className="pt-8 mt-8 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center text-[9px] text-slate-500 font-semibold tracking-wider">
-          <p>&copy; {new Date().getFullYear()} Sai Krishna Bykani. Reconstructed in luxury space-dark styling.</p>
-          <button
-            onClick={scrollToTop}
-            className="mt-4 sm:mt-0 px-3 py-1 rounded-full bg-white/5 hover:bg-white/10 text-slate-450 hover:text-white transition-colors"
-          >
-            Back to Top
-          </button>
+        <div className="pt-8 mt-8 border-t border-white/5 flex flex-col justify-center items-center text-[9px] text-slate-500 font-semibold tracking-wider hover:text-slate-400 transition-colors duration-500">
+          <p className="animate-pulse">&copy; {new Date().getFullYear()} Sai Krishna Bykani.</p>
         </div>
       </div>
     </footer>

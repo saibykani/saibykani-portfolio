@@ -6,7 +6,6 @@ import Projects from "@/components/sections/Projects";
 import Experience from "@/components/sections/Experience";
 import Expertise from "@/components/sections/Expertise";
 import Certifications from "@/components/sections/Certifications";
-import Blog from "@/components/sections/Blog";
 import Contact from "@/components/sections/Contact";
 import Footer from "@/components/Footer";
 import AIChatbot from "@/components/AIChatbot";
@@ -45,9 +44,6 @@ export default function Home() {
 
       {/* Certifications & Key Metrics */}
       <Certifications />
-
-      {/* Engineering Blog */}
-      <Blog />
 
       {/* Contact Panel */}
       <Contact />
