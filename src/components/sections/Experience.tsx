@@ -54,13 +54,7 @@ export default function Experience() {
               
               <div className="flex items-center space-x-4 mb-6">
                 <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center p-2">
-                  <Image 
-                    src="/toucan-logo.png" 
-                    alt="Toucan Logo" 
-                    width={40} 
-                    height={40} 
-                    className="object-contain"
-                  />
+                  <Building2 className="w-6 h-6 text-slate-300" />
                 </div>
                 <div>
                   <h4 className="text-lg font-bold text-white tracking-tight">{exp.company}</h4>

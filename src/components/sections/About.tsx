@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import resumeData from "@/data/resumeData.json";
+import Image from "next/image";
 import { Terminal, Database, Code2 } from "lucide-react";
 
 export default function About() {
@@ -9,22 +10,35 @@ export default function About() {
     <section id="about" className="py-24 relative border-t border-white/5">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
+        <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-center lg:items-start">
           
-          {/* Left Column: Section Title */}
+          {/* Left Column: Portrait & Title */}
           <motion.div 
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8 }}
-            className="lg:col-span-4"
+            className="flex flex-col items-center lg:items-start lg:w-1/3"
           >
-            <h2 className="text-sm font-bold tracking-widest uppercase text-slate-500 mb-2">
-              01 // Profile
-            </h2>
-            <h3 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-              Professional <br /> Summary.
+            <div className="relative w-48 h-48 sm:w-64 sm:h-64 mb-6 group">
+              <div className="absolute inset-0 rounded-3xl bg-gradient-to-tr from-blue-500/20 to-emerald-500/20 blur-xl group-hover:blur-2xl transition-all duration-500" />
+              <div className="relative w-full h-full rounded-3xl overflow-hidden border border-white/10 bg-[#0a0a0a]">
+                {/* Fallback to generic image styling if portrait fails to load */}
+                <Image 
+                  src="/portrait.png" 
+                  alt="Sai Krishna Bykani"
+                  fill
+                  className="object-cover object-top grayscale hover:grayscale-0 transition-all duration-500"
+                  sizes="(max-width: 768px) 192px, 256px"
+                />
+              </div>
+            </div>
+            <h3 className="text-3xl font-extrabold text-white tracking-tight mb-2 text-center lg:text-left">
+              {resumeData.personal.name}
             </h3>
+            <p className="text-blue-400 font-bold text-sm uppercase tracking-widest text-center lg:text-left">
+              {resumeData.personal.title}
+            </p>
           </motion.div>
 
           {/* Right Column: Content */}
@@ -33,11 +47,16 @@ export default function About() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="lg:col-span-8 space-y-8"
+            className="lg:w-2/3 space-y-8"
           >
-            <p className="text-lg text-slate-300 leading-relaxed font-medium">
-              {resumeData.personal.summary}
-            </p>
+            <div className="space-y-4">
+              <h2 className="text-sm font-bold tracking-widest uppercase text-slate-500">
+                01 // Professional Summary
+              </h2>
+              <p className="text-lg text-slate-300 leading-relaxed font-medium">
+                {resumeData.personal.summary}
+              </p>
+            </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-8 border-t border-white/10">
               

@@ -22,9 +22,9 @@ export default function Home() {
       {/* About Me Section with Portrait */}
       <About />
 
-      {/* Skills Orbit Grid */}
-      <div id="skills">
-        <Skills />
+      {/* Experience Timeline */}
+      <div id="experience">
+        <Experience />
       </div>
 
       {/* Projects Case Studies */}
@@ -32,9 +32,9 @@ export default function Home() {
         <Projects />
       </div>
 
-      {/* Experience Timeline */}
-      <div id="experience">
-        <Experience />
+      {/* Skills Orbit Grid */}
+      <div id="skills">
+        <Skills />
       </div>
 
       {/* Contact Panel */}
