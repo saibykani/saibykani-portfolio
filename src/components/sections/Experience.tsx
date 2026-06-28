@@ -10,7 +10,6 @@ import { Briefcase, Calendar, MapPin, Building2, CheckCircle2, ChevronRight, X }
 export default function Experience() {
   const exp = resumeData.experience[0];
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [expandedMilestone, setExpandedMilestone] = useState<string | null>("UI Automation");
 
   const kpiData = [
     { label: "Automated Test Cases", value: 1000, suffix: "+" },
@@ -208,38 +207,23 @@ export default function Experience() {
                   
                   <div className="relative space-y-4 before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-white/10 before:to-transparent">
                     {milestones.map((milestone, idx) => {
-                      const isExpanded = expandedMilestone === milestone.id;
                       return (
-                        <div key={milestone.id} className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
-                          <div className="flex items-center justify-center w-10 h-10 rounded-full border border-white/20 bg-[#0a0a0c] text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 cursor-pointer z-10 transition-colors hover:border-blue-400" onClick={() => setExpandedMilestone(isExpanded ? null : milestone.id)}>
-                            <div className={`w-3 h-3 rounded-full transition-colors ${isExpanded ? 'bg-blue-400' : 'bg-white/20 group-hover:bg-blue-400/50'}`} />
+                        <div key={milestone.id} className="relative flex items-start justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+                          <div className="flex items-center justify-center w-10 h-10 rounded-full border border-blue-400 bg-[#0a0a0c] text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 transition-colors">
+                            <div className="w-3 h-3 rounded-full bg-blue-400" />
                           </div>
                           
-                          <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-4 rounded-2xl border border-white/10 bg-white/[0.02] transition-all cursor-pointer hover:bg-white/[0.04]" onClick={() => setExpandedMilestone(isExpanded ? null : milestone.id)}>
-                            <div className="flex items-center justify-between mb-1">
-                              <h5 className={`text-sm font-bold tracking-tight transition-colors ${isExpanded ? 'text-white' : 'text-slate-300'}`}>{milestone.title}</h5>
-                            </div>
+                          <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-5 rounded-3xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.03] transition-all">
+                            <h5 className="text-base font-bold tracking-tight text-white mb-4 border-b border-white/10 pb-3">{milestone.title}</h5>
                             
-                            <AnimatePresence>
-                              {isExpanded && (
-                                <motion.div 
-                                  initial={{ height: 0, opacity: 0 }}
-                                  animate={{ height: "auto", opacity: 1 }}
-                                  exit={{ height: 0, opacity: 0 }}
-                                  transition={{ duration: 0.3 }}
-                                  className="overflow-hidden"
-                                >
-                                  <ul className="mt-4 space-y-3 border-t border-white/5 pt-4">
-                                    {milestone.content.map((item, i) => (
-                                      <li key={i} className="flex items-start text-xs text-slate-400 leading-relaxed">
-                                        <CheckCircle2 className="w-3.5 h-3.5 text-blue-400/70 mr-2 shrink-0 mt-0.5" />
-                                        <span>{item}</span>
-                                      </li>
-                                    ))}
-                                  </ul>
-                                </motion.div>
-                              )}
-                            </AnimatePresence>
+                            <ul className="space-y-3">
+                              {milestone.content.map((item, i) => (
+                                <li key={i} className="flex items-start text-xs text-slate-300 leading-relaxed">
+                                  <CheckCircle2 className="w-4 h-4 text-emerald-400/80 mr-3 shrink-0 mt-0.5" />
+                                  <span>{item}</span>
+                                </li>
+                              ))}
+                            </ul>
                           </div>
                         </div>
                       )

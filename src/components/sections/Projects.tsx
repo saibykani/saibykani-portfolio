@@ -9,25 +9,24 @@ type Project = typeof resumeData.projects[0];
 
 const SvgArchitectureHorizontal = ({ nodes }: { nodes: string[] }) => {
   return (
-    <div className="w-full bg-[#0a0a0c] border border-white/10 rounded-2xl p-6 relative overflow-x-auto my-4 custom-scrollbar">
+    <div className="w-full bg-[#0a0a0c] border border-white/10 rounded-2xl p-6 relative overflow-x-auto my-8 custom-scrollbar">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-white/[0.03] via-transparent to-transparent pointer-events-none" />
       
       <div className="flex items-center min-w-max space-x-0 relative z-10 py-4 px-2">
         {nodes.map((node, index) => (
           <div key={node} className="flex items-center group">
-            {/* Node */}
+            {/* Node as a Circle */}
             <motion.div 
               whileHover={{ scale: 1.05 }}
-              className="px-4 py-2.5 rounded-xl border border-white/20 bg-white/[0.02] backdrop-blur-md shadow-lg text-xs font-semibold tracking-wide text-white relative overflow-hidden flex-shrink-0"
+              className="w-24 h-24 sm:w-28 sm:h-28 rounded-full border border-white/20 bg-[#111116] shadow-[0_0_15px_rgba(255,255,255,0.05)] text-[10px] sm:text-xs font-bold tracking-wide text-white relative overflow-hidden flex-shrink-0 flex items-center justify-center text-center p-2"
             >
               <div className="absolute inset-0 bg-white/5 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
-              <span className="relative z-10">{node}</span>
+              <span className="relative z-10 leading-tight">{node}</span>
             </motion.div>
 
             {/* Connector */}
             {index < nodes.length - 1 && (
-              <div className="w-12 h-px bg-white/20 relative mx-2 flex-shrink-0 flex items-center justify-center">
-                {/* Simulated curved connection using SVG if needed, but horizontal line is cleaner */}
+              <div className="w-12 sm:w-16 h-px bg-white/20 relative mx-2 flex-shrink-0 flex items-center justify-center">
                 <motion.div
                   initial={{ left: 0, opacity: 0 }}
                   animate={{ left: "100%", opacity: [0, 1, 0] }}
@@ -200,9 +199,18 @@ export default function Projects() {
                 </button>
               </div>
 
-              {/* Modal Content - Accordions */}
+              {/* Modal Content - Accordions & Flow */}
               <div className="flex-1 overflow-y-auto p-6 sm:p-8 pb-24">
                 
+                {/* Architecture Flow Displayed Directly */}
+                <div className="mb-10">
+                  <h4 className="text-sm font-bold text-white uppercase tracking-widest flex items-center mb-4">
+                    <Network className="w-4 h-4 mr-2 text-blue-400" /> 
+                    Architecture Flow
+                  </h4>
+                  <SvgArchitectureHorizontal nodes={selectedProject.caseStudy.architecture.nodes} />
+                </div>
+
                 <Accordion title="Project Overview" icon={Target} defaultOpen={true}>
                   {selectedProject.caseStudy.overview}
                 </Accordion>
@@ -231,10 +239,6 @@ export default function Projects() {
                       </span>
                     ))}
                   </div>
-                </Accordion>
-
-                <Accordion title="Architecture Flow" icon={Network}>
-                  <SvgArchitectureHorizontal nodes={selectedProject.caseStudy.architecture.nodes} />
                 </Accordion>
 
                 <Accordion title="Automation Workflow (Deep Dive)" icon={Activity}>
