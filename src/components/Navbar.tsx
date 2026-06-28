@@ -99,18 +99,17 @@ export default function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
         
-        {/* Brand Name */}
         <Link href="/" className="flex items-center space-x-3 group">
+          {/* Circular Logo/Avatar */}
+          <div className="w-10 h-10 rounded-full bg-red-500 flex items-center justify-center shrink-0 shadow-lg shadow-red-500/20">
+            <span className="text-white font-bold text-sm tracking-widest">SK</span>
+          </div>
+          {/* Name and Role */}
           <div className="flex flex-col">
-            <span
-              className="text-xl sm:text-2xl font-serif font-bold tracking-tight text-white transition-all duration-[2000ms]"
-              style={{
-                filter: "drop-shadow(0 0 10px rgba(255,255,255,0.1))"
-              }}
-            >
-              Sai Krishna Bykani
+            <span className="text-lg sm:text-xl font-bold text-red-400 tracking-tight leading-tight">
+              Sai Krishna
             </span>
-            <span className="text-[10px] text-gray-400 font-semibold tracking-wider mt-0.5">
+            <span className="text-xs text-slate-400 font-medium">
               QA Automation Engineer
             </span>
           </div>
