@@ -363,7 +363,6 @@ export default function Skills() {
 
         {/* Section Header */}
         <div className="mb-16">
-          <span className="text-[10px] text-gray-600 font-bold uppercase tracking-[0.3em]">02</span>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white mt-2">
             Skills & Technologies
           </h2>
@@ -373,63 +372,45 @@ export default function Skills() {
           </p>
         </div>
 
-        {/* Skill Categories */}
-        <div className="space-y-14">
-          {categories.map((category, catIdx) => (
-            <div
-              key={category.title}
-              className={`transition-all duration-700 ${
-                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-              }`}
-              style={{ transitionDelay: `${catIdx * 150}ms` }}
-            >
-              {/* Category Label */}
-              <div className="flex items-center gap-3 mb-5">
-                <span className="text-[10px] font-bold text-gray-600 uppercase tracking-[0.25em]">
-                  {category.label}
+        {/* Unified Skills Grid */}
+        <div className={`transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
+          <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-4">
+            {categories.flatMap(c => c.skills).map((skill, idx) => (
+              <div
+                key={skill.name}
+                className="group relative p-4 rounded-2xl bg-[#09090b] border border-white/[0.06] flex flex-col items-center justify-between space-y-3 hover:border-white/[0.12] hover:bg-white/[0.02] transition-all duration-300 hover:shadow-lg hover:shadow-black/30 animate-in fade-in zoom-in"
+                style={{ animationDelay: `${idx * 50}ms` }}
+              >
+                {/* Hover glow */}
+                <div
+                  className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                  style={{
+                    background: `radial-gradient(circle at 50% 30%, ${skill.barColor.replace("bg-[", "").replace("]", "")}11, transparent 70%)`,
+                  }}
+                />
+
+                {/* Icon */}
+                <div className="w-10 h-10 flex items-center justify-center relative z-10 group-hover:scale-110 transition-transform duration-300">
+                  {skill.icon}
+                </div>
+
+                {/* Name */}
+                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider text-center relative z-10 group-hover:text-gray-200 transition-colors">
+                  {skill.name}
                 </span>
-                <div className="flex-1 h-[1px] bg-white/[0.04]" />
-              </div>
 
-              {/* Skills Grid */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                {category.skills.map((skill) => (
+                {/* Progress Bar */}
+                <div className="w-full h-1 bg-white/[0.04] rounded-full overflow-hidden relative z-10">
                   <div
-                    key={skill.name}
-                    className="group relative p-5 rounded-2xl bg-[#09090b] border border-white/[0.06] flex flex-col items-center justify-between space-y-3 hover:border-white/[0.12] hover:bg-white/[0.02] transition-all duration-300 hover:shadow-lg hover:shadow-black/30"
-                  >
-                    {/* Hover glow */}
-                    <div
-                      className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                      style={{
-                        background: `radial-gradient(circle at 50% 30%, ${skill.barColor.replace("bg-[", "").replace("]", "")}11, transparent 70%)`,
-                      }}
-                    />
-
-                    {/* Icon */}
-                    <div className="w-12 h-12 flex items-center justify-center relative z-10 group-hover:scale-110 transition-transform duration-300">
-                      {skill.icon}
-                    </div>
-
-                    {/* Name */}
-                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider text-center relative z-10 group-hover:text-gray-200 transition-colors">
-                      {skill.name}
-                    </span>
-
-                    {/* Progress Bar */}
-                    <div className="w-full h-1 bg-white/[0.04] rounded-full overflow-hidden relative z-10">
-                      <div
-                        className={`h-full ${skill.progress} rounded-full transition-all duration-1000 ${
-                          isVisible ? "opacity-100" : "opacity-0 w-0"
-                        }`}
-                        style={{ backgroundColor: skill.barColor.replace("bg-[", "").replace("]", "") }}
-                      />
-                    </div>
-                  </div>
-                ))}
+                    className={`h-full ${skill.progress} rounded-full transition-all duration-1000 ${
+                      isVisible ? "opacity-100" : "opacity-0 w-0"
+                    }`}
+                    style={{ backgroundColor: skill.barColor.replace("bg-[", "").replace("]", "") }}
+                  />
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
 
         {/* Summary Metrics */}

@@ -18,7 +18,9 @@ export default function Home() {
       <Navbar />
 
       {/* Hero Intro Section */}
-      <Hero />
+      <div id="home">
+        <Hero />
+      </div>
 
       {/* About Me Section with Portrait */}
       <About />

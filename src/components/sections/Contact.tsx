@@ -13,20 +13,31 @@ export default function Contact() {
   });
   const [status, setStatus] = useState<"idle" | "sending" | "success">("idle");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.email || !formData.message) return;
 
-    // Use mailto to send email natively with user's client
-    const mailtoUrl = `mailto:${resumeData.personal.email}?subject=${encodeURIComponent(
-      formData.subject || `Portfolio Contact from ${formData.name}`
-    )}&body=${encodeURIComponent(
-      `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
-    )}`;
-    window.location.href = mailtoUrl;
+    setStatus("sending");
 
-    setStatus("success");
-    setFormData({ name: "", email: "", subject: "", message: "" });
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        setStatus("success");
+        setFormData({ name: "", email: "", subject: "", message: "" });
+      } else {
+        setStatus("idle");
+        alert("Failed to send message. Please try again.");
+      }
+    } catch (error) {
+      console.error(error);
+      setStatus("idle");
+      alert("An error occurred. Please try again.");
+    }
   };
 
   return (
@@ -39,9 +50,6 @@ export default function Contact() {
         
         {/* Title Header */}
         <div className="max-w-3xl mb-16 text-center sm:text-left space-y-3">
-          <div className="text-[10px] text-gray-600 font-bold uppercase tracking-[0.3em]">
-            07
-          </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white leading-tight">
             Contact Me
           </h2>
@@ -150,18 +158,18 @@ export default function Contact() {
                   </div>
                   
                   <h3 className="text-sm font-bold text-white uppercase tracking-wider">
-                    Message Prepared
+                    Message Sent Successfully
                   </h3>
                   
                   <p className="text-xs text-slate-400 max-w-sm mx-auto leading-relaxed">
-                    Thank you! Your email client has been opened with your message. Please send it to connect with me.
+                    Thank you! I will get back to you as soon as possible.
                   </p>
 
                   <button
                     onClick={() => setStatus("idle")}
                     className="px-4 py-2 rounded-full bg-white/[0.03] border border-white/[0.06] hover:bg-white/[0.08] text-xs font-bold text-blue-400 transition-all font-sans"
                   >
-                    Draft Another Message
+                    Send Another Message
                   </button>
                 </div>
               ) : (
@@ -175,10 +183,11 @@ export default function Contact() {
                       <input
                         type="text"
                         required
+                        disabled={status === "sending"}
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         placeholder="E.g. Hiring Manager"
-                        className="w-full bg-[#050508]/60 border border-white/[0.06] rounded-xl px-4 py-3 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500/60 focus:ring-1 focus:ring-blue-500/20 transition-all"
+                        className="w-full bg-[#050508]/60 border border-white/[0.06] rounded-xl px-4 py-3 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500/60 focus:ring-1 focus:ring-blue-500/20 transition-all disabled:opacity-50"
                       />
                     </div>
                     {/* Email */}
@@ -187,10 +196,11 @@ export default function Contact() {
                       <input
                         type="email"
                         required
+                        disabled={status === "sending"}
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         placeholder="E.g. manager@company.com"
-                        className="w-full bg-[#050508]/60 border border-white/[0.06] rounded-xl px-4 py-3 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500/60 focus:ring-1 focus:ring-blue-500/20 transition-all"
+                        className="w-full bg-[#050508]/60 border border-white/[0.06] rounded-xl px-4 py-3 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500/60 focus:ring-1 focus:ring-blue-500/20 transition-all disabled:opacity-50"
                       />
                     </div>
                   </div>
@@ -200,10 +210,11 @@ export default function Contact() {
                     <label className="text-[9px] text-slate-500 block uppercase font-bold tracking-wider">Subject</label>
                     <input
                       type="text"
+                      disabled={status === "sending"}
                       value={formData.subject}
                       onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
                       placeholder="E.g. Technical Interview Schedule"
-                      className="w-full bg-[#050508]/60 border border-white/[0.06] rounded-xl px-4 py-3 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500/60 focus:ring-1 focus:ring-blue-500/20 transition-all"
+                      className="w-full bg-[#050508]/60 border border-white/[0.06] rounded-xl px-4 py-3 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500/60 focus:ring-1 focus:ring-blue-500/20 transition-all disabled:opacity-50"
                     />
                   </div>
 
@@ -213,19 +224,21 @@ export default function Contact() {
                     <textarea
                       required
                       rows={4}
+                      disabled={status === "sending"}
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                       placeholder="Compose message..."
-                      className="w-full bg-[#050508]/60 border border-white/[0.06] rounded-xl px-4 py-3 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500/60 focus:ring-1 focus:ring-blue-500/20 transition-all resize-none"
+                      className="w-full bg-[#050508]/60 border border-white/[0.06] rounded-xl px-4 py-3 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500/60 focus:ring-1 focus:ring-blue-500/20 transition-all resize-none disabled:opacity-50"
                     />
                   </div>
 
                   {/* Send Button */}
                   <button
                     type="submit"
-                    className="w-full py-3 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold tracking-wider uppercase transition-all flex items-center justify-center space-x-2 shadow-lg shadow-blue-500/20 hover:scale-[1.01]"
+                    disabled={status === "sending"}
+                    className="w-full py-3 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold tracking-wider uppercase transition-all flex items-center justify-center space-x-2 shadow-lg shadow-blue-500/20 hover:scale-[1.01] disabled:opacity-70 disabled:cursor-wait"
                   >
-                    <span>Open in Email Client</span>
+                    <span>{status === "sending" ? "Sending..." : "Send Message Directly"}</span>
                     <Send className="w-3.5 h-3.5" />
                   </button>
 

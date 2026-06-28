@@ -35,9 +35,6 @@ export default function About() {
       <div className="max-w-6xl mx-auto">
         {/* Section Label */}
         <div className="mb-16">
-          <span className="text-[10px] text-gray-600 font-bold uppercase tracking-[0.3em]">
-            01
-          </span>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white mt-2">
             About Me
           </h2>
@@ -114,7 +111,7 @@ export default function About() {
               <div className="absolute -inset-4 bg-gradient-to-br from-cyan-500/[0.08] via-transparent to-purple-500/[0.06] rounded-3xl blur-2xl" />
 
               {/* Image Container */}
-              <div className="relative w-[320px] h-[420px] sm:w-[360px] sm:h-[480px] rounded-2xl overflow-hidden border border-white/[0.08] shadow-2xl shadow-black/50">
+              <div className="relative w-[320px] h-[420px] sm:w-[360px] sm:h-[480px] rounded-2xl overflow-hidden border border-white/[0.08] shadow-2xl shadow-black/50 bg-[#0a0a0a]">
                 {/* Corner accent lines */}
                 <div className="absolute top-0 left-0 w-16 h-[1px] bg-gradient-to-r from-cyan-500/50 to-transparent z-20" />
                 <div className="absolute top-0 left-0 w-[1px] h-16 bg-gradient-to-b from-cyan-500/50 to-transparent z-20" />
@@ -122,14 +119,14 @@ export default function About() {
                 <div className="absolute bottom-0 right-0 w-[1px] h-16 bg-gradient-to-t from-cyan-500/50 to-transparent z-20" />
 
                 {/* Gradient overlay at bottom */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-10" />
 
                 {/* Portrait */}
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/portrait.png"
                   alt="Sai Krishna Bykani"
-                  className="w-full h-full object-cover transition-transform duration-700 hover:scale-[1.03]"
+                  className="w-full h-full object-contain object-bottom transition-transform duration-700 hover:scale-[1.03]"
                   style={{ filter: "contrast(1.05) brightness(0.95)" }}
                 />
               </div>

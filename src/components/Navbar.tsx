@@ -43,7 +43,7 @@ export default function Navbar() {
   // Section observer for active nav link
   useEffect(() => {
     if (pathname !== "/") return;
-    const sections = ["about", "skills", "projects", "experience"];
+    const sections = ["home", "about", "skills", "projects", "experience", "contact"];
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -97,45 +97,23 @@ export default function Navbar() {
         scrolled ? "bg-black/80 backdrop-blur-xl shadow-2xl shadow-black/50" : "bg-transparent"
       }`}
     >
-      {/* Gradient bottom line */}
-      <div
-        className="absolute bottom-0 left-0 right-0 h-[1px] transition-all duration-[2000ms]"
-        style={{
-          background: `linear-gradient(90deg, transparent, ${currentPalette.from}, ${currentPalette.to}, transparent)`,
-          opacity: scrolled ? 0.6 : 0.3,
-        }}
-      />
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
         
-        {/* Brand Logo + Name */}
+        {/* Brand Name */}
         <Link href="/" className="flex items-center space-x-3 group">
-          {/* Animated Logo Icon */}
-          <div
-            className="w-10 h-10 rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:rotate-[360deg] transition-all duration-700"
-            style={{
-              background: `linear-gradient(135deg, ${currentPalette.from}, ${currentPalette.to})`,
-              boxShadow: `0 0 20px ${currentPalette.from}33`,
-              transition: "background 2s ease, box-shadow 2s ease, transform 0.7s ease",
-            }}
-          >
-            {/* Custom bolt/code icon */}
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
-            </svg>
-          </div>
-
-          {/* Name with animated color */}
           <div className="flex flex-col">
             <span
-              className="text-sm sm:text-base font-bold bg-clip-text text-transparent transition-all duration-[2000ms]"
+              className="text-lg sm:text-xl font-extrabold tracking-wide uppercase transition-all duration-[2000ms]"
               style={{
-                backgroundImage: `linear-gradient(90deg, ${currentPalette.from}, ${currentPalette.to})`,
+                background: `linear-gradient(90deg, ${currentPalette.from}, ${currentPalette.to})`,
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                filter: "drop-shadow(0 0 10px rgba(255,255,255,0.1))"
               }}
             >
-              Sai Krishna Bykani
+              Sai Krishna
             </span>
-            <span className="text-[9px] text-gray-500 font-medium uppercase tracking-[0.2em]">
+            <span className="text-[8px] text-gray-500 font-bold uppercase tracking-[0.3em]">
               QA Automation Engineer
             </span>
           </div>
