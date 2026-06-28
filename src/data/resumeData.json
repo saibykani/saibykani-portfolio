@@ -32,80 +32,121 @@
   ],
   "projects": [
     {
-      "id": "payment-gateway-automation",
-      "title": "Payment Gateway Automation",
-      "brief": "End-to-end automation of merchant onboarding and card transaction flows with 40% regression stability improvement.",
-      "description": "A comprehensive automation suite designed to validate complex payment processing systems, merchant onboarding portals, and transactional flows. The framework simulates active user transactions and validates transaction success criteria across UI inputs and API responses.",
-      "problem": "Merchant onboarding and core transaction flows were previously manual, taking hours to execute during releases and leading to occasional regression leaks in merchant checkout redirects.",
-      "context": "Fintech payment processing requires 100% correctness. Regressions in transaction processing can lead to immediate financial impact and loss of user trust.",
-      "techStack": ["Java", "Selenium WebDriver", "Cucumber (BDD)", "TestNG", "Maven", "Page Object Model (POM)"],
-      "metrics": {
-        "Regression Stability": "~40% Improvement",
-        "Test Execution Speed": "65% Reduction in time",
-        "Coverage": "100% of Core Checkout Flows"
-      },
-      "results": "Decreased production bugs by 80% through shifting quality left and verifying redirects across multiple banks, payment links, and card types.",
-      "challenges": "Handling third-party 3D-secure OTP simulator screens and checking asynchronous webhook updates on merchant databases.",
-      "solution": "Built dynamic polling services using Awaitility and decoupled OTP simulators using sandbox mock service integrations.",
-      "frameworkDesign": "Page Object Model structure with separate directories for Step Definitions, Page Objects, Runners, and Utility classes.",
-      "folderStructure": "src/\n├── main/java/\n│   ├── pages/\n│   │   ├── LoginPage.java\n│   │   └── PaymentPage.java\n│   └── utils/\n│       ├── DriverFactory.java\n│       └── DBUtils.java\n└── test/\n    ├── java/\n    │   ├── runners/\n    │   │   └── TestRunner.java\n    │   └── stepDefinitions/\n    │       └── PaymentSteps.java\n    └── resources/\n        └── features/\n            └── PaymentGateway.feature"
+      "id": "psp-enterprise",
+      "title": "PSP – Enterprise Payment Services Platform",
+      "category": "Enterprise FinTech Platform",
+      "domain": "Payment Gateway, Merchant Acquiring, Payment Processing, Acquiring Switch, Authorization, ISO 8583, Clearing, Settlement, Reconciliation, Card Payments, UPI, Merchant Services, Digital Payments",
+      "overview": "Worked as a Software Development Engineer in Test (SDET) on a large-scale enterprise Payment Services Platform responsible for managing the complete lifecycle of digital payment transactions. The platform includes merchant onboarding, merchant checkout, payment gateway services, transaction routing, acquiring switch operations, authorization, clearing, settlement, reconciliation, refunds, and financial reporting.",
+      "businessProblem": "Financial payment platforms must process millions of secure transactions with near-zero failure rates. Any issue in authorization, routing, clearing, settlement, reconciliation, or merchant onboarding can directly impact merchants, banks, and customers. The objective was to build a scalable automation ecosystem that validates every payment workflow before production deployment, ensuring transaction accuracy, business continuity, and regulatory compliance.",
+      "responsibilities": [
+        "UI Automation using Selenium WebDriver",
+        "API Automation using REST Assured",
+        "Automation Framework Development",
+        "Merchant Onboarding Automation",
+        "Merchant Checkout Automation",
+        "Card Transaction Validation",
+        "UPI Transaction Validation",
+        "Authorization Flow Validation",
+        "Pre-Authorization Testing",
+        "Completion & Void Testing",
+        "Refund Automation",
+        "Acquiring Switch Validation",
+        "ISO 8583 Transaction Verification",
+        "Clearing Validation",
+        "Settlement Validation",
+        "Reconciliation Validation",
+        "Backend Validation using MySQL & MongoDB",
+        "Performance Testing using Apache JMeter",
+        "Grafana Log Analysis",
+        "Regression Automation",
+        "Smoke & Sanity Testing",
+        "Cross Browser Testing",
+        "Jenkins CI/CD Integration",
+        "Defect Reporting & RCA"
+      ],
+      "modules": [
+        "Merchant Management", "Merchant Onboarding", "Merchant Checkout", "Payment Gateway", "Virtual POS", "Physical POS", "Card Payments", "UPI Payments", "Wallet Payments", "QR Payments", "Authorization", "Pre-Authorization", "Completion", "Void", "Refund", "Acquiring Switch", "Transaction Routing", "Clearing", "Settlement", "Reconciliation", "Chargeback", "Merchant Settlement", "Reports", "Dashboard", "Notifications", "Configuration", "Role Management"
+      ],
+      "techStack": ["Java", "Selenium WebDriver", "TestNG", "Cucumber BDD", "REST Assured", "Postman", "Apache JMeter", "MySQL", "MongoDB", "Grafana", "Jenkins", "GitHub", "Azure DevOps", "Maven"],
+      "businessImpact": [
+        "Reduced regression execution time.",
+        "Improved automation coverage.",
+        "Validated high-volume payment transactions.",
+        "Improved payment reliability.",
+        "Reduced production defects.",
+        "Accelerated release cycles.",
+        "Improved transaction accuracy.",
+        "Strengthened payment platform stability."
+      ]
     },
     {
-      "id": "performance-testing-framework",
-      "title": "Distributed Performance Testing",
-      "brief": "Distributed load testing of card and UPI transaction flows under 3x peak load conditions.",
-      "description": "Performance verification framework designed to load test high-concurrency payment pathways. Utilizes a distributed master-slave JMeter architecture deployed in cloud and on-prem environments.",
-      "problem": "Unpredicted UPI load spikes during promotional sales caused API response latencies to exceed SLA targets (2s) on the bank gateways.",
-      "context": "UPI transaction pipelines process thousands of concurrent requests. Under high concurrency, system latencies must remain low, and database locks must be avoided.",
-      "techStack": ["Apache JMeter", "Distributed Execution", "Grafana Monitoring", "InfluxDB", "Dynatrace"],
-      "metrics": {
-        "Peak Concurrency": "10,000+ RPS Simulated",
-        "UPI Flow Scaling": "Tested up to 3x normal peaks",
-        "Response SLA Compliance": "99.9% of requests < 1.2s"
-      },
-      "results": "Identified critical connection pool limitations in backend databases, preventing connection timeout crashes under load.",
-      "challenges": "Synthesizing distributed load injection without causing CPU bottlenecks on the master injector node.",
-      "solution": "Set up a JMeter master-slave pipeline on lightweight Linux containers, feeding telemetry metrics directly to InfluxDB and visualizing load in Grafana.",
-      "frameworkDesign": "Distributed master injector coordinating load generators, executing parameterized .jmx script scenarios.",
-      "folderStructure": "jmeter/\n├── config/\n│   ├── user.properties\n│   └── system.properties\n├── scripts/\n│   ├── UPI_Load_Test.jmx\n│   └── Card_Load_Test.jmx\n└── data/\n    ├── cards_dataset.csv\n    └── merchants_dataset.csv"
+      "id": "rwa-platform",
+      "title": "RWA – Residential Welfare Association Platform",
+      "category": "Community Management",
+      "domain": "PropTech, Residential Management",
+      "overview": "Community management platform with automation covering resident management, visitor approvals, maintenance payments, complaints, facility booking, notices, and administration.",
+      "businessProblem": "Managing large residential complexes manually leads to delays in visitor approvals, payment tracking issues, and miscommunication.",
+      "responsibilities": [
+        "UI Automation for resident portal",
+        "API Automation for payment processing",
+        "Regression Testing for facility booking flows",
+        "Database validation for complaint management"
+      ],
+      "modules": [
+        "Resident Management", "Visitor Approvals", "Maintenance Payments", "Complaints", "Facility Booking", "Notices", "Administration"
+      ],
+      "techStack": ["Java", "Selenium WebDriver", "REST Assured", "TestNG"],
+      "businessImpact": [
+        "Improved resident onboarding speed.",
+        "Streamlined visitor tracking.",
+        "Automated maintenance payment verifications."
+      ]
     },
     {
-      "id": "api-automation-framework",
-      "title": "API Automation Framework",
-      "brief": "Robust REST Assured automation framework for payment webhooks, transaction status API checks, and merchant ledger validations.",
-      "description": "An enterprise-grade, clean API test framework built in Java with REST Assured. Integrates deep assertion tools, schema validation, and dynamic payload builders for verifying critical financial endpoints.",
-      "problem": "Microservice APIs were being modified without proper backward compatibility checks, leading to integration issues during weekly deploys.",
-      "context": "Payment ledger systems, payouts, and bank settlement APIs require strict contract verification to ensure zero variance in ledger reporting.",
-      "techStack": ["Java", "REST Assured", "Postman", "Newman", "JSON Schema Validation", "Jenkins"],
-      "metrics": {
-        "APIs Automated": "750+ Endpoints validated",
-        "Execution Time": "Under 4 minutes in CI",
-        "Regression Coverage": "Increased by 60%"
-      },
-      "results": "Achieved continuous regression runs on every build, preventing deployment of incompatible API changes to staging environments.",
-      "challenges": "Managing dynamic API signatures and encrypting payment payload headers (such as HMAC tokens) in real time.",
-      "solution": "Built a custom RequestSpecBuilder interceptor that automatically computes SHA-256 HMAC checksum headers for every request.",
-      "frameworkDesign": "Base API service class, payload factory using Jackson serialization, and descriptive test files using TestNG assertions.",
-      "folderStructure": "src/\n├── main/java/\n│   ├── api/\n│   │   ├── BaseAPI.java\n│   │   ├── PayloadFactory.java\n│   │   └── HMACGenerator.java\n│   └── models/\n│       ├── TransactionRequest.java\n│       └── TransactionResponse.java\n└── test/java/\n    └── tests/\n        ├── TransactionAPITest.java\n        └── LedgerAPITest.java"
+      "id": "ppms-ngo",
+      "title": "PPMS – NGO Project Management System",
+      "category": "Non-Profit Management",
+      "domain": "NGO, Campaign Management",
+      "overview": "NGO management platform with automation covering donor management, beneficiary management, campaigns, volunteers, donations, reporting, and administrative workflows.",
+      "businessProblem": "NGOs require transparent tracking of donations, efficient volunteer allocation, and accurate reporting to maintain donor trust.",
+      "responsibilities": [
+        "End-to-end automation of donation workflows",
+        "API integration testing for payment gateways",
+        "Data validation for reporting modules",
+        "Cross-browser testing for donor portals"
+      ],
+      "modules": [
+        "Donor Management", "Beneficiary Management", "Campaigns", "Volunteers", "Donations", "Reporting", "Administrative Workflows"
+      ],
+      "techStack": ["Java", "Selenium WebDriver", "Cucumber BDD", "Postman", "MySQL"],
+      "businessImpact": [
+        "Ensured zero data loss in donation processing.",
+        "Reduced manual reporting efforts.",
+        "Enhanced campaign tracking accuracy."
+      ]
     },
     {
-      "id": "backend-validation-framework",
-      "title": "Backend Validation & Monitoring",
-      "brief": "Automated data integrity checks verifying transactions across MySQL, MongoDB, and Grafana panels.",
-      "description": "A validation pipeline designed to check that when a transaction is completed, records are written consistently in SQL ledger databases and MongoDB document vaults, and system health is reporting correctly in Grafana.",
-      "problem": "Occasional network disruptions led to ledger records mismatches where transactions succeeded in the gateway but failed to reflect in DB records.",
-      "context": "Ledger consistency is critical. Data must match across UI, API, and the DB for audits.",
-      "techStack": ["MySQL", "MongoDB", "Azure SQL", "Grafana Monitoring", "Java Database Connectivity (JDBC)"],
-      "metrics": {
-        "Data Matching Accuracy": "100%",
-        "Mismatch Detect Time": "Immediate (Real-Time checks)",
-        "Audit Coverage": "All transactions audited"
-      },
-      "results": "Established automatic reconciliation, reducing manual verification work by the operations team by 90%.",
-      "challenges": "Validating unstructured Mongo collections and executing quick cross-database joins.",
-      "solution": "Built a unified validation engine utilizing MongoDB Java client alongside JDBC, mapping rows to common Transaction models.",
-      "frameworkDesign": "Database client utility wrappers, data comparative assertions, and Grafana alert query scripts.",
-      "folderStructure": "src/\n├── main/java/\n│   └── database/\n│       ├── MySQLClient.java\n│       ├── MongoClient.java\n│       └── DataValidator.java\n└── test/java/\n    └── dbtests/\n        ├── LedgerReconciliationTest.java\n        └── AuditLogTest.java"
+      "id": "vcip-kyc",
+      "title": "VCIP – Video Customer Identification Platform",
+      "category": "Digital Banking & Identity",
+      "domain": "RegTech, Video KYC, Digital Identity",
+      "overview": "Digital banking platform for Video KYC, customer onboarding, PAN verification, Aadhaar verification, document upload, face verification, approval workflow, and compliance validation.",
+      "businessProblem": "Digital banking requires highly secure, compliant, and fraud-resistant identity verification mechanisms before onboarding customers.",
+      "responsibilities": [
+        "Automated verification of PAN/Aadhaar integration endpoints",
+        "Performance testing of video streaming APIs under load",
+        "UI automation of approval workflows",
+        "Security validation for document uploads"
+      ],
+      "modules": [
+        "Video KYC", "Customer Onboarding", "PAN Verification", "Aadhaar Verification", "Document Upload", "Face Verification", "Approval Workflow", "Compliance Validation"
+      ],
+      "techStack": ["Java", "REST Assured", "Selenium", "Apache JMeter", "Jenkins"],
+      "businessImpact": [
+        "Accelerated remote customer onboarding.",
+        "Ensured 100% compliance with KYC regulations.",
+        "Reduced manual verification bottlenecks."
+      ]
     }
   ],
   "skills": {

@@ -1,321 +1,161 @@
 "use client";
 
-import { useState } from "react";
-import { ArrowRight, X, Calendar, DollarSign, Award, Target, HelpCircle, CheckCircle } from "lucide-react";
+import { CheckCircle2, LayoutTemplate, Box, Server, CheckSquare, Target, Activity } from "lucide-react";
 import resumeData from "@/data/resumeData.json";
 
 interface ProjectData {
   id: string;
   title: string;
-  brief: string;
-  description: string;
-  problem: string;
-  context: string;
+  category: string;
+  domain: string;
+  overview: string;
+  businessProblem: string;
+  responsibilities: string[];
+  modules: string[];
   techStack: string[];
-  metrics: Record<string, string>;
-  results: string;
-  challenges: string;
-  solution: string;
-  frameworkDesign: string;
-  folderStructure: string;
+  businessImpact: string[];
 }
 
 export default function Projects() {
-  const [selectedProject, setSelectedProject] = useState<ProjectData | null>(null);
-
   const projectsList = (resumeData.projects as unknown) as ProjectData[];
 
-  const renderArchitectureDiagram = (projectId: string) => {
-    switch (projectId) {
-      case "payment-gateway-automation":
-        return (
-          <svg viewBox="0 0 600 160" className="w-full h-auto bg-slate-900/60 rounded-xl p-4 border border-white/5 font-sans text-[10px]">
-            <defs>
-              <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                <path d="M 0 1 L 10 5 L 0 9 z" fill="rgba(255, 255, 255, 0.2)" />
-              </marker>
-            </defs>
-            {/* Steps */}
-            <rect x="20" y="50" width="100" height="60" rx="8" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.1)" />
-            <text x="70" y="80" fill="white" textAnchor="middle" fontWeight="bold">Gherkin BDD</text>
-            <text x="70" y="95" fill="rgba(255,255,255,0.4)" textAnchor="middle">Cucumber Scenarios</text>
-
-            <path d="M 120 80 L 160 80" stroke="rgba(255,255,255,0.1)" strokeWidth="1.5" markerEnd="url(#arrow)" />
-
-            <rect x="170" y="50" width="110" height="60" rx="8" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.1)" />
-            <text x="225" y="80" fill="white" textAnchor="middle" fontWeight="bold">TestNG runner</text>
-            <text x="225" y="95" fill="rgba(255,255,255,0.4)" textAnchor="middle">Parallel Executes</text>
-
-            <path d="M 280 80 L 320 80" stroke="rgba(255,255,255,0.1)" strokeWidth="1.5" markerEnd="url(#arrow)" />
-
-            <rect x="330" y="50" width="110" height="60" rx="8" fill="rgba(249,115,22,0.05)" stroke="rgba(249,115,22,0.2)" />
-            <text x="385" y="80" fill="white" textAnchor="middle" fontWeight="bold">DriverFactory</text>
-            <text x="385" y="95" fill="rgba(249,115,22,0.6)" textAnchor="middle">Chrome instances</text>
-
-            <path d="M 440 80 L 480 80" stroke="rgba(255,255,255,0.1)" strokeWidth="1.5" markerEnd="url(#arrow)" />
-
-            <rect x="490" y="50" width="90" height="60" rx="8" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.1)" />
-            <text x="535" y="80" fill="white" textAnchor="middle" fontWeight="bold">3DS Sandbox</text>
-            <text x="535" y="95" fill="rgba(255,255,255,0.4)" textAnchor="middle">Mocks Redirect</text>
-          </svg>
-        );
-      case "performance-testing-framework":
-        return (
-          <svg viewBox="0 0 600 160" className="w-full h-auto bg-slate-900/60 rounded-xl p-4 border border-white/5 font-sans text-[10px]">
-            <defs>
-              <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                <path d="M 0 1 L 10 5 L 0 9 z" fill="rgba(255, 255, 255, 0.2)" />
-              </marker>
-            </defs>
-            <rect x="20" y="50" width="110" height="60" rx="8" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.1)" />
-            <text x="75" y="80" fill="white" textAnchor="middle" fontWeight="bold">JMeter Master</text>
-            <text x="75" y="95" fill="rgba(255,255,255,0.4)" textAnchor="middle">Test Plan Config</text>
-
-            <path d="M 130 80 L 170 80" stroke="rgba(255,255,255,0.1)" strokeWidth="1.5" markerEnd="url(#arrow)" />
-
-            <rect x="180" y="50" width="110" height="60" rx="8" fill="rgba(249,115,22,0.05)" stroke="rgba(249,115,22,0.2)" />
-            <text x="235" y="80" fill="white" textAnchor="middle" fontWeight="bold">Docker Slaves</text>
-            <text x="235" y="95" fill="rgba(249,115,22,0.6)" textAnchor="middle">Distributed Load</text>
-
-            <path d="M 290 80 L 330 80" stroke="rgba(255,255,255,0.1)" strokeWidth="1.5" markerEnd="url(#arrow)" />
-
-            <rect x="340" y="50" width="110" height="60" rx="8" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.1)" />
-            <text x="395" y="80" fill="white" textAnchor="middle" fontWeight="bold">UPI gateway</text>
-            <text x="395" y="95" fill="rgba(255,255,255,0.4)" textAnchor="middle">Target services</text>
-
-            <path d="M 450 80 L 490 80" stroke="rgba(255,255,255,0.1)" strokeWidth="1.5" markerEnd="url(#arrow)" />
-
-            <rect x="500" y="50" width="80" height="60" rx="8" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.1)" />
-            <text x="540" y="80" fill="white" textAnchor="middle" fontWeight="bold">Grafana</text>
-            <text x="540" y="95" fill="rgba(255,255,255,0.4)" textAnchor="middle">Telemetry</text>
-          </svg>
-        );
-      case "api-automation-framework":
-        return (
-          <svg viewBox="0 0 600 160" className="w-full h-auto bg-slate-900/60 rounded-xl p-4 border border-white/5 font-sans text-[10px]">
-            <defs>
-              <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                <path d="M 0 1 L 10 5 L 0 9 z" fill="rgba(255, 255, 255, 0.2)" />
-              </marker>
-            </defs>
-            <rect x="20" y="50" width="110" height="60" rx="8" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.1)" />
-            <text x="75" y="80" fill="white" textAnchor="middle" fontWeight="bold">Payload Factory</text>
-            <text x="75" y="95" fill="rgba(255,255,255,0.4)" textAnchor="middle">Jackson Jackson</text>
-
-            <path d="M 130 80 L 170 80" stroke="rgba(255,255,255,0.1)" strokeWidth="1.5" markerEnd="url(#arrow)" />
-
-            <rect x="180" y="50" width="110" height="60" rx="8" fill="rgba(249,115,22,0.05)" stroke="rgba(249,115,22,0.2)" />
-            <text x="235" y="80" fill="white" textAnchor="middle" fontWeight="bold">HMAC Spec</text>
-            <text x="235" y="95" fill="rgba(249,115,22,0.6)" textAnchor="middle">SHA-255 header</text>
-
-            <path d="M 290 80 L 330 80" stroke="rgba(255,255,255,0.1)" strokeWidth="1.5" markerEnd="url(#arrow)" />
-
-            <rect x="340" y="50" width="110" height="60" rx="8" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.1)" />
-            <text x="395" y="80" fill="white" textAnchor="middle" fontWeight="bold">REST Assured</text>
-            <text x="395" y="95" fill="rgba(255,255,255,0.4)" textAnchor="middle">Client execute</text>
-
-            <path d="M 450 80 L 490 80" stroke="rgba(255,255,255,0.1)" strokeWidth="1.5" markerEnd="url(#arrow)" />
-
-            <rect x="500" y="50" width="80" height="60" rx="8" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.1)" />
-            <text x="540" y="85" fill="white" textAnchor="middle" fontWeight="bold">Assertions</text>
-          </svg>
-        );
-      default:
-        return null;
-    }
-  };
-
   return (
-    <section id="projects" className="py-24 relative overflow-hidden">
+    <section id="projects" className="py-24 relative overflow-hidden bg-black">
       
-      {/* Dynamic background glow */}
-      <div className="absolute bottom-[20%] right-[-5%] w-[400px] h-[400px] rounded-full bg-orange-500/5 filter blur-3xl pointer-events-none" />
+      {/* Background ambients */}
+      <div className="absolute top-[20%] left-[-10%] w-[500px] h-[500px] rounded-full bg-blue-500/[0.03] filter blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-[10%] right-[-10%] w-[600px] h-[600px] rounded-full bg-indigo-500/[0.03] filter blur-[150px] pointer-events-none" />
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
-        {/* Title Header */}
-        <div className="max-w-3xl mb-16 text-center sm:text-left space-y-3">
-          <div className="text-orange-500 text-[10px] font-bold tracking-widest uppercase">
-            Product Studies
+        {/* Header */}
+        <div className="max-w-3xl mb-20 text-center sm:text-left space-y-4">
+          <div className="text-blue-500 text-[10px] font-bold tracking-widest uppercase">
+            Enterprise Case Studies
           </div>
-          <h2 className="text-3xl sm:text-4.5xl font-extrabold tracking-tight text-white leading-tight">
-            <span className="bg-gradient-to-r from-orange-500 to-red-600 bg-clip-text text-transparent">
-              Case Studies &amp; Projects
-            </span>
+          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white leading-tight">
+            Engineering Quality at Scale
           </h2>
-          <div className="h-1 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full w-24 my-2" />
+          <div className="w-16 h-[2px] bg-gradient-to-r from-blue-500 to-indigo-500 my-4" />
           <p className="text-sm text-slate-400 max-w-xl leading-relaxed">
-            A detailed review of framework architectures, database integrity reconciliation models, and concurrent performance load benchmarks.
+            A deep dive into the architecture, testing strategies, and business impact of the core platforms I have engineered automation for.
           </p>
         </div>
 
-        {/* Projects Cards Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {projectsList.map((project) => (
-            <div
-              key={project.id}
-              className="p-8 rounded-2xl glass-premium flex flex-col justify-between hover:-translate-y-1 transition-all duration-500 group relative overflow-hidden"
-            >
-              {/* Subtle mesh background highlight on hover */}
-              <div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+        {/* Stacked Case Studies */}
+        <div className="space-y-24">
+          {projectsList.map((project, index) => (
+            <div key={project.id} className="relative group">
+              
+              {/* Connection line between projects */}
+              {index !== projectsList.length - 1 && (
+                <div className="absolute left-[27px] top-[100px] bottom-[-100px] w-[1px] bg-gradient-to-b from-white/10 to-transparent hidden md:block" />
+              )}
 
-              <div className="space-y-4 relative z-10">
-                <h3 className="text-xl font-extrabold text-white group-hover:text-orange-450 transition-colors">
-                  {project.title}
-                </h3>
+              <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-start">
                 
-                <p className="text-xs text-slate-400 leading-relaxed font-normal">
-                  {project.brief}
-                </p>
+                {/* Number Indicator (Left Column) */}
+                <div className="hidden md:flex flex-col items-center shrink-0 w-14 mt-1">
+                  <div className="w-14 h-14 rounded-2xl bg-white/[0.02] border border-white/[0.08] flex items-center justify-center text-xl font-bold text-slate-500 group-hover:text-blue-400 group-hover:border-blue-500/30 transition-all duration-500 shadow-xl shadow-black/50">
+                    0{index + 1}
+                  </div>
+                </div>
 
-                {/* Tech tag lists */}
-                <div className="flex flex-wrap gap-1.5 pt-2">
-                  {project.techStack.map((tech) => (
-                    <span
-                      key={tech}
-                      className="px-2.5 py-0.5 rounded-full text-[9px] font-bold bg-white/5 border border-white/10 text-slate-400 hover:bg-white/10 hover:text-white transition-colors"
-                    >
-                      {tech}
-                    </span>
-                  ))}
+                {/* Content Block */}
+                <div className="flex-1 space-y-8 p-1 rounded-3xl transition-all duration-500">
+                  
+                  {/* Title & Domain */}
+                  <div className="space-y-3">
+                    <div className="flex flex-wrap items-center gap-3">
+                      <span className="px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[10px] font-bold uppercase tracking-wider">
+                        {project.category}
+                      </span>
+                    </div>
+                    <h3 className="text-2xl sm:text-3xl font-extrabold text-white leading-tight">
+                      {project.title}
+                    </h3>
+                    <p className="text-xs text-slate-400 uppercase tracking-widest font-semibold leading-relaxed">
+                      {project.domain}
+                    </p>
+                  </div>
+
+                  <p className="text-sm text-slate-300 leading-relaxed max-w-3xl">
+                    {project.overview}
+                  </p>
+
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    {/* Left side info */}
+                    <div className="space-y-6">
+                      {/* Business Problem */}
+                      <div className="p-6 rounded-2xl bg-[#09090b] border border-white/[0.06] hover:border-white/[0.1] transition-colors h-full">
+                        <div className="flex items-center gap-2 mb-4">
+                          <Target className="w-4 h-4 text-red-400" />
+                          <h4 className="text-xs font-bold text-white uppercase tracking-wider">Business Challenge</h4>
+                        </div>
+                        <p className="text-xs text-slate-400 leading-relaxed">
+                          {project.businessProblem}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Right side info */}
+                    <div className="space-y-6">
+                      {/* Business Impact */}
+                      <div className="p-6 rounded-2xl bg-blue-950/10 border border-blue-500/10 hover:border-blue-500/20 transition-colors h-full">
+                        <div className="flex items-center gap-2 mb-4">
+                          <Activity className="w-4 h-4 text-blue-400" />
+                          <h4 className="text-xs font-bold text-white uppercase tracking-wider">Business Impact</h4>
+                        </div>
+                        <ul className="space-y-3">
+                          {project.businessImpact.map((impact, i) => (
+                            <li key={i} className="flex items-start gap-2 text-xs text-slate-300 leading-relaxed">
+                              <CheckCircle2 className="w-3.5 h-3.5 text-blue-500 mt-0.5 shrink-0" />
+                              <span>{impact}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Testing Strategy / Responsibilities */}
+                  <div className="p-6 rounded-2xl bg-[#09090b] border border-white/[0.06]">
+                    <div className="flex items-center gap-2 mb-6">
+                      <CheckSquare className="w-4 h-4 text-indigo-400" />
+                      <h4 className="text-xs font-bold text-white uppercase tracking-wider">Testing Strategy & Execution</h4>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-6">
+                      {project.responsibilities.map((task, i) => (
+                        <div key={i} className="flex items-center gap-2 text-xs text-slate-400">
+                          <div className="w-1.5 h-1.5 rounded-full bg-indigo-500/50" />
+                          <span>{task}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Tech Stack */}
+                  <div className="space-y-4">
+                    <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Technology Stack</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {project.techStack.map((tech) => (
+                        <span
+                          key={tech}
+                          className="px-3 py-1.5 rounded-lg text-[11px] font-semibold bg-white/[0.02] border border-white/[0.05] text-slate-300 hover:bg-white/[0.05] hover:text-white transition-colors"
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
                 </div>
               </div>
-
-              <div className="pt-8 relative z-10">
-                <button
-                  onClick={() => setSelectedProject(project)}
-                  className="inline-flex items-center space-x-1.5 text-xs font-bold text-orange-500 group-hover:text-orange-400 transition-colors uppercase tracking-wider"
-                >
-                  <span>Explore Case Study</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </button>
-              </div>
-
             </div>
           ))}
         </div>
 
       </div>
-
-      {/* Full-Screen Reading Modal */}
-      {selectedProject && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-[#050508]/90 backdrop-blur-xl flex items-center justify-center p-4">
-          <div className="w-full max-w-4xl max-h-[92vh] rounded-3xl glass-premium overflow-hidden flex flex-col animate-in fade-in zoom-in-95 duration-300">
-            
-            {/* Header Toolbar */}
-            <div className="px-8 py-5 bg-[#0a0f20]/95 border-b border-white/5 flex items-center justify-between">
-              <div>
-                <h4 className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Case Overview</h4>
-                <h3 className="text-base font-extrabold text-white mt-0.5">{selectedProject.title}</h3>
-              </div>
-              <button
-                onClick={() => setSelectedProject(null)}
-                className="p-2 rounded-full bg-white/5 border border-white/5 text-slate-400 hover:text-white hover:bg-white/10 transition-all"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-
-            {/* Editorial Content */}
-            <div className="flex-1 overflow-y-auto p-8 space-y-10 text-xs sm:text-sm text-slate-400 font-sans">
-              
-              {/* Context Summary Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 border-b border-white/5 pb-8">
-                <div className="space-y-3">
-                  <div className="flex items-center space-x-1 text-red-400">
-                    <Target className="w-4 h-4" />
-                    <span className="text-[10px] font-bold uppercase tracking-widest">Business Problem</span>
-                  </div>
-                  <p className="text-slate-350 leading-relaxed text-xs">
-                    {selectedProject.problem}
-                  </p>
-                </div>
-                <div className="space-y-3">
-                  <div className="flex items-center space-x-1 text-orange-400">
-                    <Award className="w-4 h-4" />
-                    <span className="text-[10px] font-bold uppercase tracking-widest">Context</span>
-                  </div>
-                  <p className="text-slate-350 leading-relaxed text-xs">
-                    {selectedProject.context}
-                  </p>
-                </div>
-              </div>
-
-              {/* Minimal SVG flowchart */}
-              <div className="space-y-3">
-                <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500 block">Framework Architecture Flow</span>
-                <div className="p-4 rounded-2xl bg-black/30 border border-white/5">
-                  {renderArchitectureDiagram(selectedProject.id)}
-                </div>
-              </div>
-
-              {/* Folder directory structure */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 border-t border-b border-white/5 py-8">
-                <div className="space-y-3">
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500 block">Framework Package Outline</span>
-                  <pre className="p-4 rounded-xl bg-slate-950/80 border border-white/5 text-orange-400 text-xs font-mono overflow-x-auto leading-relaxed">
-                    {selectedProject.folderStructure}
-                  </pre>
-                </div>
-                
-                <div className="space-y-6">
-                  <div className="space-y-2">
-                    <span className="text-[10px] text-yellow-500 font-bold uppercase tracking-widest flex items-center space-x-1">
-                      <HelpCircle className="w-4 h-4" />
-                      <span>Engineering Challenge</span>
-                    </span>
-                    <p className="text-slate-300 text-xs leading-relaxed">
-                      {selectedProject.challenges}
-                    </p>
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <span className="text-[10px] text-emerald-400 font-bold uppercase tracking-widest flex items-center space-x-1">
-                      <CheckCircle className="w-4 h-4" />
-                      <span>Technical Solution</span>
-                    </span>
-                    <p className="text-slate-300 text-xs leading-relaxed bg-[#0a0f20]/60 p-4 rounded-2xl border border-white/5">
-                      {selectedProject.solution}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Performance Metrics & Impact */}
-              <div className="space-y-4">
-                <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500 block">Verification Metrics</span>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {Object.entries(selectedProject.metrics).map(([key, val]) => (
-                    <div key={key} className="p-5 rounded-2xl border border-white/5 bg-[#0a0f20]/40 text-center">
-                      <span className="text-[9px] text-slate-550 uppercase block mb-1 tracking-wider font-semibold">{key}</span>
-                      <span className="text-xl font-extrabold text-white block">{val}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="bg-orange-950/10 p-5 rounded-2xl border border-orange-500/10 space-y-2">
-                <span className="text-[10px] text-orange-400 font-bold uppercase tracking-widest block">Release & Business Impact</span>
-                <p className="text-slate-300 text-xs leading-relaxed">
-                  {selectedProject.results}
-                </p>
-              </div>
-
-            </div>
-
-            {/* Footer */}
-            <div className="px-8 py-5 bg-[#0a0f20]/95 border-t border-white/5 flex justify-end">
-              <button
-                onClick={() => setSelectedProject(null)}
-                className="px-6 py-2.5 rounded-full bg-white text-black hover:bg-slate-100 font-bold text-xs tracking-wider uppercase transition-all"
-              >
-                Close Case Study
-              </button>
-            </div>
-
-          </div>
-        </div>
-      )}
     </section>
   );
 }

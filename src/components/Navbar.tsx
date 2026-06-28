@@ -103,14 +103,14 @@ export default function Navbar() {
         <Link href="/" className="flex items-center space-x-3 group">
           <div className="flex flex-col">
             <span
-              className="text-lg sm:text-xl font-extrabold tracking-wide uppercase text-white transition-all duration-[2000ms]"
+              className="text-xl sm:text-2xl font-serif font-bold tracking-tight text-white transition-all duration-[2000ms]"
               style={{
                 filter: "drop-shadow(0 0 10px rgba(255,255,255,0.1))"
               }}
             >
-              Sai Krishna
+              Sai Krishna Bykani
             </span>
-            <span className="text-[8px] text-gray-500 font-bold uppercase tracking-[0.3em]">
+            <span className="text-[10px] text-gray-400 font-semibold tracking-wider mt-0.5">
               QA Automation Engineer
             </span>
           </div>

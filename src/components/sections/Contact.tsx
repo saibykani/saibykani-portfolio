@@ -112,29 +112,59 @@ export default function Contact() {
           <div className="lg:col-span-7">
             <div className="p-8 rounded-2xl bg-[#09090b] border border-white/[0.06] h-full flex flex-col justify-center overflow-hidden">
               
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
-                    {/* Default Mail Client */}
-                    <a
-                      href={`mailto:${resumeData.personal.email}`}
-                      className="w-full py-4 rounded-2xl bg-[#111113] border border-white/[0.06] hover:bg-white/[0.05] hover:border-white/[0.12] transition-all flex flex-col items-center justify-center space-y-2 group"
-                    >
-                      <Mail className="w-6 h-6 text-slate-400 group-hover:text-white transition-colors" />
-                      <span className="text-xs font-bold text-white tracking-wider">Default Mail App</span>
-                    </a>
+              <form action={`https://formsubmit.co/${resumeData.personal.email}`} method="POST" className="space-y-4">
+                {/* Honeypot for spam protection */}
+                <input type="text" name="_honey" style={{ display: "none" }} />
+                
+                {/* Disable captcha for cleaner UX */}
+                <input type="hidden" name="_captcha" value="false" />
+                
+                {/* Auto response & success redirect (optional, leaving default formsubmit page for now or we could route back) */}
+                <input type="hidden" name="_next" value={typeof window !== 'undefined' ? window.location.href : ""} />
+                
+                <div className="space-y-2">
+                  <label htmlFor="name" className="text-[10px] text-slate-500 font-bold tracking-widest uppercase">Your Name</label>
+                  <input 
+                    type="text" 
+                    id="name" 
+                    name="name" 
+                    required 
+                    placeholder="John Doe"
+                    className="w-full px-4 py-3 bg-[#111113] border border-white/[0.06] rounded-xl text-xs text-white placeholder:text-slate-600 focus:outline-none focus:border-blue-500/50 transition-colors"
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <label htmlFor="email" className="text-[10px] text-slate-500 font-bold tracking-widest uppercase">Email Address</label>
+                  <input 
+                    type="email" 
+                    id="email" 
+                    name="email" 
+                    required 
+                    placeholder="john@example.com"
+                    className="w-full px-4 py-3 bg-[#111113] border border-white/[0.06] rounded-xl text-xs text-white placeholder:text-slate-600 focus:outline-none focus:border-blue-500/50 transition-colors"
+                  />
+                </div>
 
-                    {/* Gmail Web */}
-                    <a
-                      href={`https://mail.google.com/mail/?view=cm&fs=1&to=${resumeData.personal.email}`}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="w-full py-4 rounded-2xl bg-[#111113] border border-white/[0.06] hover:bg-white/[0.05] hover:border-white/[0.12] transition-all flex flex-col items-center justify-center space-y-2 group"
-                    >
-                      <svg className="w-6 h-6 text-slate-400 group-hover:text-white transition-colors" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.728L12 16.632l-6.545-4.904v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L12 8.336l8.073-4.843C21.691 2.279 24 3.434 24 5.457z" />
-                      </svg>
-                      <span className="text-xs font-bold text-white tracking-wider">Open in Gmail</span>
-                    </a>
-                  </div>
+                <div className="space-y-2">
+                  <label htmlFor="message" className="text-[10px] text-slate-500 font-bold tracking-widest uppercase">Message</label>
+                  <textarea 
+                    id="message" 
+                    name="message" 
+                    required 
+                    rows={4}
+                    placeholder="Hi Sai, I'd like to discuss..."
+                    className="w-full px-4 py-3 bg-[#111113] border border-white/[0.06] rounded-xl text-xs text-white placeholder:text-slate-600 focus:outline-none focus:border-blue-500/50 transition-colors resize-none"
+                  ></textarea>
+                </div>
+
+                <button 
+                  type="submit"
+                  className="w-full py-4 mt-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-extrabold tracking-widest uppercase transition-all shadow-lg shadow-blue-500/20"
+                >
+                  Send Message
+                </button>
+              </form>
             </div>
           </div>
         </div>

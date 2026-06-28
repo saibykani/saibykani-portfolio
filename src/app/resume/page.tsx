@@ -43,17 +43,31 @@ export default function ResumePage() {
               }`}
             >
               <span>{atsMode ? "Visual Dark Mode" : "Light Print Mode"}</span>
-              {atsMode ? <ToggleRight className="w-4 h-4 text-orange-550" /> : <ToggleLeft className="w-4 h-4 text-slate-500" />}
+              {atsMode ? <ToggleRight className="w-4 h-4 text-blue-500" /> : <ToggleLeft className="w-4 h-4 text-slate-500" />}
             </button>
 
             {/* Print Trigger */}
             <button
               onClick={handlePrint}
-              className="flex items-center space-x-1.5 px-4 py-2 rounded-full bg-gradient-to-r from-orange-500 to-red-650 hover:from-orange-600 hover:to-red-700 text-white font-bold transition-all shadow-md text-[10px] tracking-wider uppercase"
+              className="flex items-center space-x-1.5 px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 border border-white/10 text-white font-bold transition-all text-[10px] tracking-wider uppercase"
             >
               <Printer className="w-3.5 h-3.5" />
               <span>Print CV</span>
             </button>
+
+            {/* Direct Download Trigger */}
+            <a
+              href="/Sai_Krishna_Bykani_Resume.pdf"
+              download="Sai_Krishna_Bykani_Resume.pdf"
+              className="flex items-center space-x-1.5 px-4 py-2 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold transition-all shadow-md text-[10px] tracking-wider uppercase"
+            >
+              <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
+              <span>Download PDF</span>
+            </a>
           </div>
         </div>
 
