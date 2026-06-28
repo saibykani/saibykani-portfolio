@@ -104,11 +104,12 @@ export default function Projects() {
           {resumeData.projects.map((project, idx) => (
             <motion.div
               key={project.id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: idx * 0.1, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              className="p-8 rounded-3xl glass-premium border border-white/10 relative flex flex-col group hover:border-white/20 transition-all duration-500"
+              initial={{ opacity: 0, y: 50, scale: 0.95 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ delay: idx * 0.15, duration: 0.6, type: "spring", stiffness: 100 }}
+              whileHover={{ y: -10, scale: 1.02 }}
+              className="p-8 rounded-3xl glass-premium border border-white/10 relative flex flex-col group hover:border-blue-500/30 transition-all duration-500 shadow-xl hover:shadow-[0_0_40px_rgba(59,130,246,0.15)]"
             >
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center space-x-3">

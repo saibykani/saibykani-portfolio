@@ -25,10 +25,46 @@ export default function Experience() {
   const summary = "Building enterprise automation frameworks for payment gateway systems, merchant acquiring, API validation, performance testing and release automation.";
 
   const milestones = [
-    { id: "UI Automation", title: "UI Automation", content: exp.contributions["UI & E2E Automation"] || [] },
-    { id: "API Automation", title: "API Automation", content: exp.contributions["API & Backend Validation"] || [] },
-    { id: "Performance Engineering", title: "Performance Engineering", content: exp.contributions["Performance & Load Testing"] || [] },
-    { id: "Framework Development", title: "Framework Development", content: exp.contributions["Infrastructure & CI/CD"] || [] },
+    { 
+      id: "UI Automation", 
+      title: "UI Automation & E2E Testing", 
+      content: [
+        "Architected scalable Selenium WebDriver frameworks using Java, implementing Page Object Model (POM) and BDD approaches to maintain 1000+ UI test cases.",
+        "Engineered robust handling for dynamic iframes in payment gateway pages, ensuring seamless cross-tab workflow testing for merchant onboarding.",
+        "Integrated OCR and advanced assertions to validate dynamic financial reporting charts across Safari, Chrome, and Edge browsers.",
+        "Achieved a 40% reduction in regression cycles by implementing parallel test execution workflows via Selenium Grid and Docker containers."
+      ] 
+    },
+    { 
+      id: "API Automation", 
+      title: "API Automation & Backend Validation", 
+      content: [
+        "Designed comprehensive REST Assured test suites, validating over 750+ complex payment gateway and clearing APIs with deep JSON schema verification.",
+        "Implemented custom POJO serialization and deserialization via Jackson to simulate thousands of dynamic merchant transaction payloads in real-time.",
+        "Engineered automated database validation wrappers using JDBC to cross-verify MongoDB transaction logs against MySQL settlement ledgers, ensuring zero data loss.",
+        "Automated OAuth2 token management and webhook verifications for asynchronous acquiring bank responses."
+      ] 
+    },
+    { 
+      id: "Performance Engineering", 
+      title: "Performance & Load Testing", 
+      content: [
+        "Led performance engineering initiatives by designing massive distributed load testing architectures using Apache JMeter and Azure VMs.",
+        "Successfully simulated 3x peak production load (5,000+ TPS) to identify and isolate critical memory leaks and database connection bottlenecks before Black Friday.",
+        "Integrated Grafana and Telegraf for real-time performance observability during stress testing, mapping throughput degradation directly to JVM heap spikes.",
+        "Established baseline performance SLAs for all Tier-1 payment authorization microservices."
+      ] 
+    },
+    { 
+      id: "Framework Development", 
+      title: "Framework Development & CI/CD", 
+      content: [
+        "Built centralized, tightly integrated CI/CD pipelines in Azure DevOps, shifting quality engineering to the absolute left of the development lifecycle.",
+        "Developed custom reporting dashboards using ExtentReports and Allure, providing executive stakeholders with real-time analytics on release stability (99.8%).",
+        "Created scalable framework utilities for dynamic test data generation, reducing test flakiness by 85% across volatile environments.",
+        "Mentored QA teams on shifting from manual exploratory testing to code-first automation strategies."
+      ] 
+    },
   ];
 
   return (
