@@ -20,7 +20,7 @@ export default function About() {
             transition={{ duration: 0.8 }}
             className="flex flex-col items-center lg:items-start lg:w-1/3"
           >
-            <div className="relative w-48 h-48 sm:w-64 sm:h-64 mb-6 group">
+            <div className="relative w-56 h-[280px] sm:w-64 sm:h-[320px] mb-6 group">
               <div className="absolute inset-0 rounded-3xl bg-gradient-to-tr from-blue-500/20 to-emerald-500/20 blur-xl group-hover:blur-2xl transition-all duration-500" />
               <div className="relative w-full h-full rounded-3xl overflow-hidden border border-white/10 bg-[#0a0a0a]">
                 {/* Fallback to generic image styling if portrait fails to load */}
@@ -28,8 +28,8 @@ export default function About() {
                   src="/portrait.png" 
                   alt="Sai Krishna Bykani"
                   fill
-                  className="object-cover object-top transition-all duration-500"
-                  sizes="(max-width: 768px) 192px, 256px"
+                  className="object-cover transition-all duration-500"
+                  sizes="(max-width: 768px) 224px, 256px"
                 />
               </div>
             </div>

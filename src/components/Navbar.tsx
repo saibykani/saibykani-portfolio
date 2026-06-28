@@ -8,10 +8,10 @@ import { motion } from "framer-motion";
 const navLinks = [
   { name: "Overview", href: "/", id: "home" },
   { name: "About Me", href: "#about", id: "about" },
-  { name: "Professional Experience", href: "#experience", id: "experience" },
+  { name: "Experience", href: "#experience", id: "experience" },
   { name: "Tech Stack", href: "#skills", id: "skills" },
-  { name: "Case Studies", href: "#projects", id: "projects" },
-  { name: "Contact", href: "#contact", id: "contact" },
+  { name: "Projects", href: "#projects", id: "projects" },
+  { name: "Connect", href: "#contact", id: "contact" },
 ];
 
 export default function Navbar() {
