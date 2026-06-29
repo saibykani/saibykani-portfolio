@@ -221,3 +221,54 @@ body {
     line-height: 1.4 !important;
   }
 }
+
+/* Global color variables for multiple themes */
+:root {
+  --accent-color: #3b82f6; /* default blue */
+  --accent-color-rgb: 59, 130, 246;
+  --accent-gradient-from: #06b6d4;
+  --accent-gradient-to: #3b82f6;
+  --accent-glow: rgba(59, 130, 246, 0.1);
+}
+
+html.theme-orange {
+  --accent-color: #f97316;
+  --accent-color-rgb: 249, 115, 22;
+  --accent-gradient-from: #fb923c;
+  --accent-gradient-to: #ea580c;
+  --accent-glow: rgba(249, 115, 22, 0.1);
+}
+
+html.theme-purple {
+  --accent-color: #a855f7;
+  --accent-color-rgb: 168, 85, 247;
+  --accent-gradient-from: #c084fc;
+  --accent-gradient-to: #7e22ce;
+  --accent-glow: rgba(168, 85, 247, 0.1);
+}
+
+html.theme-emerald {
+  --accent-color: #10b981;
+  --accent-color-rgb: 16, 185, 129;
+  --accent-gradient-from: #34d399;
+  --accent-gradient-to: #047857;
+  --accent-glow: rgba(16, 185, 129, 0.1);
+}
+
+/* Utility classes mapped to custom properties */
+.text-accent-theme {
+  color: var(--accent-color) !important;
+}
+.bg-accent-theme {
+  background-color: var(--accent-color) !important;
+}
+.border-accent-theme {
+  border-color: var(--accent-color) !important;
+}
+.bg-accent-theme-glow {
+  background-color: var(--accent-glow) !important;
+}
+.bg-gradient-accent {
+  background-image: linear-gradient(to right, var(--accent-gradient-from), var(--accent-gradient-to)) !important;
+}
+

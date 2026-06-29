@@ -21,7 +21,7 @@ export default function About() {
             className="flex flex-col items-center lg:items-start lg:w-1/3"
           >
             <div className="relative w-56 h-[280px] sm:w-64 sm:h-[320px] mb-6 group">
-              <div className="absolute inset-0 rounded-3xl bg-gradient-to-tr from-blue-500/20 to-emerald-500/20 blur-xl group-hover:blur-2xl transition-all duration-500" />
+              <div className="absolute inset-0 rounded-3xl bg-gradient-to-tr from-accent-theme/20 to-accent-gradient-from/20 blur-xl group-hover:blur-2xl transition-all duration-500" />
               <div className="relative w-full h-full rounded-3xl overflow-hidden border border-white/10 bg-[#0a0a0a]">
                 {/* Fallback to generic image styling if portrait fails to load */}
                 <Image 
@@ -36,7 +36,7 @@ export default function About() {
             <h3 className="text-3xl font-extrabold text-white tracking-tight mb-2 text-center lg:text-left">
               {resumeData.personal.name}
             </h3>
-            <p className="text-[#60A5FA] font-bold text-[11px] uppercase tracking-widest text-center lg:text-left leading-relaxed">
+            <p className="text-accent-theme font-bold text-[11px] uppercase tracking-widest text-center lg:text-left leading-relaxed">
               SOFTWARE DEVELOPMENT ENGINEER IN TEST (SDET)
             </p>
           </motion.div>

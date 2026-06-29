@@ -1,37 +1,154 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import resumeData from "@/data/resumeData.json";
 import { ArrowRight, X, ChevronDown, Layers, Activity, Target, Network, CheckCircle2, Server, Database, LineChart, Code2, Briefcase, Zap, Star, LayoutGrid, Lightbulb } from "lucide-react";
 
 type Project = typeof resumeData.projects[0];
 
-const SvgArchitectureHorizontal = ({ nodes }: { nodes: string[] }) => {
+const SvgArchitectureCircular = ({ nodes }: { nodes: string[] }) => {
+  const [activeNode, setActiveNode] = useState<number | null>(null);
+  
+  // Dynamic color changing of the nodes/perimeter line every 2 seconds
+  const [colorIndex, setColorIndex] = useState(0);
+  const colors = ["#3b82f6", "#f97316", "#a855f7", "#10b981"];
+  
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setColorIndex((prev) => (prev + 1) % colors.length);
+    }, 2000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const currentColor = colors[colorIndex];
+  const N = nodes.length;
+  const radius = 150; // radius of the circle
+  const centerX = 230; // center X of the container
+  const centerY = 230; // center Y of the container
+
   return (
-    <div className="w-full bg-[#0a0a0c] border border-white/10 rounded-2xl p-4 relative overflow-x-auto my-4 custom-scrollbar">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-white/[0.03] via-transparent to-transparent pointer-events-none" />
+    <div className="w-full bg-[#0a0a0c]/80 border border-white/10 rounded-3xl p-6 relative flex items-center justify-center min-h-[500px] my-4 overflow-hidden">
+      {/* Glow gradient matching current color */}
+      <div 
+        className="absolute inset-0 pointer-events-none transition-all duration-1000 opacity-20"
+        style={{
+          background: `radial-gradient(circle at center, ${currentColor}11, transparent 70%)`
+        }}
+      />
       
-      <div className="flex items-center min-w-max space-x-0 relative z-10 py-2 px-1">
+      {/* Desktop view: Circle Layout */}
+      <div className="hidden sm:flex relative w-[460px] h-[460px] items-center justify-center shrink-0">
+        
+        {/* Pulse center core */}
+        <div className="absolute w-32 h-32 rounded-full bg-white/[0.02] border border-white/10 flex flex-col items-center justify-center text-center p-3 z-10 shadow-[0_0_40px_rgba(0,0,0,0.8)]">
+          <motion.div 
+            animate={{ scale: [1, 1.05, 1], opacity: [0.3, 0.6, 0.3] }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute inset-0 rounded-full"
+            style={{ border: `1.5px solid ${currentColor}`, opacity: 0.3 }}
+          />
+          <Network className="w-6 h-6 mb-1 transition-colors duration-1000" style={{ color: currentColor }} />
+          <span className="text-[9px] font-bold text-white tracking-widest uppercase">Transaction</span>
+          <span className="text-[8px] text-slate-500 uppercase font-semibold">Engine</span>
+        </div>
+
+        {/* SVG Circle Connections */}
+        <svg className="absolute inset-0 w-full h-full -rotate-90 pointer-events-none">
+          {/* Static circle track */}
+          <circle
+            cx={centerX}
+            cy={centerY}
+            r={radius}
+            fill="none"
+            stroke="rgba(255, 255, 255, 0.06)"
+            strokeWidth="1.5"
+          />
+          {/* Animated gradient tracing light */}
+          <motion.circle
+            cx={centerX}
+            cy={centerY}
+            r={radius}
+            fill="none"
+            stroke={currentColor}
+            strokeWidth="2.5"
+            strokeDasharray="80 300"
+            className="transition-colors duration-1000"
+            animate={{
+              strokeDashoffset: [0, -942.5], // 2 * Math.PI * radius = 942.5
+            }}
+            transition={{
+              duration: 8,
+              repeat: Infinity,
+              ease: "linear",
+            }}
+          />
+        </svg>
+
+        {/* Circular Nodes */}
+        {nodes.map((node, index) => {
+          const angle = (index / N) * 2 * Math.PI; // Angle in radians
+          const x = centerX + radius * Math.cos(angle) - 40; // subtract half width (80/2)
+          const y = centerY + radius * Math.sin(angle) - 40; // subtract half height (80/2)
+          const isHovered = activeNode === index;
+
+          return (
+            <motion.div
+              key={node}
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: index * 0.05, type: "spring", stiffness: 120 }}
+              whileHover={{ scale: 1.1 }}
+              onHoverStart={() => setActiveNode(index)}
+              onHoverEnd={() => setActiveNode(null)}
+              className="absolute w-20 h-20 rounded-full border border-white/10 bg-[#111116]/95 backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.6)] flex items-center justify-center text-center p-2.5 cursor-pointer select-none group transition-all duration-300"
+              style={{
+                left: x,
+                top: y,
+                borderColor: isHovered ? currentColor : "rgba(255, 255, 255, 0.1)"
+              }}
+            >
+              {isHovered && (
+                <div 
+                  className="absolute inset-0 rounded-full animate-ping opacity-25"
+                  style={{ backgroundColor: currentColor }}
+                />
+              )}
+              <span 
+                className="relative z-10 text-[9px] font-bold tracking-tight text-white leading-snug transition-colors duration-300"
+                style={{ color: isHovered ? currentColor : "#ffffff" }}
+              >
+                {node}
+              </span>
+            </motion.div>
+          );
+        })}
+      </div>
+
+      {/* Mobile view: Horizontal Scrollable List */}
+      <div className="sm:hidden w-full flex items-center overflow-x-auto py-4 px-1 min-w-max space-x-0 relative z-10 custom-scrollbar">
         {nodes.map((node, index) => (
           <div key={node} className="flex items-center group">
-            {/* Node as a Circle */}
             <motion.div 
-              whileHover={{ scale: 1.1, borderColor: "rgba(96,165,250,0.6)", boxShadow: "0 0 15px rgba(59,130,246,0.2)" }}
-              className="w-16 h-16 sm:w-20 sm:h-20 rounded-full border border-white/20 bg-[#111116] shadow-[0_0_10px_rgba(255,255,255,0.02)] text-[9px] sm:text-xs font-bold tracking-wide text-white relative overflow-hidden flex-shrink-0 flex items-center justify-center text-center p-2 cursor-pointer"
+              whileHover={{ scale: 1.05 }}
+              className="w-16 h-16 rounded-full border border-white/20 bg-[#111116] shadow-md text-[9px] font-bold tracking-wide text-white relative overflow-hidden flex-shrink-0 flex items-center justify-center text-center p-2 cursor-pointer transition-colors duration-1000"
+              style={{
+                borderColor: activeNode === index ? currentColor : "rgba(255, 255, 255, 0.2)"
+              }}
+              onHoverStart={() => setActiveNode(index)}
+              onHoverEnd={() => setActiveNode(null)}
             >
-              <div className="absolute inset-0 bg-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               <span className="relative z-10 leading-tight">{node}</span>
             </motion.div>
 
-            {/* Connector */}
             {index < nodes.length - 1 && (
-              <div className="w-10 sm:w-12 h-px bg-white/20 relative mx-1.5 flex-shrink-0 flex items-center justify-center">
+              <div className="w-8 h-px bg-white/20 relative mx-1 flex-shrink-0 flex items-center justify-center">
                 <motion.div
                   initial={{ left: 0, opacity: 0 }}
                   animate={{ left: "100%", opacity: [0, 1, 0] }}
-                  transition={{ duration: 1.5, repeat: Infinity, ease: "linear", delay: index * 0.2 }}
-                  className="absolute top-1/2 -translate-y-1/2 w-2.5 h-1.5 rounded-full bg-blue-400 shadow-[0_0_8px_rgba(96,165,250,0.8)]"
+                  transition={{ duration: 1.5, repeat: Infinity, ease: "linear", delay: index * 0.15 }}
+                  className="absolute top-1/2 -translate-y-1/2 w-2 h-1 rounded-full shadow-[0_0_8px_rgba(96,165,250,0.8)] transition-colors duration-1000"
+                  style={{ backgroundColor: currentColor }}
                 />
               </div>
             )}
@@ -224,7 +341,7 @@ export default function Projects() {
                     <Network className="w-4 h-4 mr-2 text-blue-400" /> 
                     Architecture Flow
                   </h4>
-                  <SvgArchitectureHorizontal nodes={selectedProject.caseStudy.architecture.nodes} />
+                  <SvgArchitectureCircular nodes={selectedProject.caseStudy.architecture.nodes} />
                 </div>
 
                 {/* 3-Column Content Grid with Staggered Entrance Animations */}

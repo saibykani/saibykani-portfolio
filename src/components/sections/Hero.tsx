@@ -59,12 +59,12 @@ const TypewriterText = () => {
   }, [displayText, isDeleting, roleIndex]);
 
   return (
-    <span className="text-[#60A5FA] font-black tracking-tight text-[32px] sm:text-[48px] md:text-[60px] lg:text-[70px] leading-tight flex items-center justify-center flex-wrap max-w-[90vw]">
+    <span className="text-accent-theme font-black tracking-tight text-[32px] sm:text-[48px] md:text-[60px] lg:text-[70px] leading-tight flex items-center justify-center flex-wrap max-w-[90vw]">
       {displayText}
       <motion.span
         animate={{ opacity: [1, 0] }}
         transition={{ duration: 0.8, repeat: Infinity, repeatType: "reverse" }}
-        className="inline-block w-1 md:w-2 h-[40px] sm:h-[60px] md:h-[70px] lg:h-[80px] bg-[#60A5FA] ml-2"
+        className="inline-block w-1 md:w-2 h-[40px] sm:h-[60px] md:h-[70px] lg:h-[80px] bg-accent-theme ml-2"
       />
     </span>
   );
@@ -135,14 +135,14 @@ export default function Hero() {
             <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </Link>
           
-          <a
-            href="/Sai_Krishna_Bykani_Resume.pdf"
-            download
-            className="group px-8 py-4 text-sm font-bold rounded-full border border-white/10 bg-white/[0.03] text-white hover:bg-white/10 transition-all flex items-center backdrop-blur-md shadow-lg"
+          <Link
+            href="/resume"
+            target="_blank"
+            className="group px-8 py-4 text-sm font-bold rounded-full border border-white/10 bg-white/[0.03] text-white hover:bg-white/10 transition-all flex items-center backdrop-blur-md shadow-lg cursor-pointer"
           >
             Download Resume
             <Download className="ml-2 w-4 h-4 group-hover:-translate-y-1 transition-transform" />
-          </a>
+          </Link>
         </motion.div>
 
       </div>

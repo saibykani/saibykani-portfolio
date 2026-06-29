@@ -85,7 +85,7 @@ export default function Expertise() {
     <section className="py-24 relative overflow-hidden">
       
       {/* Background glow */}
-      <div className="absolute top-[10%] left-[-10%] w-[350px] h-[350px] rounded-full bg-orange-500/5 filter blur-3xl pointer-events-none" />
+      <div className="absolute top-[10%] left-[-10%] w-[350px] h-[350px] rounded-full bg-accent-theme-glow filter blur-3xl pointer-events-none" />
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
@@ -97,15 +97,15 @@ export default function Expertise() {
           transition={{ duration: 0.6 }}
           className="max-w-3xl mb-16 text-center sm:text-left space-y-3"
         >
-          <div className="text-orange-500 text-[10px] font-bold tracking-widest uppercase">
+          <div className="text-accent-theme text-[10px] font-bold tracking-widest uppercase">
             Validation Domains
           </div>
           <h2 className="text-3xl sm:text-4.5xl font-extrabold tracking-tight text-white leading-tight">
-            <span className="bg-gradient-to-r from-orange-500 to-red-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-accent bg-clip-text text-transparent">
               Quality Assurance Expertise
             </span>
           </h2>
-          <div className="h-1 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full w-24 my-2" />
+          <div className="h-1 bg-gradient-accent rounded-full w-24 my-2" />
           <p className="text-sm text-slate-400 max-w-xl leading-relaxed">
             Sai Krishna implements structured verification plans to ensure transactional correctness in Fintech applications.
           </p>
@@ -125,11 +125,11 @@ export default function Expertise() {
               <motion.div
                 key={dom.name}
                 variants={itemVariants}
-                whileHover={{ y: -6, scale: 1.02, borderColor: "rgba(249, 115, 22, 0.3)", boxShadow: "0 15px 30px -10px rgba(0,0,0,0.8)" }}
-                className="p-6 rounded-2xl glass-premium space-y-4 hover:border-orange-500/20 transition-all duration-300"
+                whileHover={{ y: -6, scale: 1.02, borderColor: "var(--accent-color)", boxShadow: "0 15px 30px -10px rgba(0,0,0,0.8)" }}
+                className="p-6 rounded-2xl glass-premium space-y-4 hover:border-accent-theme/20 transition-all duration-300"
               >
                 <div className="flex items-center space-x-3">
-                  <div className="w-9 h-9 rounded-lg bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-400">
+                  <div className="w-9 h-9 rounded-lg bg-accent-theme-glow border border-accent-theme/20 flex items-center justify-center text-accent-theme">
                     <Icon className="w-4.5 h-4.5" />
                   </div>
                   <h3 className="text-sm font-bold text-white tracking-tight">
@@ -147,7 +147,7 @@ export default function Expertise() {
                     <span className="text-slate-300">{dom.tools}</span>
                   </div>
                   <div className="pt-1.5">
-                    <span className="text-orange-500 font-bold block uppercase tracking-wider">Strategy</span>
+                    <span className="text-accent-theme font-bold block uppercase tracking-wider">Strategy</span>
                     <span className="text-slate-400 font-normal">{dom.strategy}</span>
                   </div>
                 </div>
