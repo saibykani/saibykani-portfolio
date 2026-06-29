@@ -151,7 +151,7 @@ export default function Projects() {
 
         {/* Projects Cards Layout */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {(projectsList?.length ? projectsList.map((project) => (
+          {projectsList?.length && projectsList.map((project) => (
             <div
               key={project.id}
               className="p-8 rounded-2xl glass-premium flex flex-col justify-between hover:-translate-y-1 transition-all duration-500 group relative overflow-hidden"
