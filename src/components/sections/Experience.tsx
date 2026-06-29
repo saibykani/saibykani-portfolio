@@ -100,9 +100,9 @@ export default function Experience() {
           <h2 className="text-sm font-bold tracking-widest uppercase text-slate-500 mb-2">
             Experience
           </h2>
-          <h3 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-            Engineering Milestones.
-          </h3>
+          <h2 className="text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-4">
+            Impact & Milestones.
+          </h2>
         </motion.div>
 
         {/* Main Card */}
@@ -289,7 +289,7 @@ export default function Experience() {
 
                 {/* Engineering Milestones Horizontal Grid */}
                 <div>
-                  <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6">Engineering Milestones</h4>
+                  <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6">Impact & Milestones</h4>
                   
                   <motion.div 
                     variants={containerVariants}

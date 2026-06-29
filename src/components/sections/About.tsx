@@ -36,9 +36,6 @@ export default function About() {
             <h3 className="text-3xl font-extrabold text-white tracking-tight mb-2 text-center lg:text-left">
               {resumeData.personal.name}
             </h3>
-            <p className="text-accent-theme font-bold text-[11px] uppercase tracking-widest text-center lg:text-left leading-relaxed">
-              SOFTWARE DEVELOPMENT ENGINEER IN TEST (SDET)
-            </p>
           </motion.div>
 
           {/* Right Column: Content */}

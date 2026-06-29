@@ -1,0 +1,44 @@
+Sai Krishna Bykani
+QA Automation, API & Performance Test Engineer
+Hyderabad | +91 8522807300 | saibykani07@gmail.com 
+
+PROFESSIONAL SUMMARY
+Software Development Engineer in Test (SDET) with 3 years of experience in test automation, API testing, performance testing, and backend validation for payment, UPI, and transaction-driven systems. Strong expertise in Java, Selenium WebDriver, Cucumber BDD, REST Assured, Postman, Newman CLI, and Apache JMeter. Proven experience in end-to-end test automation, API integration testing, log analysis, and defect lifecycle management. Adept at working in Agile/Scrum environments, collaborating with developers, and ensuring release quality, system stability, and production readiness.
+
+PROFESSIONAL EXPERIENCE
+Software Development Engineer in Test (SDET)
+Toucan Payments Private Limited | July 2023 – Present
+    • Worked on functional, regression, integration, and end-to-end testing for web and backend payment applications.
+    • Developed and maintained UI automation scripts using Selenium WebDriver, Java, Cucumber (BDD), and TestNG.
+    • Automated critical payment and transaction workflows, improving regression coverage and execution efficiency.
+    • Built and executed API automation tests using REST Assured, Postman, and Newman, validating request/response payloads and business rules.
+    • Performed performance and load testing using Apache JMeter for UPI and card transaction flows.
+    • Configured and executed distributed JMeter master–slave setup for concurrency and scalability testing.
+    • Conducted backend data validation using MySQL, Azure SQL, and MongoDB to ensure data consistency across UI, API, and backend systems.
+    • Analyzed application logs and Grafana dashboards to identify performance issues and SLA risks.
+    • Supported CI/CD pipelines by integrating automation suites with Jenkins for scheduled and release-based execution.
+    • Logged, tracked, and managed defects using Jira, Azure DevOps, and Spira, including root cause analysis and fix validation.
+
+PROJECTS
+    • Payment Gateway Automation: Automated UI and API test cases for onboarding and transaction flows using Selenium, Cucumber, and REST Assured, ensuring end-to-end validation.
+    • API Automation Framework: Developed reusable REST Assured components and maintained Postman collections with Newman scheduler for continuous API regression testing.
+    • Performance Testing: Designed and executed Apache JMeter test plans and ran master–slave distributed tests to analyze throughput, latency, and error rates under peak load.
+    • Backend Validation & Monitoring: Performed SQL and MongoDB validation and analyzed Grafana dashboards for system stability and SLA monitoring.
+
+CORE SKILLS
+    • Programming & Automation: Java (Test Automation), Selenium WebDriver, Cucumber (BDD), TestNG, Maven, Page Object Model (POM), Data-Driven Testing
+    • API & Integration Testing: REST Assured, Postman, Newman (Postman CLI), REST APIs, JSON Validation, XML Validation, API Automation Frameworks, API Workflow Validation, Transaction Validation
+    • Performance & Load Testing: Apache JMeter, Load Testing, Stress Testing, Spike Testing, Endurance Testing, Distributed JMeter (Master–Slave), Performance Bottleneck Analysis
+    • Backend & Database Validation: MongoDB, Backend Data Validation, Data Reconciliation, Log Analysis
+    • CI/CD, DevOps & Monitoring: Jenkins, GitHub, Gitea, Grafana Monitoring, SLA Validation
+    • Defect & Test Management: Jira, Spira, Defect Tracking, Root Cause Analysis (RCA), Test Planning, Test Case Design, Test Execution, Test Reporting
+    • Methodologies: Agile, Scrum, SDLC, STLC
+
+EDUCATION
+Teegala Krishna Reddy Engineering College, Hyderabad.                                         Oct 2020 – July 2023
+B.Tech, Electrical and Electronics Engineering.
+
+ACHIEVEMENTS
+    • Recognised for automation testing and API validation contributions that improved regression stability by ~40% and increased automated test coverage across critical payment flows.
+    • Played a key role in performance and load testing of high-volume payment and UPI transaction flows using Apache JMeter, validating system behaviour under 2x–3x peak load conditions.
+    • Supported successful release sign-offs by ensuring end-to-end test coverage across UI automation, API testing, backend validation, and integration testing, reducing post-release defects and rework.

@@ -19,44 +19,15 @@ const TECHNOLOGIES = [
   "MySQL", "MongoDB", "Jenkins", "Docker", "GitHub", "Azure DevOps"
 ];
 
-const TypewriterText = () => {
+const RoleAnimator = () => {
   const [roleIndex, setRoleIndex] = useState(0);
-  const [displayText, setDisplayText] = useState("");
-  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
-    const currentRole = ROLES[roleIndex];
-    const typingSpeed = 60;
-    const deletingSpeed = 30;
-    const pauseBeforeDelete = 3500;
-    const pauseBeforeType = 300;
-
-    let timeout: NodeJS.Timeout;
-
-    if (isDeleting) {
-      if (displayText.length > 0) {
-        timeout = setTimeout(() => {
-          setDisplayText(currentRole.substring(0, displayText.length - 1));
-        }, deletingSpeed);
-      } else {
-        setIsDeleting(false);
-        setRoleIndex((prev) => (prev + 1) % ROLES.length);
-        timeout = setTimeout(() => {}, pauseBeforeType);
-      }
-    } else {
-      if (displayText.length < currentRole.length) {
-        timeout = setTimeout(() => {
-          setDisplayText(currentRole.substring(0, displayText.length + 1));
-        }, typingSpeed);
-      } else {
-        timeout = setTimeout(() => {
-          setIsDeleting(true);
-        }, pauseBeforeDelete);
-      }
-    }
-
-    return () => clearTimeout(timeout);
-  }, [displayText, isDeleting, roleIndex]);
+    const interval = setInterval(() => {
+      setRoleIndex((prev) => (prev + 1) % ROLES.length);
+    }, 4000); // changes every 4 seconds
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     const roleThemes = ["blue", "orange", "purple", "emerald", "cyan", "rose"];
@@ -77,14 +48,20 @@ const TypewriterText = () => {
   }, [roleIndex]);
 
   return (
-    <span className="bg-gradient-accent bg-clip-text text-transparent font-black tracking-tight text-[32px] sm:text-[48px] md:text-[60px] lg:text-[70px] leading-tight flex items-center justify-center flex-wrap max-w-[90vw] transition-all duration-300">
-      {displayText}
-      <motion.span
-        animate={{ opacity: [1, 0] }}
-        transition={{ duration: 0.8, repeat: Infinity, repeatType: "reverse" }}
-        className="inline-block w-1 md:w-2 h-[40px] sm:h-[60px] md:h-[70px] lg:h-[80px] bg-accent-theme ml-2"
-      />
-    </span>
+    <div className="h-[100px] sm:h-[130px] md:h-[150px] flex items-center justify-center overflow-hidden w-full">
+      <AnimatePresence mode="wait">
+        <motion.span
+          key={roleIndex}
+          initial={{ opacity: 0, y: 40, filter: "blur(10px)", scale: 0.9 }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)", scale: 1 }}
+          exit={{ opacity: 0, y: -40, filter: "blur(10px)", scale: 1.1 }}
+          transition={{ duration: 0.7, type: "spring", stiffness: 120, damping: 20 }}
+          className="bg-gradient-accent bg-clip-text text-transparent font-black tracking-tight text-[32px] sm:text-[48px] md:text-[60px] lg:text-[70px] leading-tight text-center max-w-[90vw]"
+        >
+          {ROLES[roleIndex]}
+        </motion.span>
+      </AnimatePresence>
+    </div>
   );
 };
 
@@ -117,15 +94,9 @@ export default function Hero() {
           👋 Hi, I&apos;m Sai Krishna Bykani
         </motion.div>
 
-        {/* Typewriter Role as Main Focus */}
-        <div className="mb-12 mt-16 min-h-[120px] flex items-center justify-center">
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-          >
-            <TypewriterText />
-          </motion.div>
+        {/* Role Animator */}
+        <div className="mb-8 w-full flex justify-center">
+          <RoleAnimator />
         </div>
 
         {/* Description */}
@@ -153,14 +124,14 @@ export default function Hero() {
             <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </Link>
           
-          <Link
-            href="/resume"
-            target="_blank"
+          <a
+            href="/Sai_Krishna_Bykani_Resume.txt"
+            download="Sai_Krishna_Bykani_Resume.txt"
             className="group px-8 py-4 text-sm font-bold rounded-full border border-white/10 bg-white/[0.03] text-white hover:bg-white/10 transition-all flex items-center backdrop-blur-md shadow-lg cursor-pointer"
           >
             Download Resume
             <Download className="ml-2 w-4 h-4 group-hover:-translate-y-1 transition-transform" />
-          </Link>
+          </a>
         </motion.div>
 
       </div>

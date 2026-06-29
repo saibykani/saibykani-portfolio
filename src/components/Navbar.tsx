@@ -96,6 +96,7 @@ export default function Navbar() {
                       e.preventDefault();
                     }
                     handleLinkClick(link.href, link.id);
+                    setHoveredSection(null);
                   }}
                   onMouseEnter={() => setHoveredSection(link.id)}
                   className={`relative block px-4 py-2 text-[11px] font-semibold tracking-widest uppercase transition-colors duration-300 ${
