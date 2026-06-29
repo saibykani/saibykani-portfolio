@@ -64,6 +64,26 @@ const SvgArchitectureCircular = ({ nodes }: { nodes: string[] }) => {
             stroke="rgba(255, 255, 255, 0.06)"
             strokeWidth="1.5"
           />
+          {/* Radial connector lines from core to nodes */}
+          {nodes.map((node, index) => {
+            const angle = (index / N) * 2 * Math.PI;
+            const x2 = centerX + radius * Math.cos(angle);
+            const y2 = centerY + radius * Math.sin(angle);
+            const isHovered = activeNode === index;
+            return (
+              <line
+                key={`line-${node}`}
+                x1={centerX}
+                y1={centerY}
+                x2={x2}
+                y2={y2}
+                stroke={isHovered ? currentColor : "rgba(255, 255, 255, 0.02)"}
+                strokeWidth={isHovered ? "1.5" : "0.5"}
+                strokeDasharray={isHovered ? "4 4" : "none"}
+                className={`transition-all duration-300 ${isHovered ? "animated-connector-line" : ""}`}
+              />
+            );
+          })}
           {/* Animated gradient tracing light */}
           <motion.circle
             cx={centerX}
@@ -311,11 +331,11 @@ export default function Projects() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 20, scale: 0.98 }}
               transition={{ type: "spring", damping: 30, stiffness: 300 }}
-              className="w-full max-w-[95vw] lg:max-w-7xl bg-[#050508] border border-white/10 rounded-3xl shadow-2xl relative h-[90vh] max-h-[90vh] flex flex-col"
+              className="w-full max-w-[95vw] lg:max-w-7xl bg-background dark:bg-[#050508] border border-slate-200 dark:border-white/10 rounded-3xl shadow-2xl relative h-[90vh] max-h-[90vh] flex flex-col"
             >
               
               {/* Modal Header */}
-              <div className="sticky top-0 z-20 px-8 py-6 bg-[#050508]/90 backdrop-blur-xl border-b border-white/10 flex items-center justify-between rounded-t-3xl">
+              <div className="sticky top-0 z-20 px-8 py-6 bg-background/90 dark:bg-[#050508]/90 backdrop-blur-xl border-b border-slate-200 dark:border-white/10 flex items-center justify-between rounded-t-3xl">
                 <div>
                   <h4 className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-1">
                     Engineering Case Study

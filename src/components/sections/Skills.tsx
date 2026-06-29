@@ -307,7 +307,7 @@ export default function Skills() {
   ];
 
   return (
-    <section ref={sectionRef} id="skills" className="py-24 relative overflow-hidden bg-black">
+    <section ref={sectionRef} id="skills" className="py-24 relative overflow-hidden bg-background text-foreground transition-colors duration-300">
       {/* Background glows */}
       <div className="absolute top-1/3 left-[-10%] w-[350px] h-[350px] rounded-full bg-cyan-500/[0.02] filter blur-[120px] pointer-events-none" />
       <div className="absolute bottom-1/4 right-[-5%] w-[300px] h-[300px] rounded-full bg-purple-500/[0.02] filter blur-[100px] pointer-events-none" />

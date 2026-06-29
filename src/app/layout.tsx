@@ -55,7 +55,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark scroll-smooth">
       <body
-        className={`${jakarta.className} ${jakarta.variable} antialiased bg-black text-slate-200 min-h-screen relative overflow-x-hidden`}
+        className={`${jakarta.className} ${jakarta.variable} antialiased bg-background text-foreground min-h-screen relative overflow-x-hidden transition-colors duration-300`}
       >
         {/* Spotlight Follow Glow */}
         <SpotlightCursor />

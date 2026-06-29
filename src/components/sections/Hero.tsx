@@ -26,10 +26,10 @@ const TypewriterText = () => {
 
   useEffect(() => {
     const currentRole = ROLES[roleIndex];
-    const typingSpeed = 70;
-    const deletingSpeed = 40;
-    const pauseBeforeDelete = 2500;
-    const pauseBeforeType = 500;
+    const typingSpeed = 60;
+    const deletingSpeed = 30;
+    const pauseBeforeDelete = 3500;
+    const pauseBeforeType = 300;
 
     let timeout: NodeJS.Timeout;
 
@@ -57,6 +57,24 @@ const TypewriterText = () => {
 
     return () => clearTimeout(timeout);
   }, [displayText, isDeleting, roleIndex]);
+
+  useEffect(() => {
+    const roleThemes = ["blue", "orange", "purple", "emerald", "cyan", "rose"];
+    const theme = roleThemes[roleIndex % roleThemes.length];
+    
+    document.documentElement.classList.remove(
+      "theme-blue",
+      "theme-orange",
+      "theme-purple",
+      "theme-emerald",
+      "theme-cyan",
+      "theme-rose"
+    );
+    
+    if (theme !== "blue") {
+      document.documentElement.classList.add(`theme-${theme}`);
+    }
+  }, [roleIndex]);
 
   return (
     <span className="text-accent-theme font-black tracking-tight text-[32px] sm:text-[48px] md:text-[60px] lg:text-[70px] leading-tight flex items-center justify-center flex-wrap max-w-[90vw]">

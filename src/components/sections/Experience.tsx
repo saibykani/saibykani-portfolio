@@ -208,10 +208,10 @@ export default function Experience() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 20, scale: 0.98 }}
               transition={{ type: "spring", damping: 30, stiffness: 300 }}
-              className="w-full max-w-[95vw] lg:max-w-7xl bg-[#050508] border border-white/10 rounded-3xl shadow-2xl relative h-[85vh] max-h-[85vh] flex flex-col"
+              className="w-full max-w-[95vw] lg:max-w-7xl bg-background dark:bg-[#050508] border border-slate-200 dark:border-white/10 rounded-3xl shadow-2xl relative h-[85vh] max-h-[85vh] flex flex-col"
             >
               {/* Modal Header */}
-              <div className="sticky top-0 z-20 px-8 py-6 bg-[#050508]/90 backdrop-blur-xl border-b border-white/10 flex items-center justify-between rounded-t-3xl">
+              <div className="sticky top-0 z-20 px-8 py-6 bg-background/90 dark:bg-[#050508]/90 backdrop-blur-xl border-b border-slate-200 dark:border-white/10 flex items-center justify-between rounded-t-3xl">
                 <div>
                   <h4 className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-1">
                     Complete Experience
