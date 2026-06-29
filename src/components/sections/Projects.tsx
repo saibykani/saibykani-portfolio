@@ -179,7 +179,7 @@ export default function Projects() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 20, scale: 0.98 }}
               transition={{ type: "spring", damping: 30, stiffness: 300 }}
-              className="w-full max-w-4xl bg-[#050508] border border-white/10 rounded-3xl shadow-2xl relative min-h-[90vh] flex flex-col"
+              className="w-full max-w-[95vw] lg:max-w-7xl bg-[#050508] border border-white/10 rounded-3xl shadow-2xl relative min-h-[90vh] flex flex-col"
             >
               
               {/* Modal Header */}
@@ -200,91 +200,173 @@ export default function Projects() {
                 </button>
               </div>
 
-              {/* Modal Content - Accordions & Flow */}
-              <div className="flex-1 overflow-y-auto p-6 sm:p-8 pb-24">
+              {/* Modal Content - Horizontal Layout */}
+              <div className="flex-1 overflow-y-auto p-6 sm:p-8 pb-24 space-y-8">
                 
                 {/* Architecture Flow Displayed Directly */}
-                <div className="mb-10">
-                  <h4 className="text-sm font-bold text-white uppercase tracking-widest flex items-center mb-4">
+                <div>
+                  <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center mb-4">
                     <Network className="w-4 h-4 mr-2 text-blue-400" /> 
                     Architecture Flow
                   </h4>
                   <SvgArchitectureHorizontal nodes={selectedProject.caseStudy.architecture.nodes} />
                 </div>
 
-                <Accordion title="Project Overview" icon={Target} defaultOpen={true}>
-                  {selectedProject.caseStudy.overview}
-                </Accordion>
-
-                <Accordion title="Business Problem" icon={Zap}>
-                  {selectedProject.caseStudy.businessProblem}
-                </Accordion>
-
-                <Accordion title="Business Context" icon={Layers}>
-                  {selectedProject.caseStudy.businessContext}
-                </Accordion>
-
-                <Accordion title="My Role" icon={Briefcase}>
-                  {selectedProject.role}
-                </Accordion>
-
-                <Accordion title="Testing Strategy" icon={CheckCircle2}>
-                  {selectedProject.caseStudy.testingStrategy}
-                </Accordion>
-
-                <Accordion title="Technology Stack" icon={Code2}>
-                  <div className="flex flex-wrap gap-2">
-                    {selectedProject.technologies.map(tech => (
-                      <span key={tech} className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-[11px] font-semibold text-slate-300">
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                </Accordion>
-
-                <Accordion title="Automation Workflow (Deep Dive)" icon={Activity}>
+                {/* 3-Column Content Grid */}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                  
+                  {/* Column 1: Context & Challenge */}
                   <div className="space-y-6">
-                    {selectedProject.caseStudy.uiAutomation && (
-                      <div>
-                        <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-1">UI Automation</span>
-                        <p className="text-sm text-slate-300">{selectedProject.caseStudy.uiAutomation}</p>
+                    {/* Project Overview */}
+                    <div className="p-6 rounded-3xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.03] transition-all flex flex-col space-y-4">
+                      <div className="flex items-center space-x-3 border-b border-white/10 pb-3">
+                        <div className="p-2 rounded-lg bg-white/5">
+                          <Target className="w-4 h-4 text-blue-400" />
+                        </div>
+                        <span className="text-sm font-bold text-white uppercase tracking-widest">Project Overview</span>
                       </div>
-                    )}
-                    {selectedProject.caseStudy.apiAutomation && (
-                      <div>
-                        <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-1">API Automation</span>
-                        <p className="text-sm text-slate-300">{selectedProject.caseStudy.apiAutomation}</p>
-                      </div>
-                    )}
-                    {selectedProject.caseStudy.performanceTesting && (
-                      <div>
-                        <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-1">Performance Testing</span>
-                        <p className="text-sm text-slate-300">{selectedProject.caseStudy.performanceTesting}</p>
-                      </div>
-                    )}
-                    {selectedProject.caseStudy.dbValidation && (
-                      <div>
-                        <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-1">Database Validation</span>
-                        <p className="text-sm text-slate-300">{selectedProject.caseStudy.dbValidation}</p>
-                      </div>
-                    )}
-                  </div>
-                </Accordion>
+                      <p className="text-sm text-slate-300 leading-relaxed">
+                        {selectedProject.caseStudy.overview}
+                      </p>
+                    </div>
 
-                <Accordion title="Business Impact" icon={LineChart}>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                    {Object.entries(selectedProject.metrics).map(([key, value]) => (
-                      <div key={key} className="p-4 rounded-xl bg-white/[0.02] border border-white/5 text-center">
-                        <div className="text-xl font-extrabold text-emerald-400 mb-1">{value}</div>
-                        <div className="text-[9px] font-bold text-slate-500 uppercase tracking-wider">{key}</div>
+                    {/* Business Challenge */}
+                    <div className="p-6 rounded-3xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.03] transition-all flex flex-col space-y-4">
+                      <div className="flex items-center space-x-3 border-b border-white/10 pb-3">
+                        <div className="p-2 rounded-lg bg-white/5">
+                          <Zap className="w-4 h-4 text-blue-400" />
+                        </div>
+                        <span className="text-sm font-bold text-white uppercase tracking-widest">Business Challenge</span>
                       </div>
-                    ))}
-                  </div>
-                </Accordion>
+                      <div className="space-y-3 text-sm text-slate-300 leading-relaxed">
+                        <p>{selectedProject.caseStudy.businessProblem}</p>
+                        {selectedProject.caseStudy.businessContext && (
+                          <div className="pt-3 border-t border-white/5">
+                            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-1">Business Context</span>
+                            <p>{selectedProject.caseStudy.businessContext}</p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
 
-                <Accordion title="Lessons Learned" icon={Lightbulb}>
-                  Focusing on creating loosely coupled framework components allowed us to scale test automation alongside the rapid feature development of the payment gateway.
-                </Accordion>
+                    {/* My Role */}
+                    <div className="p-6 rounded-3xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.03] transition-all flex flex-col space-y-4">
+                      <div className="flex items-center space-x-3 border-b border-white/10 pb-3">
+                        <div className="p-2 rounded-lg bg-white/5">
+                          <Briefcase className="w-4 h-4 text-blue-400" />
+                        </div>
+                        <span className="text-sm font-bold text-white uppercase tracking-widest">My Role</span>
+                      </div>
+                      <p className="text-sm text-slate-300 leading-relaxed">
+                        {selectedProject.role}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Column 2: Strategy & Testing */}
+                  <div className="space-y-6">
+                    {/* Testing Strategy */}
+                    <div className="p-6 rounded-3xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.03] transition-all flex flex-col space-y-4">
+                      <div className="flex items-center space-x-3 border-b border-white/10 pb-3">
+                        <div className="p-2 rounded-lg bg-white/5">
+                          <CheckCircle2 className="w-4 h-4 text-blue-400" />
+                        </div>
+                        <span className="text-sm font-bold text-white uppercase tracking-widest">Testing Strategy</span>
+                      </div>
+                      <p className="text-sm text-slate-300 leading-relaxed">
+                        {selectedProject.caseStudy.testingStrategy}
+                      </p>
+                    </div>
+
+                    {/* Automation Workflow (Deep Dive) */}
+                    <div className="p-6 rounded-3xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.03] transition-all flex flex-col space-y-4">
+                      <div className="flex items-center space-x-3 border-b border-white/10 pb-3">
+                        <div className="p-2 rounded-lg bg-white/5">
+                          <Activity className="w-4 h-4 text-blue-400" />
+                        </div>
+                        <span className="text-sm font-bold text-white uppercase tracking-widest">Automation Workflow</span>
+                      </div>
+                      <div className="space-y-4">
+                        {selectedProject.caseStudy.uiAutomation && (
+                          <div>
+                            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-1">UI Automation</span>
+                            <p className="text-xs text-slate-300 leading-relaxed">{selectedProject.caseStudy.uiAutomation}</p>
+                          </div>
+                        )}
+                        {selectedProject.caseStudy.apiAutomation && (
+                          <div className="pt-3 border-t border-white/5">
+                            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-1">API Automation</span>
+                            <p className="text-xs text-slate-300 leading-relaxed">{selectedProject.caseStudy.apiAutomation}</p>
+                          </div>
+                        )}
+                        {selectedProject.caseStudy.performanceTesting && (
+                          <div className="pt-3 border-t border-white/5">
+                            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-1">Performance Testing</span>
+                            <p className="text-xs text-slate-300 leading-relaxed">{selectedProject.caseStudy.performanceTesting}</p>
+                          </div>
+                        )}
+                        {selectedProject.caseStudy.dbValidation && (
+                          <div className="pt-3 border-t border-white/5">
+                            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-1">Database Validation</span>
+                            <p className="text-xs text-slate-300 leading-relaxed">{selectedProject.caseStudy.dbValidation}</p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Column 3: Technologies & Results */}
+                  <div className="space-y-6">
+                    {/* Technology Stack */}
+                    <div className="p-6 rounded-3xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.03] transition-all flex flex-col space-y-4">
+                      <div className="flex items-center space-x-3 border-b border-white/10 pb-3">
+                        <div className="p-2 rounded-lg bg-white/5">
+                          <Code2 className="w-4 h-4 text-blue-400" />
+                        </div>
+                        <span className="text-sm font-bold text-white uppercase tracking-widest">Technology Stack</span>
+                      </div>
+                      <div className="flex flex-wrap gap-2 pt-2">
+                        {selectedProject.technologies.map(tech => (
+                          <span key={tech} className="px-2.5 py-1 rounded bg-white/5 border border-white/10 text-[10px] font-semibold text-slate-300">
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Business Impact */}
+                    <div className="p-6 rounded-3xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.03] transition-all flex flex-col space-y-4">
+                      <div className="flex items-center space-x-3 border-b border-white/10 pb-3">
+                        <div className="p-2 rounded-lg bg-white/5">
+                          <LineChart className="w-4 h-4 text-blue-400" />
+                        </div>
+                        <span className="text-sm font-bold text-white uppercase tracking-widest">Business Impact</span>
+                      </div>
+                      <div className="grid grid-cols-1 gap-3 pt-2">
+                        {Object.entries(selectedProject.metrics).map(([key, value]) => (
+                          <div key={key} className="p-3 rounded-2xl bg-white/[0.02] border border-white/[0.05] flex items-center justify-between">
+                            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">{key}</span>
+                            <span className="text-xs font-black text-emerald-400">{value}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Lessons Learned */}
+                    <div className="p-6 rounded-3xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.03] transition-all flex flex-col space-y-4">
+                      <div className="flex items-center space-x-3 border-b border-white/10 pb-3">
+                        <div className="p-2 rounded-lg bg-white/5">
+                          <Lightbulb className="w-4 h-4 text-blue-400" />
+                        </div>
+                        <span className="text-sm font-bold text-white uppercase tracking-widest">Lessons Learned</span>
+                      </div>
+                      <p className="text-sm text-slate-300 leading-relaxed font-medium">
+                        {selectedProject.caseStudy.lessonsLearned}
+                      </p>
+                    </div>
+                  </div>
+
+                </div>
 
               </div>
             </motion.div>
