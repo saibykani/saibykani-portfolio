@@ -9,29 +9,29 @@ type Project = typeof resumeData.projects[0];
 
 const SvgArchitectureHorizontal = ({ nodes }: { nodes: string[] }) => {
   return (
-    <div className="w-full bg-[#0a0a0c] border border-white/10 rounded-2xl p-6 relative overflow-x-auto my-8 custom-scrollbar">
+    <div className="w-full bg-[#0a0a0c] border border-white/10 rounded-2xl p-4 relative overflow-x-auto my-4 custom-scrollbar">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-white/[0.03] via-transparent to-transparent pointer-events-none" />
       
-      <div className="flex items-center min-w-max space-x-0 relative z-10 py-4 px-2">
+      <div className="flex items-center min-w-max space-x-0 relative z-10 py-2 px-1">
         {nodes.map((node, index) => (
           <div key={node} className="flex items-center group">
             {/* Node as a Circle */}
             <motion.div 
-              whileHover={{ scale: 1.05 }}
-              className="w-24 h-24 sm:w-28 sm:h-28 rounded-full border border-white/20 bg-[#111116] shadow-[0_0_15px_rgba(255,255,255,0.05)] text-[10px] sm:text-xs font-bold tracking-wide text-white relative overflow-hidden flex-shrink-0 flex items-center justify-center text-center p-2"
+              whileHover={{ scale: 1.1, borderColor: "rgba(96,165,250,0.6)", boxShadow: "0 0 15px rgba(59,130,246,0.2)" }}
+              className="w-16 h-16 sm:w-20 sm:h-20 rounded-full border border-white/20 bg-[#111116] shadow-[0_0_10px_rgba(255,255,255,0.02)] text-[9px] sm:text-xs font-bold tracking-wide text-white relative overflow-hidden flex-shrink-0 flex items-center justify-center text-center p-2 cursor-pointer"
             >
-              <div className="absolute inset-0 bg-white/5 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
+              <div className="absolute inset-0 bg-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               <span className="relative z-10 leading-tight">{node}</span>
             </motion.div>
 
             {/* Connector */}
             {index < nodes.length - 1 && (
-              <div className="w-12 sm:w-16 h-px bg-white/20 relative mx-2 flex-shrink-0 flex items-center justify-center">
+              <div className="w-10 sm:w-12 h-px bg-white/20 relative mx-1.5 flex-shrink-0 flex items-center justify-center">
                 <motion.div
                   initial={{ left: 0, opacity: 0 }}
                   animate={{ left: "100%", opacity: [0, 1, 0] }}
                   transition={{ duration: 1.5, repeat: Infinity, ease: "linear", delay: index * 0.2 }}
-                  className="absolute top-1/2 -translate-y-1/2 w-3 h-1.5 rounded-full bg-blue-400 shadow-[0_0_10px_rgba(96,165,250,0.8)]"
+                  className="absolute top-1/2 -translate-y-1/2 w-2.5 h-1.5 rounded-full bg-blue-400 shadow-[0_0_8px_rgba(96,165,250,0.8)]"
                 />
               </div>
             )}
@@ -78,6 +78,21 @@ const Accordion = ({ title, icon: Icon, children, defaultOpen = false }: any) =>
 
 export default function Projects() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.06
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 15, scale: 0.98 },
+    show: { opacity: 1, y: 0, scale: 1, transition: { type: "spring" as const, stiffness: 100, damping: 15 } }
+  };
 
   return (
     <section id="projects" className="py-24 relative border-t border-white/5">
@@ -179,7 +194,7 @@ export default function Projects() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 20, scale: 0.98 }}
               transition={{ type: "spring", damping: 30, stiffness: 300 }}
-              className="w-full max-w-[95vw] lg:max-w-7xl bg-[#050508] border border-white/10 rounded-3xl shadow-2xl relative min-h-[90vh] flex flex-col"
+              className="w-full max-w-[95vw] lg:max-w-7xl bg-[#050508] border border-white/10 rounded-3xl shadow-2xl relative h-[90vh] max-h-[90vh] flex flex-col"
             >
               
               {/* Modal Header */}
@@ -212,13 +227,22 @@ export default function Projects() {
                   <SvgArchitectureHorizontal nodes={selectedProject.caseStudy.architecture.nodes} />
                 </div>
 
-                {/* 3-Column Content Grid */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                {/* 3-Column Content Grid with Staggered Entrance Animations */}
+                <motion.div 
+                  variants={containerVariants}
+                  initial="hidden"
+                  animate="show"
+                  className="grid grid-cols-1 lg:grid-cols-3 gap-6"
+                >
                   
                   {/* Column 1: Context & Challenge */}
                   <div className="space-y-6">
                     {/* Project Overview */}
-                    <div className="p-6 rounded-3xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.03] transition-all flex flex-col space-y-4">
+                    <motion.div 
+                      variants={itemVariants}
+                      whileHover={{ y: -4, scale: 1.01, borderColor: "rgba(255,255,255,0.15)", boxShadow: "0 10px 30px -10px rgba(0,0,0,0.7)" }}
+                      className="p-6 rounded-3xl border border-white/10 bg-white/[0.02] transition-all flex flex-col space-y-4"
+                    >
                       <div className="flex items-center space-x-3 border-b border-white/10 pb-3">
                         <div className="p-2 rounded-lg bg-white/5">
                           <Target className="w-4 h-4 text-blue-400" />
@@ -228,10 +252,14 @@ export default function Projects() {
                       <p className="text-sm text-slate-300 leading-relaxed">
                         {selectedProject.caseStudy.overview}
                       </p>
-                    </div>
+                    </motion.div>
 
                     {/* Business Challenge */}
-                    <div className="p-6 rounded-3xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.03] transition-all flex flex-col space-y-4">
+                    <motion.div 
+                      variants={itemVariants}
+                      whileHover={{ y: -4, scale: 1.01, borderColor: "rgba(255,255,255,0.15)", boxShadow: "0 10px 30px -10px rgba(0,0,0,0.7)" }}
+                      className="p-6 rounded-3xl border border-white/10 bg-white/[0.02] transition-all flex flex-col space-y-4"
+                    >
                       <div className="flex items-center space-x-3 border-b border-white/10 pb-3">
                         <div className="p-2 rounded-lg bg-white/5">
                           <Zap className="w-4 h-4 text-blue-400" />
@@ -247,10 +275,14 @@ export default function Projects() {
                           </div>
                         )}
                       </div>
-                    </div>
+                    </motion.div>
 
                     {/* My Role */}
-                    <div className="p-6 rounded-3xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.03] transition-all flex flex-col space-y-4">
+                    <motion.div 
+                      variants={itemVariants}
+                      whileHover={{ y: -4, scale: 1.01, borderColor: "rgba(255,255,255,0.15)", boxShadow: "0 10px 30px -10px rgba(0,0,0,0.7)" }}
+                      className="p-6 rounded-3xl border border-white/10 bg-white/[0.02] transition-all flex flex-col space-y-4"
+                    >
                       <div className="flex items-center space-x-3 border-b border-white/10 pb-3">
                         <div className="p-2 rounded-lg bg-white/5">
                           <Briefcase className="w-4 h-4 text-blue-400" />
@@ -260,13 +292,17 @@ export default function Projects() {
                       <p className="text-sm text-slate-300 leading-relaxed">
                         {selectedProject.role}
                       </p>
-                    </div>
+                    </motion.div>
                   </div>
 
                   {/* Column 2: Strategy & Testing */}
                   <div className="space-y-6">
                     {/* Testing Strategy */}
-                    <div className="p-6 rounded-3xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.03] transition-all flex flex-col space-y-4">
+                    <motion.div 
+                      variants={itemVariants}
+                      whileHover={{ y: -4, scale: 1.01, borderColor: "rgba(255,255,255,0.15)", boxShadow: "0 10px 30px -10px rgba(0,0,0,0.7)" }}
+                      className="p-6 rounded-3xl border border-white/10 bg-white/[0.02] transition-all flex flex-col space-y-4"
+                    >
                       <div className="flex items-center space-x-3 border-b border-white/10 pb-3">
                         <div className="p-2 rounded-lg bg-white/5">
                           <CheckCircle2 className="w-4 h-4 text-blue-400" />
@@ -276,10 +312,14 @@ export default function Projects() {
                       <p className="text-sm text-slate-300 leading-relaxed">
                         {selectedProject.caseStudy.testingStrategy}
                       </p>
-                    </div>
+                    </motion.div>
 
                     {/* Automation Workflow (Deep Dive) */}
-                    <div className="p-6 rounded-3xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.03] transition-all flex flex-col space-y-4">
+                    <motion.div 
+                      variants={itemVariants}
+                      whileHover={{ y: -4, scale: 1.01, borderColor: "rgba(255,255,255,0.15)", boxShadow: "0 10px 30px -10px rgba(0,0,0,0.7)" }}
+                      className="p-6 rounded-3xl border border-white/10 bg-white/[0.02] transition-all flex flex-col space-y-4"
+                    >
                       <div className="flex items-center space-x-3 border-b border-white/10 pb-3">
                         <div className="p-2 rounded-lg bg-white/5">
                           <Activity className="w-4 h-4 text-blue-400" />
@@ -312,13 +352,17 @@ export default function Projects() {
                           </div>
                         )}
                       </div>
-                    </div>
+                    </motion.div>
                   </div>
 
                   {/* Column 3: Technologies & Results */}
                   <div className="space-y-6">
                     {/* Technology Stack */}
-                    <div className="p-6 rounded-3xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.03] transition-all flex flex-col space-y-4">
+                    <motion.div 
+                      variants={itemVariants}
+                      whileHover={{ y: -4, scale: 1.01, borderColor: "rgba(255,255,255,0.15)", boxShadow: "0 10px 30px -10px rgba(0,0,0,0.7)" }}
+                      className="p-6 rounded-3xl border border-white/10 bg-white/[0.02] transition-all flex flex-col space-y-4"
+                    >
                       <div className="flex items-center space-x-3 border-b border-white/10 pb-3">
                         <div className="p-2 rounded-lg bg-white/5">
                           <Code2 className="w-4 h-4 text-blue-400" />
@@ -332,10 +376,14 @@ export default function Projects() {
                           </span>
                         ))}
                       </div>
-                    </div>
+                    </motion.div>
 
                     {/* Business Impact */}
-                    <div className="p-6 rounded-3xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.03] transition-all flex flex-col space-y-4">
+                    <motion.div 
+                      variants={itemVariants}
+                      whileHover={{ y: -4, scale: 1.01, borderColor: "rgba(255,255,255,0.15)", boxShadow: "0 10px 30px -10px rgba(0,0,0,0.7)" }}
+                      className="p-6 rounded-3xl border border-white/10 bg-white/[0.02] transition-all flex flex-col space-y-4"
+                    >
                       <div className="flex items-center space-x-3 border-b border-white/10 pb-3">
                         <div className="p-2 rounded-lg bg-white/5">
                           <LineChart className="w-4 h-4 text-blue-400" />
@@ -346,14 +394,18 @@ export default function Projects() {
                         {Object.entries(selectedProject.metrics).map(([key, value]) => (
                           <div key={key} className="p-3 rounded-2xl bg-white/[0.02] border border-white/[0.05] flex items-center justify-between">
                             <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">{key}</span>
-                            <span className="text-xs font-black text-emerald-400">{value}</span>
+                            <span className="text-xs font-black text-emerald-400">{value as string}</span>
                           </div>
                         ))}
                       </div>
-                    </div>
+                    </motion.div>
 
                     {/* Lessons Learned */}
-                    <div className="p-6 rounded-3xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.03] transition-all flex flex-col space-y-4">
+                    <motion.div 
+                      variants={itemVariants}
+                      whileHover={{ y: -4, scale: 1.01, borderColor: "rgba(255,255,255,0.15)", boxShadow: "0 10px 30px -10px rgba(0,0,0,0.7)" }}
+                      className="p-6 rounded-3xl border border-white/10 bg-white/[0.02] transition-all flex flex-col space-y-4"
+                    >
                       <div className="flex items-center space-x-3 border-b border-white/10 pb-3">
                         <div className="p-2 rounded-lg bg-white/5">
                           <Lightbulb className="w-4 h-4 text-blue-400" />
@@ -363,10 +415,10 @@ export default function Projects() {
                       <p className="text-sm text-slate-300 leading-relaxed font-medium">
                         {selectedProject.caseStudy.lessonsLearned}
                       </p>
-                    </div>
+                    </motion.div>
                   </div>
 
-                </div>
+                </motion.div>
 
               </div>
             </motion.div>

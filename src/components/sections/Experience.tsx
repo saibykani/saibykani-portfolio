@@ -11,6 +11,21 @@ export default function Experience() {
   const exp = resumeData.experience[0];
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.08
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 15, scale: 0.98 },
+    show: { opacity: 1, y: 0, scale: 1, transition: { type: "spring" as const, stiffness: 100, damping: 15 } }
+  };
+
   const kpiData = [
     { label: "Automated Test Cases", value: 1000, suffix: "+" },
     { label: "APIs Tested", value: 750, suffix: "+" },
@@ -180,7 +195,7 @@ export default function Experience() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 20, scale: 0.98 }}
               transition={{ type: "spring", damping: 30, stiffness: 300 }}
-              className="w-full max-w-[95vw] lg:max-w-7xl bg-[#050508] border border-white/10 rounded-3xl shadow-2xl relative min-h-[85vh] flex flex-col"
+              className="w-full max-w-[95vw] lg:max-w-7xl bg-[#050508] border border-white/10 rounded-3xl shadow-2xl relative h-[85vh] max-h-[85vh] flex flex-col"
             >
               {/* Modal Header */}
               <div className="sticky top-0 z-20 px-8 py-6 bg-[#050508]/90 backdrop-blur-xl border-b border-white/10 flex items-center justify-between rounded-t-3xl">
@@ -249,9 +264,19 @@ export default function Experience() {
                 <div>
                   <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6">Engineering Milestones</h4>
                   
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                  <motion.div 
+                    variants={containerVariants}
+                    initial="hidden"
+                    animate="show"
+                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+                  >
                     {milestones.map((milestone) => (
-                      <div key={milestone.id} className="p-6 rounded-3xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.03] transition-all flex flex-col justify-between">
+                      <motion.div 
+                        key={milestone.id} 
+                        variants={itemVariants}
+                        whileHover={{ y: -4, scale: 1.01, borderColor: "rgba(255,255,255,0.15)", boxShadow: "0 10px 30px -10px rgba(0,0,0,0.7)" }}
+                        className="p-6 rounded-3xl border border-white/10 bg-white/[0.02] transition-all flex flex-col justify-between cursor-default"
+                      >
                         <div>
                           <h5 className="text-sm font-bold tracking-tight text-white mb-4 border-b border-white/10 pb-3 flex items-center min-h-[40px]">
                             <span className="w-2 h-2 rounded-full bg-blue-400 mr-2.5 shrink-0" />
@@ -267,9 +292,9 @@ export default function Experience() {
                             ))}
                           </ul>
                         </div>
-                      </div>
+                      </motion.div>
                     ))}
-                  </div>
+                  </motion.div>
                 </div>
 
               </div>
