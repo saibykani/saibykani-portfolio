@@ -26,6 +26,9 @@ export default function Experience() {
     show: { opacity: 1, y: 0, scale: 1, transition: { type: "spring" as const, stiffness: 100, damping: 15 } }
   };
 
+  const [logoError, setLogoError] = useState(false);
+  const [modalLogoError, setModalLogoError] = useState(false);
+
   const kpiData = [
     { label: "Automated Test Cases", value: 1000, suffix: "+" },
     { label: "APIs Tested", value: 750, suffix: "+" },
@@ -116,9 +119,19 @@ export default function Experience() {
           {/* Header: Logo & Company Info */}
           <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-6 relative z-10">
             <div className="flex items-start space-x-5">
-              <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center p-2 shrink-0 group-hover:bg-white/10 transition-colors">
-                <Image src="/logo.png" alt="Company Logo" width={48} height={48} className="object-contain" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
-                <Building2 className="w-8 h-8 text-slate-400 absolute -z-10" />
+              <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center p-2 shrink-0 group-hover:bg-white/10 transition-colors relative">
+                {!logoError ? (
+                  <Image 
+                    src="/logo.png" 
+                    alt="Company Logo" 
+                    width={48} 
+                    height={48} 
+                    className="object-contain" 
+                    onError={() => setLogoError(true)} 
+                  />
+                ) : (
+                  <Building2 className="w-8 h-8 text-slate-400" />
+                )}
               </div>
               <div>
                 <h4 className="text-2xl font-extrabold text-white tracking-tight mb-1">{exp.company}</h4>
@@ -222,8 +235,17 @@ export default function Experience() {
                 <div className="p-8 rounded-3xl bg-white/[0.02] border border-white/10 flex flex-col md:flex-row md:items-center justify-between gap-8">
                   <div className="flex items-center space-x-6">
                     <div className="w-20 h-20 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center p-3 relative shrink-0">
-                      <Image src="/logo.png" alt="Logo" fill className="object-contain p-3" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
-                      <Building2 className="w-8 h-8 text-slate-400 absolute -z-10" />
+                      {!modalLogoError ? (
+                        <Image 
+                          src="/logo.png" 
+                          alt="Logo" 
+                          fill 
+                          className="object-contain p-3" 
+                          onError={() => setModalLogoError(true)} 
+                        />
+                      ) : (
+                        <Building2 className="w-8 h-8 text-slate-400" />
+                      )}
                     </div>
                     <div>
                       <div className="flex flex-wrap items-center gap-3 mb-1.5">

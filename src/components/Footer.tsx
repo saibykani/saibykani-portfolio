@@ -22,14 +22,8 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row justify-between items-center gap-12 lg:gap-8 mb-16">
           
           {/* Left: Brand */}
-          <div className="flex items-center space-x-4">
-            <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center p-2 relative overflow-hidden group">
-              <Image src="/logo.png" alt="Logo" width={40} height={40} className="object-contain transition-transform group-hover:scale-110" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
-            </div>
-            <div>
-              <h3 className="text-xl font-bold text-white tracking-tight">{resumeData.personal.name}</h3>
-              <p className="text-xs font-bold text-blue-400 uppercase tracking-widest">{resumeData.personal.title}</p>
-            </div>
+          <div>
+            <h3 className="text-xl font-bold text-white tracking-tight">{resumeData.personal.name}</h3>
           </div>
 
           {/* Right: Professional Links */}
