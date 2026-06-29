@@ -136,18 +136,13 @@ export default function Experience() {
               <div>
                 <h4 className="text-2xl font-extrabold text-white tracking-tight mb-1 group-hover:translate-x-1 transition-transform duration-300">{exp.company}</h4>
                 <div className="flex items-center text-xs font-bold text-slate-400 uppercase tracking-wider space-x-3 mb-2">
-                  <span className="text-accent-theme font-black tracking-widest">{exp.industry}</span>
+                  <span className="text-blue-500 font-black tracking-widest">{exp.industry}</span>
                   <span className="w-1 h-1 rounded-full bg-slate-600" />
                   <span>{exp.duration}</span>
                 </div>
                 <div className="flex items-center text-sm font-bold">
-                  <motion.div
-                    animate={{ scale: [1, 1.1, 1] }}
-                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                  >
-                    <Briefcase className="w-4 h-4 mr-2 text-accent-theme" />
-                  </motion.div>
-                  <span className="bg-gradient-accent bg-clip-text text-transparent font-extrabold tracking-wide">{exp.role}</span>
+                  <Briefcase className="w-4 h-4 mr-2 text-blue-500" />
+                  <span className="text-blue-500 font-extrabold tracking-wide">{exp.role}</span>
                 </div>
                 <div className="flex items-center text-sm font-medium text-slate-400 mt-1">
                   <MapPin className="w-4 h-4 mr-2 text-slate-500" />

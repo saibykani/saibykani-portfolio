@@ -46,70 +46,44 @@ const ROLES = [
 ];
 
 // Provide 40 distinct animations
-const ANIMATIONS: any[] = [
-  { initial: { opacity: 0, y: 30 }, animate: { opacity: 1, y: 0 }, exit: { opacity: 0, y: -30 } },
-  { initial: { opacity: 0, y: -30 }, animate: { opacity: 1, y: 0 }, exit: { opacity: 0, y: 30 } },
-  { initial: { opacity: 0, x: 50 }, animate: { opacity: 1, x: 0 }, exit: { opacity: 0, x: -50 } },
-  { initial: { opacity: 0, x: -50 }, animate: { opacity: 1, x: 0 }, exit: { opacity: 0, x: 50 } },
-  { initial: { opacity: 0, filter: "blur(20px)" }, animate: { opacity: 1, filter: "blur(0px)" }, exit: { opacity: 0, filter: "blur(20px)" } },
-  { initial: { opacity: 0, scale: 0.5 }, animate: { opacity: 1, scale: 1 }, exit: { opacity: 0, scale: 1.5 } },
-  { initial: { opacity: 0, scale: 1.5 }, animate: { opacity: 1, scale: 1 }, exit: { opacity: 0, scale: 0.5 } },
-  { initial: { opacity: 0, rotateX: 90 }, animate: { opacity: 1, rotateX: 0 }, exit: { opacity: 0, rotateX: -90 } },
-  { initial: { opacity: 0, rotateY: 90 }, animate: { opacity: 1, rotateY: 0 }, exit: { opacity: 0, rotateY: -90 } },
-  { initial: { opacity: 0, scale: 0.8 }, animate: { opacity: 1, scale: 1, transition: { type: "spring", bounce: 0.7 } }, exit: { opacity: 0, scale: 0.8 } },
-  { initial: { opacity: 0, skewX: 20, x: 20 }, animate: { opacity: 1, skewX: 0, x: 0 }, exit: { opacity: 0, skewX: -20, x: -20 } },
-  { initial: { opacity: 0, y: -100, scale: 1.2 }, animate: { opacity: 1, y: 0, scale: 1 }, exit: { opacity: 0, y: 100, scale: 0.8 } },
-  { initial: { opacity: 0, rotateZ: 30, transformOrigin: "top" }, animate: { opacity: 1, rotateZ: 0 }, exit: { opacity: 0, rotateZ: -30 } },
-  { initial: { opacity: 0, rotateX: 90, transformOrigin: "bottom" }, animate: { opacity: 1, rotateX: 0 }, exit: { opacity: 0, rotateX: -90 } },
-  { initial: { opacity: 0 }, animate: { opacity: [0, 1.2, 1], scale: [0.8, 1.1, 1] }, exit: { opacity: 0, scale: 0.9 } },
-  { initial: { opacity: 0, x: -10, skewX: 10 }, animate: { opacity: 1, x: [10, -5, 5, 0], skewX: [20, -10, 0] }, exit: { opacity: 0, filter: "blur(10px)" } },
-  { initial: { opacity: 0, x: -100 }, animate: { opacity: 1, x: 0, transition: { type: "spring", bounce: 0.6 } }, exit: { opacity: 0, x: 100 } },
-  { initial: { opacity: 0, scale: 0.1 }, animate: { opacity: 1, scale: 1, transition: { type: "spring", stiffness: 300, damping: 10 } }, exit: { opacity: 0, scale: 1.2 } },
-  { initial: { opacity: 0, scaleX: 0, scaleY: 2 }, animate: { opacity: 1, scaleX: 1, scaleY: 1 }, exit: { opacity: 0, scaleX: 2, scaleY: 0 } },
-  { initial: { opacity: 0, filter: "brightness(0) blur(10px)" }, animate: { opacity: 1, filter: "brightness(1) blur(0px)" }, exit: { opacity: 0, filter: "brightness(2) blur(10px)" } },
-  { initial: { opacity: 0, rotate: 10, y: 50 }, animate: { opacity: 1, rotate: 0, y: 0 }, exit: { opacity: 0, rotate: -10, y: -50 } },
-  { initial: { opacity: 0, rotate: -45, x: -100 }, animate: { opacity: 1, rotate: 0, x: 0 }, exit: { opacity: 0, rotate: 45, x: 100 } },
-  { initial: { opacity: 0, rotateX: 90, scaleY: 0 }, animate: { opacity: 1, rotateX: 0, scaleY: 1 }, exit: { opacity: 0, rotateX: -90, scaleY: 0 } },
-  { initial: { opacity: 0, letterSpacing: "1em" }, animate: { opacity: 1, letterSpacing: "normal" }, exit: { opacity: 0, letterSpacing: "-0.5em" } },
-  { initial: { opacity: 0, y: 100, scale: 0.5 }, animate: { opacity: 1, y: [-20, 0], scale: 1 }, exit: { opacity: 0, y: -100 } },
-  { initial: { opacity: 0, x: 10, filter: "blur(5px)" }, animate: { opacity: 1, x: 0, filter: "blur(0px)", transition: { ease: "linear" } }, exit: { opacity: 0, x: -10 } },
-  { initial: { opacity: 0, scale: 1.1, filter: "blur(15px)" }, animate: { opacity: 1, scale: 1, filter: "blur(0px)" }, exit: { opacity: 0, scale: 0.9, filter: "blur(15px)" } },
-  { initial: { opacity: 0 }, animate: { opacity: 1, x: [2, -2, 0], y: [-1, 1, 0] }, exit: { opacity: 0 } },
-  { initial: { opacity: 0, scaleY: 0.01, scaleX: 3 }, animate: { opacity: 1, scaleY: 1, scaleX: 1 }, exit: { opacity: 0, scaleY: 0, scaleX: 0 } },
-  { initial: { opacity: 0, rotateZ: 180, scale: 0 }, animate: { opacity: 1, rotateZ: 0, scale: 1 }, exit: { opacity: 0, rotateZ: -180, scale: 0 } },
-  { initial: { opacity: 0, y: -50, rotateX: -90 }, animate: { opacity: 1, y: 0, rotateX: 0 }, exit: { opacity: 0, y: 50, rotateX: 90 } },
-  { initial: { opacity: 0, x: -50, rotateY: -90 }, animate: { opacity: 1, x: 0, rotateY: 0 }, exit: { opacity: 0, x: 50, rotateY: 90 } },
-  { initial: { opacity: 0, clipPath: "circle(0% at 50% 50%)" }, animate: { opacity: 1, clipPath: "circle(100% at 50% 50%)" }, exit: { opacity: 0, clipPath: "circle(0% at 50% 50%)" } },
-  { initial: { opacity: 0, clipPath: "inset(100% 0 0 0)" }, animate: { opacity: 1, clipPath: "inset(0% 0 0 0)" }, exit: { opacity: 0, clipPath: "inset(0 0 100% 0)" } },
-  { initial: { opacity: 0, clipPath: "polygon(50% 0%, 50% 0%, 50% 100%, 50% 100%)" }, animate: { opacity: 1, clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)" }, exit: { opacity: 0, clipPath: "polygon(50% 0%, 50% 0%, 50% 100%, 50% 100%)" } },
-  { initial: { opacity: 0, scaleX: -1 }, animate: { opacity: 1, scaleX: 1 }, exit: { opacity: 0, scaleX: -1 } },
-  { initial: { opacity: 0, scaleY: -1 }, animate: { opacity: 1, scaleY: 1 }, exit: { opacity: 0, scaleY: -1 } },
-  { initial: { opacity: 0, y: 10, filter: "contrast(200%) brightness(150%) blur(5px)" }, animate: { opacity: 1, y: 0, filter: "contrast(100%) brightness(100%) blur(0px)" }, exit: { opacity: 0, y: -10, filter: "contrast(200%) brightness(150%) blur(5px)" } },
-  { initial: { opacity: 0, rotate: 3, scale: 1.05 }, animate: { opacity: 1, rotate: 0, scale: 1, transition: { type: "spring", stiffness: 50 } }, exit: { opacity: 0, rotate: -3, scale: 0.95 } },
-  { initial: { opacity: 0, skewY: 10, y: 20 }, animate: { opacity: 1, skewY: 0, y: 0 }, exit: { opacity: 0, skewY: -10, y: -20 } },
-];
-
-const AnimatedRole = () => {
+const TypewriterText = () => {
   const [roleIndex, setRoleIndex] = useState(0);
-  const [animIndex, setAnimIndex] = useState(0);
+  const [displayText, setDisplayText] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setRoleIndex((prev) => (prev + 1) % ROLES.length);
-      
-      // Ensure the next animation is randomly selected but different from the current one
-      setAnimIndex((prevAnim) => {
-        let nextAnim;
-        do {
-          nextAnim = Math.floor(Math.random() * ANIMATIONS.length);
-        } while (nextAnim === prevAnim);
-        return nextAnim;
-      });
-      
-    }, 3500); // changes every 3.5 seconds
-    
-    return () => clearInterval(interval);
-  }, []);
+    const currentRole = ROLES[roleIndex];
+    const typingSpeed = 60;
+    const deletingSpeed = 30;
+    const pauseBeforeDelete = 3500;
+    const pauseBeforeType = 300;
+
+    let timeout: NodeJS.Timeout;
+
+    if (isDeleting) {
+      if (displayText.length > 0) {
+        timeout = setTimeout(() => {
+          setDisplayText(currentRole.substring(0, displayText.length - 1));
+        }, deletingSpeed);
+      } else {
+        setIsDeleting(false);
+        setRoleIndex((prev) => (prev + 1) % ROLES.length);
+        timeout = setTimeout(() => {}, pauseBeforeType);
+      }
+    } else {
+      if (displayText.length < currentRole.length) {
+        timeout = setTimeout(() => {
+          setDisplayText(currentRole.substring(0, displayText.length + 1));
+        }, typingSpeed);
+      } else {
+        timeout = setTimeout(() => {
+          setIsDeleting(true);
+        }, pauseBeforeDelete);
+      }
+    }
+
+    return () => clearTimeout(timeout);
+  }, [displayText, isDeleting, roleIndex]);
 
   useEffect(() => {
     const roleThemes = ["blue", "orange", "purple", "emerald", "cyan", "rose"];
@@ -126,20 +100,14 @@ const AnimatedRole = () => {
   }, [roleIndex]);
 
   return (
-    <div className="h-[100px] sm:h-[130px] md:h-[150px] flex items-center justify-center overflow-hidden w-full relative">
-      <AnimatePresence mode="wait">
-        <motion.span
-          key={roleIndex}
-          initial={ANIMATIONS[animIndex].initial}
-          animate={ANIMATIONS[animIndex].animate}
-          exit={ANIMATIONS[animIndex].exit}
-          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-          className="bg-gradient-accent bg-clip-text text-transparent font-black tracking-tight text-[32px] sm:text-[48px] md:text-[60px] lg:text-[70px] leading-tight text-center max-w-[90vw] absolute"
-        >
-          {ROLES[roleIndex]}
-        </motion.span>
-      </AnimatePresence>
-    </div>
+    <span className="bg-gradient-accent bg-clip-text text-transparent font-black tracking-tight text-[32px] sm:text-[48px] md:text-[60px] lg:text-[70px] leading-tight flex items-center justify-center flex-wrap max-w-[90vw] transition-all duration-300">
+      {displayText}
+      <motion.span
+        animate={{ opacity: [1, 0] }}
+        transition={{ duration: 0.8, repeat: Infinity, repeatType: "reverse" }}
+        className="inline-block w-1 md:w-2 h-[40px] sm:h-[60px] md:h-[70px] lg:h-[80px] bg-accent-theme ml-2"
+      />
+    </span>
   );
 };
 
@@ -147,16 +115,16 @@ export default function Hero() {
   const headingLines = ["Engineering Quality", "At Enterprise Scale."];
 
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center pt-32 pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden z-10">
+    <section className="relative min-h-screen flex flex-col items-center justify-center pt-20 pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden z-10">
       
-      <div className="max-w-5xl mx-auto w-full relative z-10 flex flex-col items-center text-center">
+      <div className="max-w-5xl mx-auto w-full relative z-10 flex flex-col items-center text-center -mt-10">
         
         {/* Availability Badge */}
         <motion.div 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="inline-flex items-center space-x-2 px-4 py-2 rounded-full bg-white/[0.03] border border-white/[0.08] backdrop-blur-md mb-8"
+          className="inline-flex items-center space-x-2 px-4 py-2 rounded-full bg-white/[0.03] border border-white/[0.08] backdrop-blur-md mb-6"
         >
           <span className="relative flex h-2 w-2">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
@@ -172,14 +140,20 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.1 }}
-          className="text-lg sm:text-xl font-bold text-slate-400 mb-2"
+          className="text-lg sm:text-xl font-bold text-slate-400 mb-2 mt-4"
         >
           👋 Hi, I&apos;m Sai Krishna Bykani
         </motion.div>
 
-        {/* Role Animator */}
-        <div className="mb-8 w-full flex justify-center">
-          <AnimatedRole />
+        {/* Typewriter Role as Main Focus */}
+        <div className="mb-12 mt-4 min-h-[120px] flex items-center justify-center">
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+          >
+            <TypewriterText />
+          </motion.div>
         </div>
 
         {/* Description */}
@@ -187,7 +161,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.5 }}
-          className="max-w-2xl mx-auto mt-6 mb-12"
+          className="max-w-2xl mx-auto mt-2 mb-12"
         >
           <p className="text-base sm:text-lg text-slate-400 leading-relaxed">
             Building enterprise-grade automation frameworks, validating mission-critical payment systems, and delivering reliable software through UI automation, API testing, backend validation, and performance engineering.
