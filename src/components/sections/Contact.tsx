@@ -47,31 +47,20 @@ export default function Contact() {
     setStatus("loading");
 
     const formData = new FormData(e.currentTarget);
-    const payload = {
-      name: formData.get("name"),
-      email: formData.get("email"),
-      subject: "Portfolio Message",
-      message: formData.get("message"),
-    };
-
-    try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      if (response.ok) {
-        setStatus("success");
-      } else {
-        const err = await response.json();
-        setErrorMessage(err.error || "Failed to deliver message.");
-        setStatus("error");
-      }
-    } catch (err) {
-      setErrorMessage("Something went wrong. Please check your network.");
-      setStatus("error");
-    }
+    const name = formData.get("name") as string;
+    const email = formData.get("email") as string;
+    const message = formData.get("message") as string;
+    
+    // Format the message for WhatsApp
+    const whatsappText = `*New Portfolio Contact*\n\n*Name:* ${name}\n*Email:* ${email}\n\n*Message:*\n${message}`;
+    const whatsappUrl = `https://wa.me/${resumeData.personal.phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(whatsappText)}`;
+    
+    // Open WhatsApp in a new tab
+    window.open(whatsappUrl, "_blank");
+    
+    setTimeout(() => {
+      setStatus("success");
+    }, 1000);
   };
 
   return (
@@ -139,7 +128,6 @@ export default function Contact() {
                     className="absolute bottom-0 left-0 h-[1px] bg-gradient-to-r from-blue-500 to-transparent" 
                   />
                   <h3 className="text-2xl font-black text-white tracking-tight">Sai Krishna Bykani</h3>
-                  <p className="text-blue-400 mt-2 font-bold tracking-widest text-[10px] uppercase">QA Automation / SDET</p>
                 </div>
 
                 {/* Contact Items */}
