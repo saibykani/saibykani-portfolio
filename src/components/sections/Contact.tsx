@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { Mail, Phone, MapPin } from "lucide-react";
 import resumeData from "@/data/resumeData.json";
 
@@ -9,7 +10,13 @@ export default function Contact() {
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Title Header */}
-        <div className="max-w-3xl mb-16 text-center sm:text-left space-y-3">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6 }}
+          className="max-w-3xl mb-16 text-center sm:text-left space-y-3"
+        >
           <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white leading-tight">
             Contact Me
           </h2>
@@ -17,14 +24,20 @@ export default function Contact() {
           <p className="text-sm text-gray-500 max-w-xl leading-relaxed">
             Please submit a request to schedule a technical interview session or discuss automation frameworks.
           </p>
-        </div>
+        </motion.div>
 
         {/* Contact Layout Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
           
           {/* Left panel: Info anchors */}
-          <div className="lg:col-span-5 space-y-6">
-            <div className="p-8 rounded-2xl bg-[#09090b] border border-white/[0.06] h-full flex flex-col justify-between">
+          <motion.div 
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ type: "spring", stiffness: 100, damping: 15 }}
+            className="lg:col-span-5 space-y-6"
+          >
+            <div className="p-8 rounded-2xl bg-[#09090b] border border-white/[0.06] h-full flex flex-col justify-between hover:border-blue-500/20 transition-colors duration-300">
               
               <div className="space-y-6 text-xs text-slate-400">
                 <div className="border-b border-white/[0.06] pb-4 mb-4">
@@ -102,11 +115,17 @@ export default function Contact() {
               </div>
 
             </div>
-          </div>
+          </motion.div>
 
           {/* Right panel: Submission Form */}
-          <div className="lg:col-span-7">
-            <div className="p-8 rounded-2xl bg-[#09090b] border border-white/[0.06] h-full flex flex-col justify-center overflow-hidden">
+          <motion.div 
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ type: "spring", stiffness: 100, damping: 15, delay: 0.1 }}
+            className="lg:col-span-7"
+          >
+            <div className="p-8 rounded-2xl bg-[#09090b] border border-white/[0.06] h-full flex flex-col justify-center overflow-hidden hover:border-blue-500/20 transition-colors duration-300">
               
               <form action={`https://formsubmit.co/${resumeData.personal.email}`} method="POST" className="space-y-4">
                 {/* Honeypot for spam protection */}
@@ -115,7 +134,7 @@ export default function Contact() {
                 {/* Disable captcha for cleaner UX */}
                 <input type="hidden" name="_captcha" value="false" />
                 
-                {/* Auto response & success redirect (optional, leaving default formsubmit page for now or we could route back) */}
+                {/* Auto response & success redirect */}
                 <input type="hidden" name="_next" value={typeof window !== 'undefined' ? window.location.href : ""} />
                 
                 <div className="space-y-2">
@@ -154,15 +173,17 @@ export default function Contact() {
                   ></textarea>
                 </div>
 
-                <button 
+                <motion.button 
+                  whileHover={{ scale: 1.02, backgroundColor: "#e2e8f0" }}
+                  whileTap={{ scale: 0.98 }}
                   type="submit"
-                  className="w-full py-4 mt-2 bg-white text-black hover:bg-slate-200 rounded-xl text-xs font-extrabold tracking-widest uppercase transition-all"
+                  className="w-full py-4 mt-2 bg-white text-black rounded-xl text-xs font-extrabold tracking-widest uppercase transition-all shadow-md hover:shadow-white/10 cursor-pointer"
                 >
                   Send Message
-                </button>
+                </motion.button>
               </form>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

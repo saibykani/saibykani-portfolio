@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { CheckCircle2, ShieldCheck, Activity, Terminal, Database, Cpu } from "lucide-react";
 
 interface ExpertiseDomain {
@@ -11,6 +12,30 @@ interface ExpertiseDomain {
 }
 
 export default function Expertise() {
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.08
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20, scale: 0.98 },
+    show: { 
+      opacity: 1, 
+      y: 0, 
+      scale: 1, 
+      transition: { 
+        type: "spring" as const, 
+        stiffness: 100, 
+        damping: 15 
+      } 
+    }
+  };
+
   const domains: ExpertiseDomain[] = [
     {
       name: "API Contract Testing",
@@ -65,7 +90,13 @@ export default function Expertise() {
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Title Header */}
-        <div className="max-w-3xl mb-16 text-center sm:text-left space-y-3">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6 }}
+          className="max-w-3xl mb-16 text-center sm:text-left space-y-3"
+        >
           <div className="text-orange-500 text-[10px] font-bold tracking-widest uppercase">
             Validation Domains
           </div>
@@ -78,15 +109,23 @@ export default function Expertise() {
           <p className="text-sm text-slate-400 max-w-xl leading-relaxed">
             Sai Krishna implements structured verification plans to ensure transactional correctness in Fintech applications.
           </p>
-        </div>
+        </motion.div>
 
         {/* Expertise Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <motion.div 
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-100px" }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
           {domains.map((dom) => {
             const Icon = dom.icon;
             return (
-              <div
+              <motion.div
                 key={dom.name}
+                variants={itemVariants}
+                whileHover={{ y: -6, scale: 1.02, borderColor: "rgba(249, 115, 22, 0.3)", boxShadow: "0 15px 30px -10px rgba(0,0,0,0.8)" }}
                 className="p-6 rounded-2xl glass-premium space-y-4 hover:border-orange-500/20 transition-all duration-300"
               >
                 <div className="flex items-center space-x-3">
@@ -113,10 +152,10 @@ export default function Expertise() {
                   </div>
                 </div>
 
-              </div>
+              </motion.div>
             );
           })}
-        </div>
+        </motion.div>
 
       </div>
     </section>

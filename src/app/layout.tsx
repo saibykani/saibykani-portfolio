@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
+import SpotlightCursor from "@/components/SpotlightCursor";
 
 const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -55,6 +56,9 @@ export default function RootLayout({
       <body
         className={`${jakarta.className} ${jakarta.variable} antialiased bg-black text-slate-200 min-h-screen relative overflow-x-hidden`}
       >
+        {/* Spotlight Follow Glow */}
+        <SpotlightCursor />
+
         {/* Dynamic Faint Grid and Mesh Gradient matching Ahmed's site */}
         <div className="aurora-container">
           <div className="aurora-mesh" />
