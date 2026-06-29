@@ -23,7 +23,7 @@ interface ProjectData {
 export default function Projects() {
   const [selectedProject, setSelectedProject] = useState<ProjectData | null>(null);
 
-  const projectsList = (resumeData.projects as unknown) as ProjectData[];
+  const projectsList = (resumeData.projects ?? []) as ProjectData[];
 
   const renderArchitectureDiagram = (projectId: string) => {
     switch (projectId) {
@@ -151,7 +151,7 @@ export default function Projects() {
 
         {/* Projects Cards Layout */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {projectsList.map((project) => (
+          {(projectsList?.length ? projectsList.map((project) => (
             <div
               key={project.id}
               className="p-8 rounded-2xl glass-premium flex flex-col justify-between hover:-translate-y-1 transition-all duration-500 group relative overflow-hidden"
@@ -170,7 +170,7 @@ export default function Projects() {
 
                 {/* Tech tag lists */}
                 <div className="flex flex-wrap gap-1.5 pt-2">
-                  {project.techStack.map((tech) => (
+                  {(project.techStack ?? []).map((tech) => (
                     <span
                       key={tech}
                       className="px-2.5 py-0.5 rounded-full text-[9px] font-bold bg-white/5 border border-white/10 text-slate-400 hover:bg-white/10 hover:text-white transition-colors"

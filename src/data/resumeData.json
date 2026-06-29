@@ -241,7 +241,78 @@
         "testingMetrics": ["100% data accuracy", "Zero transaction gaps"],
         "lessonsLearned": "Automated data reconciliation catches asynchronous write issues."
       }
+    },
+    {
+      "id": "rwa",
+      "title": "Residential Welfare Association Platform",
+      "category": "Community Management",
+      "summary": "End-to-end automation of resident management, visitor approvals, maintenance payments, and community services.",
+      "role": "QA Automation Engineer",
+      "testingTypes": ["UI Automation", "API Automation", "Backend Validation"],
+      "technologies": ["Java", "Selenium", "REST Assured", "TestNG", "Postman", "MySQL", "Jenkins"],
+      "techStack": ["Java", "Selenium", "REST Assured", "TestNG", "Postman", "MySQL", "Jenkins"],
+      "businessImpactBadge": "Quality Assurance",
+      "metrics": {"Automation Coverage": "85%", "Defect Leakage": "<2%"},
+      "caseStudy": {
+        "overview": "Automated core resident workflows, visitor management, and payment processing for gated communities.",
+        "businessDomain": "Community Management",
+        "businessProblem": "Manual processes caused delays and errors in resident services.",
+        "businessContext": "Need reliable automation to ensure timely handling of resident requests.",
+        "responsibilities": ["Implemented Selenium scripts for UI flows", "Created REST API tests for payment services", "Validated backend data integrity"],
+        "modules": ["Resident Registration", "Visitor Management", "Maintenance Payments", "Community Dashboard"],
+        "testingStrategy": "Layered approach: API first, then UI, followed by backend verification.",
+        "framework": "Page Object Model with Cucumber BDD",
+        "impact": "Reduced manual regression time by 70% and improved release confidence."
+      }
+    },
+    {
+      "id": "ppms",
+      "title": "NGO Project Management System",
+      "category": "NGO Management",
+      "summary": "Automation of donor management, beneficiary tracking, campaign planning, and financial reporting.",
+      "role": "QA Automation Engineer",
+      "testingTypes": ["UI Automation", "API Automation", "Backend Validation"],
+      "technologies": ["Java", "Selenium", "REST Assured", "TestNG", "Postman", "MySQL", "Jenkins"],
+      "techStack": ["Java", "Selenium", "REST Assured", "TestNG", "Postman", "MySQL", "Jenkins"],
+      "businessImpactBadge": "NGO Efficiency",
+      "metrics": {"Automation Coverage": "80%", "Data Accuracy": "100%"},
+      "caseStudy": {
+        "overview": "Automated donor onboarding, campaign lifecycle, and financial report generation.",
+        "businessDomain": "NGO Operations",
+        "businessProblem": "Manual tracking led to reporting delays and data inconsistencies.",
+        "businessContext": "Need comprehensive automated testing for critical NGO workflows.",
+        "responsibilities": ["Built Selenium suites for donor UI", "Created API tests for campaign services", "Implemented DB validation for financial records"],
+        "modules": ["Donor Management", "Beneficiary Tracking", "Campaign Planning", "Financial Reports"],
+        "testingStrategy": "Data‑driven tests covering all CRUD operations.",
+        "framework": "Page Object Model with TestNG",
+        "impact": "Achieved 100% data accuracy and cut reporting cycle by 60%.",
+        "challenges": ["Complex relational data models"]
+      }
+    },
+    {
+      "id": "vcip",
+      "title": "Video Customer Identification Platform",
+      "category": "Digital Banking & eKYC",
+      "summary": "Automated end‑to‑end video KYC onboarding, document verification, and account creation workflows.",
+      "role": "Software Development Engineer in Test",
+      "testingTypes": ["UI Automation", "API Automation", "Performance Testing"],
+      "technologies": ["Java", "Selenium", "REST Assured", "Postman", "TestNG", "MySQL", "Jenkins"],
+      "techStack": ["Java", "Selenium", "REST Assured", "Postman", "TestNG", "MySQL", "Jenkins"],
+      "businessImpactBadge": "Secure Onboarding",
+      "metrics": {"Automation Coverage": "90%", "KYC Success Rate": "99.5%"},
+      "caseStudy": {
+        "overview": "Automated video capture, document OCR, facial recognition, and compliance checks for digital account opening.",
+        "businessDomain": "Banking & KYC",
+        "businessProblem": "High manual effort and compliance risk in traditional onboarding.",
+        "businessContext": "Regulatory pressure to digitize KYC without compromising security.",
+        "responsibilities": ["Implemented Selenium flows for video session", "Created API tests for verification services", "Validated backend storage of KYC data"],
+        "modules": ["Customer Registration", "Video Capture", "Document OCR", "Face Matching", "Compliance Checks"],
+        "testingStrategy": "Combine UI video flow tests with API contract validation.",
+        "framework": "Hybrid Page Object Model with Cucumber BDD",
+        "impact": "Reduced onboarding time from days to minutes and ensured 99.5% verification accuracy."
+      }
     }
+
   ],
   "skills": {
     "categories": [
