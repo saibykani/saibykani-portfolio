@@ -77,7 +77,7 @@ const TypewriterText = () => {
   }, [roleIndex]);
 
   return (
-    <span className="text-accent-theme font-black tracking-tight text-[32px] sm:text-[48px] md:text-[60px] lg:text-[70px] leading-tight flex items-center justify-center flex-wrap max-w-[90vw]">
+    <span className="bg-gradient-accent bg-clip-text text-transparent font-black tracking-tight text-[32px] sm:text-[48px] md:text-[60px] lg:text-[70px] leading-tight flex items-center justify-center flex-wrap max-w-[90vw] transition-all duration-300">
       {displayText}
       <motion.span
         animate={{ opacity: [1, 0] }}

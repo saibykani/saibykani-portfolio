@@ -23,12 +23,12 @@ const SvgArchitectureCircular = ({ nodes }: { nodes: string[] }) => {
 
   const currentColor = colors[colorIndex];
   const N = nodes.length;
-  const radius = 150; // radius of the circle
-  const centerX = 230; // center X of the container
-  const centerY = 230; // center Y of the container
+  const radius = 185; // radius of the circle
+  const centerX = 265; // center X of the container
+  const centerY = 265; // center Y of the container
 
   return (
-    <div className="w-full bg-[#0a0a0c]/80 border border-white/10 rounded-3xl p-6 relative flex items-center justify-center min-h-[500px] my-4 overflow-hidden">
+    <div className="w-full bg-[#0a0a0c]/80 dark:bg-black/40 border border-slate-200 dark:border-white/10 rounded-3xl p-6 relative flex items-center justify-center min-h-[570px] my-4 overflow-hidden">
       {/* Glow gradient matching current color */}
       <div 
         className="absolute inset-0 pointer-events-none transition-all duration-1000 opacity-20"
@@ -38,10 +38,10 @@ const SvgArchitectureCircular = ({ nodes }: { nodes: string[] }) => {
       />
       
       {/* Desktop view: Circle Layout */}
-      <div className="hidden sm:flex relative w-[460px] h-[460px] items-center justify-center shrink-0">
+      <div className="hidden sm:flex relative w-[530px] h-[530px] items-center justify-center shrink-0">
         
         {/* Pulse center core */}
-        <div className="absolute w-32 h-32 rounded-full bg-white/[0.02] border border-white/10 flex flex-col items-center justify-center text-center p-3 z-10 shadow-[0_0_40px_rgba(0,0,0,0.8)]">
+        <div className="absolute w-32 h-32 rounded-full bg-slate-100/50 dark:bg-white/[0.02] border border-slate-200 dark:border-white/10 flex flex-col items-center justify-center text-center p-3 z-10 shadow-[0_0_40px_rgba(0,0,0,0.8)]">
           <motion.div 
             animate={{ scale: [1, 1.05, 1], opacity: [0.3, 0.6, 0.3] }}
             transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
@@ -81,6 +81,27 @@ const SvgArchitectureCircular = ({ nodes }: { nodes: string[] }) => {
                 strokeWidth={isHovered ? "1.5" : "0.5"}
                 strokeDasharray={isHovered ? "4 4" : "none"}
                 className={`transition-all duration-300 ${isHovered ? "animated-connector-line" : ""}`}
+              />
+            );
+          })}
+          {/* Circular polygon loop connecting adjacent nodes */}
+          {nodes.map((node, index) => {
+            const angle1 = (index / N) * 2 * Math.PI;
+            const angle2 = (((index + 1) % N) / N) * 2 * Math.PI;
+            const x1 = centerX + radius * Math.cos(angle1);
+            const y1 = centerY + radius * Math.sin(angle1);
+            const x2 = centerX + radius * Math.cos(angle2);
+            const y2 = centerY + radius * Math.sin(angle2);
+            return (
+              <line
+                key={`edge-${node}`}
+                x1={x1}
+                y1={y1}
+                x2={x2}
+                y2={y2}
+                stroke={currentColor}
+                strokeWidth="1"
+                className="opacity-20 dark:opacity-10 transition-all duration-1000"
               />
             );
           })}

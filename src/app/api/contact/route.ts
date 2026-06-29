@@ -6,27 +6,54 @@ export async function POST(request: Request) {
     const { name, email, subject, message } = data;
 
     if (!name || !email || !message) {
-      return NextResponse.json({ error: "Missing fields" }, { status: 400 });
+      return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
-    // TODO: Add your Email provider integration here (e.g., Resend, SendGrid, NodeMailer)
-    // Example (Resend):
-    // await resend.emails.send({ from: '...', to: '...', subject, text: message });
+    console.log("Contact form submission received:", { name, email, subject, message });
 
-    // TODO: Add your SMS provider integration here (e.g., Twilio)
-    // Example (Twilio):
-    // await twilioClient.messages.create({ body: `New Contact: ${name}`, from: '...', to: '...' });
+    // Twilio SMS integration via HTTP REST API (no npm package install needed!)
+    const accountSid = process.env.TWILIO_ACCOUNT_SID;
+    const authToken = process.env.TWILIO_AUTH_TOKEN;
+    const fromPhone = process.env.TWILIO_PHONE_NUMBER;
+    const toPhone = process.env.MY_PHONE_NUMBER;
 
-    console.log("Mock Contact Submission:", { name, email, subject, message });
+    if (accountSid && authToken && fromPhone && toPhone) {
+      try {
+        const url = `https://api.twilio.com/2010-04-01/Accounts/${accountSid}/Messages.json`;
+        const auth = Buffer.from(`${accountSid}:${authToken}`).toString("base64");
+        
+        const body = new URLSearchParams();
+        body.append("To", toPhone);
+        body.append("From", fromPhone);
+        body.append("Body", `Portfolio Alert: Message from ${name} (${email}): ${message}`);
 
-    // Simulate network delay
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+        const smsRes = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Authorization": `Basic ${auth}`,
+            "Content-Type": "application/x-www-form-urlencoded"
+          },
+          body: body.toString()
+        });
+
+        if (!smsRes.ok) {
+          const errText = await smsRes.text();
+          console.error("Twilio SMS dispatch failed:", errText);
+        } else {
+          console.log("Twilio SMS alert sent successfully.");
+        }
+      } catch (smsErr) {
+        console.error("Failed to send Twilio SMS:", smsErr);
+      }
+    } else {
+      console.warn("Twilio SMS environment variables not configured. SMS notification skipped.");
+    }
 
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
-    console.error("Contact form error:", error);
+    console.error("Contact API handler error:", error);
     return NextResponse.json(
-      { error: "Failed to send message" },
+      { error: "Failed to submit contact message" },
       { status: 500 }
     );
   }

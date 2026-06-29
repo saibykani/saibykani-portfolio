@@ -1,12 +1,48 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Mail, Phone, MapPin } from "lucide-react";
 import resumeData from "@/data/resumeData.json";
 
 export default function Contact() {
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setStatus("loading");
+
+    const formData = new FormData(e.currentTarget);
+    const payload = {
+      name: formData.get("name"),
+      email: formData.get("email"),
+      subject: "Portfolio Message",
+      message: formData.get("message"),
+    };
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (response.ok) {
+        setStatus("success");
+      } else {
+        const err = await response.json();
+        setErrorMessage(err.error || "Failed to deliver message.");
+        setStatus("error");
+      }
+    } catch (err) {
+      setErrorMessage("Something went wrong. Please check your network.");
+      setStatus("error");
+    }
+  };
+
   return (
-    <section id="contact" className="py-24 relative overflow-hidden">
+    <section id="contact" className="py-24 relative overflow-hidden bg-background text-foreground transition-colors duration-300">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Title Header */}
@@ -18,29 +54,29 @@ export default function Contact() {
           className="max-w-3xl mb-16 text-center sm:text-left space-y-3"
         >
           <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white leading-tight">
-            Contact Me
+            Let&apos;s Connect.
           </h2>
-          <div className="w-12 h-[2px] bg-gradient-to-r from-blue-500 to-indigo-500 my-4" />
-          <p className="text-sm text-gray-500 max-w-xl leading-relaxed">
-            Please submit a request to schedule a technical interview session or discuss automation frameworks.
+          <div className="h-1 bg-gradient-accent rounded-full w-24 my-2" />
+          <p className="text-sm text-slate-400 max-w-xl leading-relaxed">
+            Reach out to Sai Krishna Bykani to schedule a technical session or discuss payment testing integrations.
           </p>
         </motion.div>
 
-        {/* Contact Layout Grid */}
+        {/* Content Layout Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
           
-          {/* Left panel: Info anchors */}
+          {/* Left panel: Direct Contact Card */}
           <motion.div 
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ type: "spring", stiffness: 100, damping: 15 }}
-            className="lg:col-span-5 space-y-6"
+            className="lg:col-span-5 flex flex-col justify-between"
           >
-            <div className="p-8 rounded-2xl bg-[#09090b] border border-white/[0.06] h-full flex flex-col justify-between hover:border-blue-500/20 transition-colors duration-300">
+            <div className="p-8 rounded-2xl glass-premium border border-slate-200 dark:border-white/[0.06] space-y-8 flex-grow flex flex-col justify-center bg-card text-card-foreground">
               
               <div className="space-y-6 text-xs text-slate-400">
-                <div className="border-b border-white/[0.06] pb-4 mb-4">
+                <div className="border-b border-slate-200 dark:border-white/5 pb-4 mb-4">
                   <span className="text-[9px] text-slate-500 tracking-widest uppercase font-bold">Contact details</span>
                   <h3 className="text-sm font-extrabold text-white mt-1">Sai Krishna Bykani</h3>
                 </div>
@@ -85,8 +121,8 @@ export default function Contact() {
                 </div>
               </div>
 
-              {/* Social links row */}
-              <div className="border-t border-white/[0.06] pt-6 mt-8 flex items-center space-x-4">
+              {/* Dynamic Social Icons */}
+              <div className="flex items-center space-x-3 pt-6 border-t border-slate-200 dark:border-white/5">
                 <a
                   href={resumeData.personal.linkedin}
                   target="_blank"
@@ -125,63 +161,87 @@ export default function Contact() {
             transition={{ type: "spring", stiffness: 100, damping: 15, delay: 0.1 }}
             className="lg:col-span-7"
           >
-            <div className="p-8 rounded-2xl bg-[#09090b] border border-white/[0.06] h-full flex flex-col justify-center overflow-hidden hover:border-blue-500/20 transition-colors duration-300">
+            <div className="p-8 rounded-2xl bg-card border border-slate-200 dark:border-white/[0.06] h-full flex flex-col justify-center overflow-hidden hover:border-blue-500/20 transition-colors duration-300">
               
-              <form action={`https://formsubmit.co/${resumeData.personal.email}`} method="POST" className="space-y-4">
-                {/* Honeypot for spam protection */}
-                <input type="text" name="_honey" style={{ display: "none" }} />
-                
-                {/* Disable captcha for cleaner UX */}
-                <input type="hidden" name="_captcha" value="false" />
-                
-                {/* Auto response & success redirect */}
-                <input type="hidden" name="_next" value={typeof window !== 'undefined' ? window.location.href : ""} />
-                
-                <div className="space-y-2">
-                  <label htmlFor="name" className="text-[10px] text-slate-500 font-bold tracking-widest uppercase">Your Name</label>
-                  <input 
-                    type="text" 
-                    id="name" 
-                    name="name" 
-                    required 
-                    placeholder="John Doe"
-                    className="w-full px-4 py-3 bg-[#111113] border border-white/[0.06] rounded-xl text-xs text-white placeholder:text-slate-600 focus:outline-none focus:border-blue-500/50 transition-colors"
-                  />
-                </div>
-                
-                <div className="space-y-2">
-                  <label htmlFor="email" className="text-[10px] text-slate-500 font-bold tracking-widest uppercase">Email Address</label>
-                  <input 
-                    type="email" 
-                    id="email" 
-                    name="email" 
-                    required 
-                    placeholder="john@example.com"
-                    className="w-full px-4 py-3 bg-[#111113] border border-white/[0.06] rounded-xl text-xs text-white placeholder:text-slate-600 focus:outline-none focus:border-blue-500/50 transition-colors"
-                  />
-                </div>
+              <AnimatePresence mode="wait">
+                {status === "success" ? (
+                  <motion.div 
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="flex flex-col items-center justify-center text-center py-10 space-y-4"
+                  >
+                    <div className="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+                      <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                    <h4 className="text-base font-extrabold text-white">Message Sent Successfully!</h4>
+                    <p className="text-xs text-slate-400 max-w-xs leading-relaxed">
+                      Thank you for contacting Sai Krishna Bykani. Your message has been routed and an SMS alert was dispatched.
+                    </p>
+                    <button
+                      onClick={() => setStatus("idle")}
+                      className="px-5 py-2.5 rounded-full bg-white/5 border border-white/10 text-xs font-bold text-slate-300 hover:text-white transition-all cursor-pointer"
+                    >
+                      Send Another Message
+                    </button>
+                  </motion.div>
+                ) : (
+                  <form onSubmit={handleSubmit} className="space-y-4">
+                    <div className="space-y-2">
+                      <label htmlFor="name" className="text-[10px] text-slate-500 font-bold tracking-widest uppercase">Your Name</label>
+                      <input 
+                        type="text" 
+                        id="name" 
+                        name="name" 
+                        required 
+                        placeholder="John Doe"
+                        className="w-full px-4 py-3 bg-[#111113] border border-slate-200 dark:border-white/[0.06] rounded-xl text-xs text-white placeholder:text-slate-600 focus:outline-none focus:border-blue-500/50 transition-colors"
+                      />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <label htmlFor="email" className="text-[10px] text-slate-500 font-bold tracking-widest uppercase">Email Address</label>
+                      <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        required 
+                        placeholder="john@example.com"
+                        className="w-full px-4 py-3 bg-[#111113] border border-slate-200 dark:border-white/[0.06] rounded-xl text-xs text-white placeholder:text-slate-650 focus:outline-none focus:border-blue-500/50 transition-colors"
+                      />
+                    </div>
 
-                <div className="space-y-2">
-                  <label htmlFor="message" className="text-[10px] text-slate-500 font-bold tracking-widest uppercase">Message</label>
-                  <textarea 
-                    id="message" 
-                    name="message" 
-                    required 
-                    rows={4}
-                    placeholder="Hi Sai, I'd like to discuss..."
-                    className="w-full px-4 py-3 bg-[#111113] border border-white/[0.06] rounded-xl text-xs text-white placeholder:text-slate-600 focus:outline-none focus:border-blue-500/50 transition-colors resize-none"
-                  ></textarea>
-                </div>
+                    <div className="space-y-2">
+                      <label htmlFor="message" className="text-[10px] text-slate-500 font-bold tracking-widest uppercase">Message</label>
+                      <textarea 
+                        id="message" 
+                        name="message" 
+                        required 
+                        rows={4}
+                        placeholder="Hi Sai, I'd like to discuss..."
+                        className="w-full px-4 py-3 bg-[#111113] border border-slate-200 dark:border-white/[0.06] rounded-xl text-xs text-white placeholder:text-slate-650 focus:outline-none focus:border-blue-500/50 transition-colors resize-none"
+                      ></textarea>
+                    </div>
 
-                <motion.button 
-                  whileHover={{ scale: 1.02, backgroundColor: "#e2e8f0" }}
-                  whileTap={{ scale: 0.98 }}
-                  type="submit"
-                  className="w-full py-4 mt-2 bg-white text-black rounded-xl text-xs font-extrabold tracking-widest uppercase transition-all shadow-md hover:shadow-white/10 cursor-pointer"
-                >
-                  Send Message
-                </motion.button>
-              </form>
+                    {status === "error" && (
+                      <p className="text-xs font-bold text-red-500">{errorMessage}</p>
+                    )}
+
+                    <motion.button 
+                      whileHover={status === "loading" ? {} : { scale: 1.02, backgroundColor: "#e2e8f0" }}
+                      whileTap={status === "loading" ? {} : { scale: 0.98 }}
+                      type="submit"
+                      disabled={status === "loading"}
+                      className="w-full py-4 mt-2 bg-white text-black rounded-xl text-xs font-extrabold tracking-widest uppercase transition-all shadow-md hover:shadow-white/10 cursor-pointer disabled:opacity-50"
+                    >
+                      {status === "loading" ? "Sending Alert..." : "Send Message"}
+                    </motion.button>
+                  </form>
+                )}
+              </AnimatePresence>
+
             </div>
           </motion.div>
         </div>
