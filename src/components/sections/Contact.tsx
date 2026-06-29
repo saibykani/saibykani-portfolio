@@ -1,71 +1,35 @@
 "use client";
 
-import { useState, useRef } from "react";
-import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Mail, Phone, MapPin, Send, MessageSquare } from "lucide-react";
 import resumeData from "@/data/resumeData.json";
-
-// Particle component for background VFX
-const FloatingParticles = () => {
-  return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {[...Array(15)].map((_, i) => (
-        <motion.div
-          key={i}
-          className="absolute w-1 h-1 bg-blue-500/30 rounded-full blur-[1px]"
-          initial={{
-            x: Math.random() * (typeof window !== "undefined" ? window.innerWidth : 1000),
-            y: Math.random() * (typeof window !== "undefined" ? window.innerHeight : 1000),
-            opacity: Math.random() * 0.5 + 0.2
-          }}
-          animate={{
-            y: [null, Math.random() * -200],
-            x: [null, Math.random() * 100 - 50],
-            opacity: [null, 0],
-            scale: [1, 2]
-          }}
-          transition={{
-            duration: Math.random() * 5 + 5,
-            repeat: Infinity,
-            ease: "linear"
-          }}
-        />
-      ))}
-    </div>
-  );
-};
 
 export default function Contact() {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
-  const containerRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({ target: containerRef, offset: ["start end", "end start"] });
-  const y = useTransform(scrollYProgress, [0, 1], [50, -50]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setStatus("loading");
 
     const formData = new FormData(e.currentTarget);
-    const payload = {
-      name: formData.get("name"),
-      email: formData.get("email"),
-      phone: formData.get("phone"),
-      message: formData.get("message"),
-    };
+    
+    // Add necessary config for formsubmit.co
+    formData.append("_subject", "New Portfolio Message!");
+    formData.append("_captcha", "false"); // disable captcha for seamless UX
 
     try {
-      const response = await fetch("/api/contact", {
+      // POST directly to formsubmit.co which will email saibykani07@gmail.com
+      const response = await fetch("https://formsubmit.co/ajax/saibykani07@gmail.com", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: formData,
       });
 
       if (response.ok) {
         setStatus("success");
       } else {
-        const err = await response.json();
-        setErrorMessage(err.error || "Failed to deliver message.");
+        setErrorMessage("Failed to deliver message.");
         setStatus("error");
       }
     } catch (err) {
@@ -75,76 +39,52 @@ export default function Contact() {
   };
 
   return (
-    <section ref={containerRef} id="contact" className="py-32 relative overflow-hidden bg-[#030303] text-foreground">
-      {/* Premium Background VFX */}
+    <section id="contact" className="py-24 sm:py-32 relative bg-[#030303] text-foreground">
+      {/* Lightweight Premium Background */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,_var(--tw-gradient-stops))] from-blue-900/10 via-[#030303] to-[#030303] pointer-events-none" />
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-[120px] pointer-events-none" />
-      <FloatingParticles />
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-[120px] pointer-events-none opacity-50" />
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-[120px] pointer-events-none opacity-50" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Title Header */}
-        <motion.div 
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="max-w-3xl mx-auto mb-20 text-center space-y-6"
-        >
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="inline-flex items-center space-x-2 px-5 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[11px] font-black tracking-widest uppercase mb-4 shadow-[0_0_30px_rgba(59,130,246,0.15)]"
-          >
+        <div className="max-w-3xl mx-auto mb-16 sm:mb-20 text-center space-y-6">
+          <div className="inline-flex items-center space-x-2 px-5 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[11px] font-black tracking-widest uppercase mb-4 shadow-[0_0_30px_rgba(59,130,246,0.15)]">
             <MessageSquare className="w-3.5 h-3.5" />
             <span>Get In Touch</span>
-          </motion.div>
+          </div>
           
-          <h2 className="text-5xl sm:text-6xl lg:text-7xl font-black tracking-tighter text-white leading-[1.1]">
+          <h2 className="text-4xl sm:text-5xl lg:text-7xl font-black tracking-tighter text-white leading-[1.1]">
             Let&apos;s Build <br className="hidden sm:block" />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-500">
               Something Great.
             </span>
           </h2>
-          <p className="text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed font-medium">
+          <p className="text-base sm:text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed font-medium">
             Reach out to schedule a technical session, discuss payment testing integrations, or explore exciting opportunities.
           </p>
-        </motion.div>
+        </div>
 
         {/* Content Layout Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-stretch max-w-6xl mx-auto">
           
           {/* Left panel: Direct Contact Card */}
-          <motion.div 
-            style={{ y }}
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ type: "spring", stiffness: 70, damping: 20 }}
-            className="lg:col-span-5 flex flex-col justify-between relative group"
-          >
+          <div className="lg:col-span-5 flex flex-col justify-between relative group">
             {/* Animated Glow Border */}
-            <div className="absolute -inset-1 bg-gradient-to-br from-blue-500/40 via-purple-500/20 to-blue-500/40 rounded-[2rem] blur opacity-40 group-hover:opacity-100 transition duration-1000 group-hover:duration-300" />
+            <div className="absolute -inset-1 bg-gradient-to-br from-blue-500/30 via-purple-500/10 to-blue-500/30 rounded-[2rem] blur opacity-30 group-hover:opacity-100 transition duration-700" />
             
-            <div className="p-10 rounded-[2rem] bg-[#0a0a0c]/80 backdrop-blur-2xl border border-white/10 space-y-10 flex-grow flex flex-col justify-center relative z-10 shadow-2xl">
+            <div className="p-8 sm:p-10 rounded-[2rem] bg-[#0a0a0c]/90 border border-white/10 space-y-10 flex-grow flex flex-col justify-center relative z-10 shadow-2xl">
               
               <div className="space-y-10 text-xs text-slate-400">
                 <div className="pb-8 mb-4 border-b border-white/10 relative">
-                  <motion.div 
-                    initial={{ width: 0 }}
-                    whileInView={{ width: "40%" }}
-                    transition={{ duration: 1.5, delay: 0.5, ease: "easeOut" }}
-                    className="absolute bottom-0 left-0 h-[2px] bg-gradient-to-r from-blue-500 to-transparent" 
-                  />
+                  <div className="absolute bottom-0 left-0 h-[2px] w-[40%] bg-gradient-to-r from-blue-500 to-transparent" />
                   <h3 className="text-3xl font-black text-white tracking-tight">Sai Krishna <br/>Bykani</h3>
                 </div>
 
                 {/* Contact Items */}
                 <div className="space-y-8">
                   {/* Email */}
-                  <motion.div whileHover={{ x: 10 }} className="flex items-center space-x-5 cursor-pointer group/item">
+                  <div className="flex items-center space-x-5 group/item transition-transform hover:translate-x-2 duration-300">
                     <div className="w-14 h-14 rounded-2xl bg-white/[0.03] border border-white/[0.08] flex items-center justify-center text-slate-300 group-hover/item:text-blue-400 group-hover/item:border-blue-500/40 group-hover/item:bg-blue-500/20 group-hover/item:shadow-[0_0_20px_rgba(59,130,246,0.3)] transition-all duration-300">
                       <Mail className="w-6 h-6" />
                     </div>
@@ -154,10 +94,10 @@ export default function Contact() {
                         {resumeData.personal.email}
                       </a>
                     </div>
-                  </motion.div>
+                  </div>
 
                   {/* Phone */}
-                  <motion.div whileHover={{ x: 10 }} className="flex items-center space-x-5 cursor-pointer group/item">
+                  <div className="flex items-center space-x-5 group/item transition-transform hover:translate-x-2 duration-300">
                     <div className="w-14 h-14 rounded-2xl bg-white/[0.03] border border-white/[0.08] flex items-center justify-center text-slate-300 group-hover/item:text-blue-400 group-hover/item:border-blue-500/40 group-hover/item:bg-blue-500/20 group-hover/item:shadow-[0_0_20px_rgba(59,130,246,0.3)] transition-all duration-300">
                       <Phone className="w-6 h-6" />
                     </div>
@@ -167,10 +107,10 @@ export default function Contact() {
                         {resumeData.personal.phone}
                       </a>
                     </div>
-                  </motion.div>
+                  </div>
 
                   {/* Location */}
-                  <motion.div whileHover={{ x: 10 }} className="flex items-center space-x-5 group/item">
+                  <div className="flex items-center space-x-5 group/item transition-transform hover:translate-x-2 duration-300">
                     <div className="w-14 h-14 rounded-2xl bg-white/[0.03] border border-white/[0.08] flex items-center justify-center text-slate-300 group-hover/item:text-blue-400 group-hover/item:border-blue-500/40 group-hover/item:bg-blue-500/20 group-hover/item:shadow-[0_0_20px_rgba(59,130,246,0.3)] transition-all duration-300">
                       <MapPin className="w-6 h-6" />
                     </div>
@@ -180,18 +120,17 @@ export default function Contact() {
                         {resumeData.personal.location}
                       </p>
                     </div>
-                  </motion.div>
+                  </div>
                 </div>
               </div>
 
               {/* Social Icons */}
               <div className="flex items-center space-x-4 pt-6 mt-4 border-t border-white/5">
-                <motion.a
-                  whileHover={{ y: -4, scale: 1.02 }}
+                <a
                   href={resumeData.personal.linkedin}
                   target="_blank"
                   rel="noreferrer"
-                  className="flex-1 flex items-center justify-center space-x-2 py-4 rounded-xl bg-white/[0.03] border border-white/[0.08] text-[11px] font-bold text-slate-300 hover:text-white hover:bg-[#0077b5]/20 hover:border-[#0077b5]/50 hover:shadow-[0_0_20px_rgba(0,119,181,0.3)] transition-all"
+                  className="flex-1 flex items-center justify-center space-x-2 py-4 rounded-xl bg-white/[0.03] border border-white/[0.08] text-[11px] font-bold text-slate-300 hover:text-white hover:bg-[#0077b5]/20 hover:border-[#0077b5]/50 hover:shadow-[0_0_20px_rgba(0,119,181,0.3)] transition-all hover:-translate-y-1"
                 >
                   <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
@@ -199,34 +138,27 @@ export default function Contact() {
                     <circle cx="4" cy="4" r="2" />
                   </svg>
                   <span>LINKEDIN</span>
-                </motion.a>
-                <motion.a
-                  whileHover={{ y: -4, scale: 1.02 }}
+                </a>
+                <a
                   href={resumeData.personal.github}
                   target="_blank"
                   rel="noreferrer"
-                  className="flex-1 flex items-center justify-center space-x-2 py-4 rounded-xl bg-white/[0.03] border border-white/[0.08] text-[11px] font-bold text-slate-300 hover:text-white hover:bg-white/10 hover:border-white/20 hover:shadow-[0_0_20px_rgba(255,255,255,0.1)] transition-all"
+                  className="flex-1 flex items-center justify-center space-x-2 py-4 rounded-xl bg-white/[0.03] border border-white/[0.08] text-[11px] font-bold text-slate-300 hover:text-white hover:bg-white/10 hover:border-white/20 hover:shadow-[0_0_20px_rgba(255,255,255,0.1)] transition-all hover:-translate-y-1"
                 >
                   <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
                     <path d="M9 18c-4.51 2-5-2-7-2" />
                   </svg>
                   <span>GITHUB</span>
-                </motion.a>
+                </a>
               </div>
 
             </div>
-          </motion.div>
+          </div>
 
           {/* Right panel: Submission Form */}
-          <motion.div 
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ type: "spring", stiffness: 70, damping: 20, delay: 0.2 }}
-            className="lg:col-span-7"
-          >
-            <div className="p-8 sm:p-12 rounded-[2rem] bg-[#0a0a0c]/80 backdrop-blur-2xl border border-white/[0.08] h-full flex flex-col justify-center overflow-hidden hover:border-blue-500/30 transition-colors duration-500 relative shadow-2xl group">
+          <div className="lg:col-span-7">
+            <div className="p-8 sm:p-12 rounded-[2rem] bg-[#0a0a0c]/80 border border-white/[0.08] h-full flex flex-col justify-center overflow-hidden hover:border-blue-500/30 transition-colors duration-500 relative shadow-2xl group">
               
               {/* Form Glow Effect */}
               <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-bl from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
@@ -243,31 +175,24 @@ export default function Contact() {
                   >
                     <div className="relative">
                       <div className="absolute inset-0 bg-emerald-500/30 blur-2xl rounded-full" />
-                      <motion.div 
-                        initial={{ rotate: -180, scale: 0 }}
-                        animate={{ rotate: 0, scale: 1 }}
-                        transition={{ type: "spring", damping: 12, delay: 0.2 }}
-                        className="w-24 h-24 rounded-full bg-gradient-to-tr from-emerald-400 to-emerald-600 flex items-center justify-center text-white relative z-10 shadow-[0_0_50px_rgba(16,185,129,0.5)] border border-emerald-300/50"
-                      >
+                      <div className="w-24 h-24 rounded-full bg-gradient-to-tr from-emerald-400 to-emerald-600 flex items-center justify-center text-white relative z-10 shadow-[0_0_50px_rgba(16,185,129,0.5)] border border-emerald-300/50">
                         <svg className="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3">
                           <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                         </svg>
-                      </motion.div>
+                      </div>
                     </div>
                     <div className="space-y-3">
-                      <h4 className="text-3xl font-black text-white">Message Delivered!</h4>
-                      <p className="text-base text-slate-400 max-w-md mx-auto leading-relaxed">
-                        Thank you for reaching out. Your message has been securely routed via the third-party integration. I will get back to you shortly.
+                      <h4 className="text-2xl sm:text-3xl font-black text-white">Check Your Email!</h4>
+                      <p className="text-sm sm:text-base text-slate-400 max-w-md mx-auto leading-relaxed">
+                        The very first time you use this form, you will receive an activation email at <b>saibykani07@gmail.com</b>. Please click 'Activate' in that email to start receiving form submissions seamlessly!
                       </p>
                     </div>
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
+                    <button
                       onClick={() => setStatus("idle")}
                       className="px-10 py-4 mt-6 rounded-full bg-white/[0.05] border border-white/10 text-sm font-bold text-white hover:bg-white/10 hover:border-white/20 transition-all shadow-lg hover:shadow-white/5"
                     >
                       Send Another Message
-                    </motion.button>
+                    </button>
                   </motion.div>
                 ) : (
                   <motion.form 
@@ -310,7 +235,7 @@ export default function Contact() {
                         type="tel" 
                         id="phone" 
                         name="phone" 
-                        placeholder="+91 98765 43210"
+                        placeholder="+91 8522807300"
                         className="w-full px-6 py-4 bg-[#111113]/80 border border-white/[0.08] rounded-2xl text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-blue-500/60 focus:bg-[#151518] focus:ring-4 focus:ring-blue-500/10 transition-all shadow-inner"
                       />
                     </div>
@@ -328,17 +253,15 @@ export default function Contact() {
                     </div>
 
                     {status === "error" && (
-                      <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-sm font-bold text-red-400 text-center shadow-inner">
+                      <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-sm font-bold text-red-400 text-center shadow-inner">
                         {errorMessage}
-                      </motion.div>
+                      </div>
                     )}
 
-                    <motion.button 
-                      whileHover={status === "loading" ? {} : { scale: 1.02 }}
-                      whileTap={status === "loading" ? {} : { scale: 0.98 }}
+                    <button 
                       type="submit"
                       disabled={status === "loading"}
-                      className="w-full py-5 mt-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-2xl text-sm font-black tracking-[0.2em] uppercase transition-all shadow-[0_0_30px_rgba(59,130,246,0.3)] hover:shadow-[0_0_40px_rgba(79,70,229,0.5)] cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center relative overflow-hidden group/btn border border-blue-400/20"
+                      className="w-full py-5 mt-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-2xl text-sm font-black tracking-[0.2em] uppercase transition-all shadow-[0_0_30px_rgba(59,130,246,0.3)] hover:shadow-[0_0_40px_rgba(79,70,229,0.5)] cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center relative overflow-hidden group/btn border border-blue-400/20 active:scale-[0.98]"
                     >
                       {/* Button shine effect */}
                       <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent group-hover/btn:animate-[shimmer_1.5s_infinite]" />
@@ -357,13 +280,13 @@ export default function Contact() {
                           <Send className="w-5 h-5 ml-2 group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform" />
                         </span>
                       )}
-                    </motion.button>
+                    </button>
                   </motion.form>
                 )}
               </AnimatePresence>
 
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>
