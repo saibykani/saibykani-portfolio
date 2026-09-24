@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import Monogram from "@/components/ui/Monogram";
 import { useRef, useState } from "react";
 import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion";
 import { ArrowUpRight, Check, Copy, HelpCircle, Loader2, Mail, MapPin, Phone, Send } from "lucide-react";
@@ -132,9 +132,9 @@ export default function Contact() {
             <motion.span
               animate={{ y: [0, -8, 0] }}
               transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-              className="relative mx-1 block size-14 overflow-hidden rounded-full bg-white shadow-[0_0_40px_rgba(255,255,255,0.35)] md:size-16"
+              className="relative mx-2 flex items-center [filter:drop-shadow(0_0_18px_rgba(255,255,255,0.45))]"
             >
-              <Image src="/logo.png" alt="Logo" fill sizes="64px" className="object-contain" />
+              <Monogram className="text-[44px] md:text-[56px]" />
             </motion.span>
             <Wing />
           </div>

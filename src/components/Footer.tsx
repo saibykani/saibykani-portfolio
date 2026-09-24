@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import Monogram from "@/components/ui/Monogram";
 import Link from "next/link";
 import { ArrowUp, ArrowUpRight } from "lucide-react";
 import resumeData from "@/data/resumeData.json";
@@ -49,8 +49,8 @@ export default function Footer() {
         <div className="relative mb-10 flex flex-col items-center gap-6 md:flex-row">
           <div className="flex flex-1 flex-col items-start gap-4 md:flex-row md:justify-between">
             <div className="hidden flex-col gap-y-6 md:flex md:w-1/2">
-              <button onClick={() => go("home")} className="relative h-10 w-10" aria-label="Back to top">
-                <Image src="/logo.png" alt="Logo" fill sizes="40px" className="rounded-full object-contain" />
+              <button onClick={() => go("home")} className="flex h-10 w-fit items-center" aria-label="Back to top">
+                <Monogram className="text-[32px]" />
               </button>
               <p className="w-64 text-base leading-5 text-gray-300">
                 I&apos;m Sai — an SDET, automation engineer &amp; quality advocate. Thanks for checking out my site!

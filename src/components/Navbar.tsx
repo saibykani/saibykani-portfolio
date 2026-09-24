@@ -8,6 +8,7 @@ import { Award, ChevronDown, Command, Download, FileText, GraduationCap } from "
 import { GitHubIcon, LinkedInIcon } from "@/components/ui/brandIcons";
 import resumeData from "@/data/resumeData.json";
 import CommandMenu, { scrollToId } from "@/components/CommandMenu";
+import Monogram from "@/components/ui/Monogram";
 
 const navLinks = [
   { name: "Home", id: "home" },
@@ -178,17 +179,15 @@ export default function Navbar() {
           className="flex w-full items-center justify-between px-4 py-1.5 md:px-6"
         >
           {/* Logo */}
-          <button onClick={() => go("home")} className="relative hidden h-10 w-10 transition-transform hover:rotate-12 md:block" aria-label="Home">
-            <Image src="/logo.png" alt="Sai Krishna Bykani logo" fill sizes="40px" className="rounded-full object-contain" />
+          <button onClick={() => go("home")} className="hidden h-10 items-center transition-transform duration-300 hover:scale-110 md:flex" aria-label="Home">
+            <Monogram className="text-[32px]" />
           </button>
 
           {/* Mobile pill */}
           <div className="relative mx-auto flex justify-center md:hidden">
             <div className="relative flex min-h-10 flex-col items-center justify-center rounded-[22px] bg-black/30 px-1 py-1 shadow-border backdrop-blur-2xl">
               <button onClick={() => setOpen((o) => !o)} className="flex min-w-[11.5rem] cursor-pointer select-none items-center justify-between gap-2 px-4">
-                <span className="relative h-[30px] w-[30px] shrink-0">
-                  <Image src="/logo.png" alt="Logo" fill sizes="30px" className="rounded-full object-contain" />
-                </span>
+                <Monogram className="text-[22px]" />
                 <span className="text-[18px] font-medium text-white">Sai Krishna</span>
                 <ChevronDown className={`size-4 text-white/70 transition-transform ${open ? "rotate-180" : ""}`} />
               </button>

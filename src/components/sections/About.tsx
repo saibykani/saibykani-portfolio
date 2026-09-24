@@ -32,14 +32,9 @@ function PortraitTile() {
         <div className="absolute inset-0 overflow-hidden rounded-[2.5rem] border border-white/10 bg-zinc-950 shadow-2xl" style={{ transform: "translateZ(20px)" }}>
           <Image src="/portrait.png" alt={resumeData.personal.name} fill sizes="(max-width: 1024px) 240px, 460px" className="object-cover object-[50%_20%] transition-transform duration-700 group-hover:scale-105" />
           <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/90 to-transparent" />
-          <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between">
-            <div>
-              <p className="font-instrument text-xl text-white lg:text-2xl">{resumeData.personal.name}</p>
-              <p className="font-mono text-[10px] uppercase tracking-widest text-white/60">SDET · Hyderabad</p>
-            </div>
-            <span className="relative size-9 overflow-hidden rounded-full bg-white lg:size-11">
-              <Image src="/logo.png" alt="" fill sizes="44px" className="object-contain" />
-            </span>
+          <div className="absolute bottom-4 left-4 right-4">
+            <p className="font-instrument text-xl text-white lg:text-2xl">{resumeData.personal.name}</p>
+            <p className="font-mono text-[10px] uppercase tracking-widest text-white/60">SDET · Hyderabad</p>
           </div>
         </div>
       </motion.div>

@@ -48,49 +48,53 @@ float stars(vec2 uv, float scale, float t) {
 }
 
 void main() {
-  vec2 frag = gl_FragCoord.xy;
-  vec2 uv = frag / uRes;                 // 0..1
+  vec2 uv = gl_FragCoord.xy / uRes;          // 0..1, y up
   float aspect = uRes.x / uRes.y;
   vec2 p = (uv - 0.5) * vec2(aspect, 1.0);
-  float t = uTime * 0.03;
+  float t = uTime * 0.02;
+  vec2 par = uMouse * 0.05;
 
-  // parallax
-  vec2 par = uMouse * 0.06;
+  // --- cloud density: domain-warped billowy fbm, detailed at several scales ---
+  vec2 q = p * 3.0 + par;
+  vec2 w = vec2(fbm(q * 0.6 + vec2(t, 0.0)), fbm(q * 0.6 + vec2(3.7, -t * 0.8)));
+  vec2 dp = q + 0.9 * w + vec2(t * 1.5, t * 0.3);
+  float base = fbm(dp);
+  float detail = fbm(dp * 3.1 - w * 2.0 + vec2(-t * 2.5, 0.0));
+  float billow = 1.0 - abs(2.0 * fbm(dp * 1.7 + 4.1) - 1.0);   // puffy ridges
 
-  // domain-warped clouds
-  vec2 q = p * 1.6 + par;
-  vec2 w = vec2(fbm(q + vec2(0.0, t)), fbm(q + vec2(5.2, -t * 0.7)));
-  float c = fbm(q * 1.2 + 2.2 * w + vec2(t * 1.3, t * 0.4));
-  float wisps = fbm(q * 3.5 - w * 1.5 + vec2(-t * 2.0, 0.0));
+  // coverage: heavy banks at the left/right edges, lighter veil across the middle
+  float ex = abs(p.x) / (aspect * 0.5);
+  float edge = smoothstep(0.25, 1.0, ex);
+  float coverage = 0.47 + edge * 0.12 + smoothstep(0.55, 1.0, uv.y) * 0.05;
+  float d = base * 0.55 + billow * 0.28 + detail * 0.30;
+  d = smoothstep(1.0 - coverage - 0.08, 1.0 - coverage + 0.32, d);
 
-  // clouds gather toward the left/right edges and top, clear-ish in the middle
-  float edge = smoothstep(0.05, 0.75, abs(p.x) / (aspect * 0.5));
-  float top = smoothstep(0.35, 0.95, uv.y);
-  float mask = clamp(edge * 1.1 + top * 0.45 + 0.22, 0.0, 1.0);
-  float cloud = smoothstep(0.28, 0.82, c) * mask;
-  cloud += smoothstep(0.5, 0.95, wisps) * 0.35 * mask;
-  cloud = clamp(cloud, 0.0, 1.0);
+  // fake sunlight from the upper-left: brighter where density falls off toward the light
+  vec2 lo = vec2(-0.035, 0.05);
+  float dl = fbm(dp + lo * 3.0) * 0.55 + (1.0 - abs(2.0 * fbm((dp + lo * 3.0) * 1.7 + 4.1) - 1.0)) * 0.28 + detail * 0.30;
+  dl = smoothstep(1.0 - coverage - 0.08, 1.0 - coverage + 0.32, dl);
+  float lit = clamp((d - dl) * 2.2 + 0.5, 0.0, 1.0);
 
-  // palette (deep navy sky, luminous blue cloud banks)
-  vec3 deep = vec3(0.01, 0.02, 0.085);
-  vec3 navy = vec3(0.03, 0.07, 0.25);
-  vec3 blue = vec3(0.12, 0.24, 0.62);
-  vec3 glow = vec3(0.5, 0.63, 1.0);
+  // --- palette sampled from the reference sky ---
+  vec3 gap   = vec3(0.006, 0.06, 0.19);   // dark sky between clouds
+  vec3 sky   = vec3(0.04, 0.13, 0.37);   // overall mid blue
+  vec3 cloud = vec3(0.07, 0.2, 0.46);    // cloud body
+  vec3 rim   = vec3(0.24, 0.40, 0.78);    // lit cloud edges
 
-  vec3 col = mix(deep, navy, smoothstep(0.0, 1.0, uv.y) * 0.9 + 0.1);
-  col = mix(col, blue, cloud);
-  col += glow * pow(cloud, 2.2) * 0.6;
-  // soft rim light on cloud edges
-  col += glow * smoothstep(0.35, 0.6, cloud) * (1.0 - smoothstep(0.6, 0.9, cloud)) * 0.12;
+  vec3 col = mix(gap, sky, smoothstep(0.0, 0.55, d));
+  col = mix(col, cloud, smoothstep(0.45, 1.0, d) * (0.55 + 0.45 * lit));
+  col += rim * pow(d, 3.0) * lit * 0.28;
 
-  // stars (behind thin clouds, parallax at different depths)
-  float s = stars(uv * vec2(aspect, 1.0) + par * 0.3, 90.0, uTime) * 0.9
-          + stars(uv * vec2(aspect, 1.0) + par * 0.6 + 11.0, 55.0, uTime * 1.3);
-  col += vec3(0.85, 0.9, 1.0) * s * (1.0 - cloud * 0.8);
+  // gentle vertical grade: slightly brighter/cleaner up top
+  col *= (0.9 + 0.2 * smoothstep(0.3, 1.0, uv.y)) * 0.86;
 
-  // fade to black at the bottom
-  col *= smoothstep(-0.05, 0.45, uv.y) * 0.85 + 0.15;
-  col = mix(col, vec3(0.0), smoothstep(0.35, 0.0, uv.y) * 0.9);
+  // stars, mostly visible through the gaps
+  float s = stars(uv * vec2(aspect, 1.0) + par * 0.3, 110.0, uTime) * 0.8
+          + stars(uv * vec2(aspect, 1.0) + par * 0.6 + 11.0, 60.0, uTime * 1.3);
+  col += vec3(0.8, 0.88, 1.0) * s * (1.0 - smoothstep(0.3, 0.9, d)) * 0.9;
+
+  // fade to black toward the bottom (the reference is near-black below ~80%)
+  col *= smoothstep(0.04, 0.5, uv.y);
 
   gl_FragColor = vec4(col, 1.0);
 }
@@ -109,13 +113,17 @@ export default function SkyCanvas({ className = "" }: { className?: string }) {
       const s = gl.createShader(type)!;
       gl.shaderSource(s, src);
       gl.compileShader(s);
+      if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) console.error("SkyCanvas shader:", gl.getShaderInfoLog(s));
       return s;
     };
     const prog = gl.createProgram()!;
     gl.attachShader(prog, compile(gl.VERTEX_SHADER, VERT));
     gl.attachShader(prog, compile(gl.FRAGMENT_SHADER, FRAG));
     gl.linkProgram(prog);
-    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) return;
+    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
+      console.error("SkyCanvas link:", gl.getProgramInfoLog(prog));
+      return;
+    }
     gl.useProgram(prog);
 
     const buf = gl.createBuffer();

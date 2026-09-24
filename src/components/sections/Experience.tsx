@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { Briefcase, CalendarDays, CheckCircle2, MapPin } from "lucide-react";
 import resumeData from "@/data/resumeData.json";
@@ -50,7 +51,12 @@ export default function Experience() {
                         Current
                       </span>
                       <h3 className="mt-4 font-instrument text-3xl text-white md:text-5xl">{exp.role}</h3>
-                      <p className="mt-2 text-lg text-white/80">{exp.company}</p>
+                      <p className="mt-3 flex items-center gap-3 text-lg text-white/80">
+                        <span className="relative size-8 shrink-0 overflow-hidden rounded-full bg-white">
+                          <Image src="/logo.png" alt={`${exp.company} logo`} fill sizes="32px" className="object-contain" />
+                        </span>
+                        {exp.company}
+                      </p>
                       <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm font-light text-neutral-400">
                         <span className="inline-flex items-center gap-1.5">
                           <CalendarDays className="size-4" /> {exp.duration}
