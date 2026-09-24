@@ -289,7 +289,7 @@ function TimezoneCard() {
           ))}
         </div>
       </div>
-      <div className="pointer-events-none absolute -bottom-[14%] left-1/2 w-[150%] -translate-x-1/2 transition-transform duration-700 group-hover:scale-105 md:w-[140%]">
+      <div className="pointer-events-none absolute -bottom-[14%] left-1/2 w-[150%] max-w-[540px] -translate-x-1/2 transition-transform duration-700 group-hover:scale-105 md:w-[140%]">
         <DotGlobe />
       </div>
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-[#0b0b0b] via-[#0b0b0b]/50 to-transparent" />
@@ -400,7 +400,7 @@ function WorkspaceCard() {
 
 export default function Bento() {
   return (
-    <section className="container py-10">
+    <section className="w-full px-4 py-10 md:px-5">
       <motion.div
         initial={{ opacity: 0, y: 30, filter: "blur(8px)" }}
         whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}

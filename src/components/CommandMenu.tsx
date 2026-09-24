@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   Award,
+  Gamepad2,
   BadgeCheck,
   Briefcase,
   Code2,
@@ -43,6 +44,7 @@ export default function CommandMenu({ open, onClose }: { open: boolean; onClose:
       { group: "Navigate", label: "Achievements", Icon: Award, run: () => scrollToId("achievements") },
       { group: "Navigate", label: "Certifications", Icon: BadgeCheck, run: () => scrollToId("certifications") },
       { group: "Navigate", label: "Contact", Icon: Mail, run: () => scrollToId("contact") },
+      { group: "Fun", label: "Play Bug Hunt", Icon: Gamepad2, run: () => scrollToId("game") },
       { group: "Resume", label: "Open resume page", Icon: FileText, run: () => (window.location.href = "/resume") },
       {
         group: "Resume",

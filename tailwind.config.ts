@@ -18,6 +18,7 @@ const config: Config = {
         outfit: ["var(--font-outfit)", "ui-sans-serif", "system-ui", "sans-serif"],
         instrument: ["var(--font-instrument)", "ui-serif", "Georgia", "serif"],
         mono: ["var(--font-mono)", "ui-monospace", "SFMono-Regular", "Menlo", "monospace"],
+        arcade: ["'Press Start 2P'", "ui-monospace", "monospace"],
       },
       keyframes: {
         shimmer: {

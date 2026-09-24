@@ -10,6 +10,8 @@ import About from "@/components/sections/About";
 import Experience from "@/components/sections/Experience";
 import Achievements from "@/components/sections/Achievements";
 import Certifications from "@/components/sections/Certifications";
+import RaceTrack from "@/components/sections/RaceTrack";
+import BugHunt from "@/components/sections/BugHunt";
 import Contact from "@/components/sections/Contact";
 import Footer from "@/components/Footer";
 import AIChatbot from "@/components/AIChatbot";
@@ -48,12 +50,18 @@ export default function Home() {
           <Experience />
         </div>
 
+        <RaceTrack />
+
         <div id="achievements">
           <Achievements />
         </div>
 
         <div id="certifications">
           <Certifications />
+        </div>
+
+        <div id="game">
+          <BugHunt />
         </div>
 
         <Contact />
