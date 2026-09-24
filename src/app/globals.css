@@ -9,6 +9,9 @@
     --card: #161616;
     --border: rgba(255, 255, 255, 0.1);
     --muted: #a1a1a1;
+    --font-outfit: "Outfit";
+    --font-instrument: "Instrument Serif";
+    --font-mono: "JetBrains Mono";
   }
 
   * {

@@ -1,25 +1,5 @@
 import type { Metadata } from "next";
-import { Outfit, Instrument_Serif, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-
-const outfit = Outfit({
-  subsets: ["latin"],
-  variable: "--font-outfit",
-  weight: ["200", "300", "400", "500", "600", "700", "800"],
-});
-
-const instrument = Instrument_Serif({
-  subsets: ["latin"],
-  variable: "--font-instrument",
-  weight: "400",
-  style: ["normal", "italic"],
-});
-
-const mono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-mono",
-  weight: ["400", "500", "700"],
-});
 
 export const metadata: Metadata = {
   title: "Sai Krishna Bykani | QA Automation Engineer & SDET Portfolio",
@@ -65,8 +45,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark scroll-smooth">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {/* eslint-disable-next-line @next/next/no-page-custom-font */}
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@200..800&display=swap"
+        />
+      </head>
       <body
-        className={`${outfit.className} ${outfit.variable} ${instrument.variable} ${mono.variable} antialiased bg-black text-foreground min-h-screen relative overflow-x-hidden`}
+        className={`font-outfit antialiased bg-black text-foreground min-h-screen relative overflow-x-hidden`}
       >
         {/* Bottom viewport blur fade */}
         <div className="pointer-events-none blur-wrapper fixed left-0 z-40 w-full select-none bg-gradient-to-t from-black/30 to-transparent no-print" />
