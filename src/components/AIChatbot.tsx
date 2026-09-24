@@ -43,48 +43,43 @@ export default function AIChatbot() {
     
     if (q.includes("skill") || q.includes("technology") || q.includes("stack") || q.includes("languages") || q.includes("java") || q.includes("selenium")) {
       return `Sai has expert capabilities across several domains:\n\n` +
-        `• **Programming**: ${resumeData.skills.programming.join(", ")}\n` +
-        `• **Automation**: ${resumeData.skills.automation.join(", ")}\n` +
-        `• **API Testing**: ${resumeData.skills.api.join(", ")}\n` +
-        `• **Performance**: ${resumeData.skills.performance.join(", ")}\n` +
-        `• **CI/CD & Cloud**: ${resumeData.skills.cicd.join(", ")}, ${resumeData.skills.cloud.join(", ")}\n` +
-        `• **Databases**: ${resumeData.skills.database.join(", ")}`;
+        resumeData.skills.categories.map((c) => `• **${c.title}**: ${c.skills.join(", ")}`).join("\n");
     }
-    
+
     if (q.includes("project") || q.includes("case study") || q.includes("portfolio")) {
       return `Sai has built several high-performance test frameworks:\n\n` +
-        resumeData.projects.map(p => `• **${p.title}**: ${p.brief} (Stack: ${p.techStack.join(", ")})`).join("\n") +
+        resumeData.projects.map((p) => `• **${p.title}**: ${p.summary} (Stack: ${p.technologies.join(", ")})`).join("\n") +
         `\n\nScroll to the projects section to explore detailed case studies!`;
     }
-    
+
     if (q.includes("experience") || q.includes("work") || q.includes("job") || q.includes("company") || q.includes("history") || q.includes("toucan")) {
       const exp = resumeData.experience[0];
+      const bullets = Object.values(exp.contributions).flat() as string[];
       return `Sai is currently working at **${exp.company}** as a **${exp.role}** (${exp.duration}).\n\n` +
         `Key focus areas:\n` +
-        exp.bulletPoints.slice(0, 3).map(bullet => `• ${bullet}`).join("\n") +
-        `\n\nHe has over 2.6 years of professional payments domain QA experience.`;
+        bullets.slice(0, 3).map((bullet) => `• ${bullet}`).join("\n") +
+        `\n\nHe has ${exp.kpis.yearsExp} years of professional payments domain QA experience.`;
     }
-    
+
     if (q.includes("contact") || q.includes("email") || q.includes("phone") || q.includes("linkedin") || q.includes("reach") || q.includes("hire") || q.includes("mail")) {
       return `You can connect with Sai directly through:\n\n` +
         `• **Email**: ${resumeData.personal.email}\n` +
         `• **Phone**: ${resumeData.personal.phone}\n` +
         `• **LinkedIn**: [LinkedIn Profile](${resumeData.personal.linkedin})\n` +
         `• **GitHub**: [GitHub Repositories](${resumeData.personal.github})\n\n` +
-        `Visit the Recruiter Hub page to easily book calendar invites or download CVs.`;
+        `Or use the contact form at the bottom of the page, and download the CV from the resume page.`;
     }
-    
+
     if (q.includes("education") || q.includes("college") || q.includes("degree") || q.includes("btech") || q.includes("study")) {
       const edu = resumeData.education[0];
-      return `Sai holds a **${edu.degree}** in **${edu.major}** from **${edu.school}**, Hyderabad (${edu.duration}).`;
+      return `Sai holds a **${edu.degree}** from **${edu.institution}** (${edu.duration}).`;
+    }
+
+    if (q.includes("achievement") || q.includes("award") || q.includes("recogni")) {
+      return `Highlights:\n\n` + resumeData.achievements.map((a) => `• ${a}`).join("\n");
     }
     
-    if (q.includes("certification") || q.includes("cert") || q.includes("istqb")) {
-      return `Sai is certified in:\n\n` +
-        resumeData.certifications.map(c => `• **${c.name}** (${c.issuer}, ${c.year})`).join("\n");
-    }
-    
-    return `I can help you with Sai Krishna's portfolio details. Try asking me about: "skills", "experience", "projects", "certifications", or "how to contact him"!`;
+    return `I can help you with Sai Krishna's portfolio details. Try asking me about: "skills", "experience", "projects", "achievements", or "how to contact him"!`;
   };
 
   const handleSend = (text: string) => {
@@ -117,15 +112,23 @@ export default function AIChatbot() {
       {/* Floating Toggle Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 right-6 z-50 p-4 rounded-full border border-white/10 bg-white/10 backdrop-blur-md text-white shadow-lg shadow-black/40 hover:bg-white hover:text-black hover:scale-105 active:scale-95 transition-all duration-300 focus:outline-none no-print"
+        className="group fixed bottom-4 right-4 z-50 flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-3 text-base text-white shadow-lg shadow-blue-600/30 transition-all duration-300 hover:-translate-y-0.5 hover:bg-blue-500 hover:shadow-blue-500/50 active:scale-95 focus:outline-none md:bottom-6 md:right-6 md:px-5 md:text-lg no-print"
       >
-        {isOpen ? <X className="w-5 h-5" /> : <MessageSquare className="w-5 h-5" />}
-        <span className="absolute top-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-400 border border-slate-900 animate-pulse" />
+        {isOpen ? (
+          <X className="w-5 h-5" />
+        ) : (
+          <span className="relative flex size-3">
+            <span className="absolute inline-flex size-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+            <span className="relative inline-flex size-3 rounded-full border-2 border-emerald-400" />
+          </span>
+        )}
+        <span className="hidden sm:inline">{isOpen ? "Close chat" : "Chat with me, I am online!"}</span>
+        {!isOpen && <MessageSquare className="w-5 h-5 sm:hidden" />}
       </button>
 
       {/* Chat Drawer Dialog */}
       {isOpen && (
-        <div className="fixed bottom-24 right-6 w-[360px] max-w-[90vw] h-[480px] rounded-2xl bg-[#09090b] border border-white/[0.06] z-50 flex flex-col overflow-hidden animate-in slide-in-from-bottom-5 duration-300 shadow-2xl shadow-black/80">
+        <div className="fixed bottom-24 right-4 md:right-6 w-[360px] max-w-[90vw] h-[480px] rounded-2xl bg-[#09090b] border border-white/[0.06] z-50 flex flex-col overflow-hidden animate-in slide-in-from-bottom-5 duration-300 shadow-2xl shadow-black/80">
           {/* Header */}
           <div className="px-5 py-4 bg-[#050508]/90 border-b border-white/[0.06] flex items-center justify-between">
             <div className="flex items-center space-x-2">
@@ -146,7 +149,7 @@ export default function AIChatbot() {
           </div>
 
           {/* Messages Log */}
-          <div className="flex-1 overflow-y-auto p-5 space-y-4 text-xs font-sans">
+          <div data-lenis-prevent className="flex-1 overflow-y-auto p-5 space-y-4 text-xs font-sans">
             {messages.map((msg, idx) => (
               <div key={idx} className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}>
                 <div

@@ -12,10 +12,14 @@ import Achievements from "@/components/sections/Achievements";
 import Contact from "@/components/sections/Contact";
 import Footer from "@/components/Footer";
 import AIChatbot from "@/components/AIChatbot";
+import SmoothScroll from "@/components/SmoothScroll";
+import ScrollProgress from "@/components/ScrollProgress";
 
 export default function Home() {
   return (
     <>
+      <SmoothScroll />
+      <ScrollProgress />
       <Navbar />
 
       <div id="home">
@@ -43,7 +47,9 @@ export default function Home() {
           <Experience />
         </div>
 
-        <Achievements />
+        <div id="achievements">
+          <Achievements />
+        </div>
 
         <Contact />
       </main>

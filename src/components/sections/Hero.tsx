@@ -1,57 +1,41 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
-import { useMemo, useState } from "react";
-import { ArrowRight, Check, Copy, FileText, Mail } from "lucide-react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef, useState } from "react";
+import { ArrowRight, Check, Copy, FileCheck2, FileText, Mail } from "lucide-react";
 import resumeData from "@/data/resumeData.json";
 import { ShinyButton } from "@/components/ui/primitives";
+import SkyCanvas from "@/components/ui/SkyCanvas";
+
+function Words({ text, delay = 0, className = "" }: { text: string; delay?: number; className?: string }) {
+  return (
+    <>
+      {text.split(" ").map((w, i) => (
+        <motion.span
+          key={i}
+          initial={{ opacity: 0, y: 18, filter: "blur(10px)" }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          transition={{ duration: 0.7, delay: delay + i * 0.07, ease }}
+          className={`inline-block ${className}`}
+        >
+          {w}
+          {" "}
+        </motion.span>
+      ))}
+    </>
+  );
+}
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
-function Stars() {
-  // Deterministic pseudo-random star field (avoids hydration mismatch)
-  const stars = useMemo(
-    () =>
-      Array.from({ length: 60 }, (_, i) => {
-        const r = (n: number) => ((Math.sin(i * 928.37 + n * 13.1) + 1) / 2);
-        return { top: r(1) * 70, left: r(2) * 100, size: r(3) * 1.8 + 0.6, delay: r(4) * 4 };
-      }),
-    []
-  );
-  return (
-    <div className="absolute inset-0">
-      {stars.map((s, i) => (
-        <span
-          key={i}
-          className="absolute rounded-full bg-white animate-twinkle"
-          style={{ top: `${s.top}%`, left: `${s.left}%`, width: s.size, height: s.size, animationDelay: `${s.delay}s` }}
-        />
-      ))}
-    </div>
-  );
-}
-
-function Clouds() {
-  return (
-    <div className="absolute inset-x-0 bottom-0 h-[55%]">
-      <div className="absolute -bottom-24 -left-[10%] h-72 w-[60%] rounded-[50%] bg-white/[0.07] blur-3xl animate-drift" />
-      <div
-        className="absolute -bottom-32 left-[25%] h-80 w-[55%] rounded-[50%] bg-blue-200/[0.08] blur-3xl animate-drift"
-        style={{ animationDelay: "-6s", animationDuration: "22s" }}
-      />
-      <div
-        className="absolute -bottom-20 -right-[10%] h-64 w-[50%] rounded-[50%] bg-white/[0.06] blur-3xl animate-drift"
-        style={{ animationDelay: "-12s", animationDuration: "26s" }}
-      />
-      <div className="absolute bottom-10 left-[10%] h-24 w-[30%] rounded-[50%] bg-white/[0.05] blur-2xl" />
-      <div className="absolute bottom-16 right-[15%] h-20 w-[25%] rounded-[50%] bg-white/[0.05] blur-2xl" />
-    </div>
-  );
-}
-
 export default function Hero() {
   const [copied, setCopied] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end start"] });
+  const contentY = useTransform(scrollYProgress, [0, 1], [0, 160]);
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
+  const skyScale = useTransform(scrollYProgress, [0, 1], [1, 1.15]);
   const { email, name } = resumeData.personal;
 
   const copyEmail = async () => {
@@ -70,8 +54,11 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative grid min-h-screen place-content-center overflow-hidden bg-gradient-to-b from-blue-900 to-black px-4 py-24 text-gray-200">
-      <div className="relative z-10 flex flex-col items-center">
+    <section
+      ref={sectionRef}
+      className="relative grid min-h-screen place-content-center overflow-hidden bg-gradient-to-b from-[#0a1a4a] via-[#07102e] to-black px-4 py-24 text-gray-200"
+    >
+      <motion.div style={{ y: contentY, opacity: contentOpacity }} className="relative z-10 flex flex-col items-center">
         {/* Announcement badge */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -93,25 +80,24 @@ export default function Hero() {
         </motion.div>
 
         {/* Headline */}
-        <motion.h2
-          initial={{ opacity: 0, y: 24, filter: "blur(8px)" }}
-          animate={{ opacity: 0.9, y: 0, filter: "blur(0px)" }}
-          transition={{ duration: 0.9, delay: 0.1, ease }}
-          className="mt-2 text-center font-outfit text-4xl leading-tight text-zinc-100 sm:text-5xl md:mt-5 lg:text-6xl"
-        >
-          <span className="md:whitespace-nowrap">I help teams ship payment systems</span>
-          <br className="hidden md:block" /> with
-          <span className="bg-gradient-to-b from-zinc-700 via-zinc-200 to-zinc-50 bg-clip-text font-instrument italic tracking-tight text-transparent">
-            {" "}
-            zero-defect confidence
+        <h2 className="mt-2 text-center font-outfit text-4xl leading-tight text-zinc-100/90 sm:text-5xl md:mt-5 lg:text-6xl">
+          <span className="md:whitespace-nowrap">
+            <Words text="I help teams ship payment systems" delay={0.15} />
           </span>
-        </motion.h2>
+          <br className="hidden md:block" />
+          <Words text="with" delay={0.5} />
+          <Words
+            text="zero-defect confidence"
+            delay={0.6}
+            className="bg-gradient-to-b from-zinc-400 via-zinc-100 to-white bg-clip-text pr-1 font-instrument italic tracking-tight text-transparent"
+          />
+        </h2>
 
         {/* Intro line */}
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.3, ease }}
+          transition={{ duration: 0.9, delay: 0.85, ease }}
           className="relative z-20 mt-10 flex flex-col items-center justify-center text-center text-xl tracking-tight sm:flex-row lg:text-2xl"
         >
           <span className="flex items-center justify-center bg-gradient-to-t from-gray-600 to-white bg-clip-text text-transparent">
@@ -145,18 +131,26 @@ export default function Hero() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.5, ease }}
+          transition={{ duration: 0.9, delay: 1.05, ease }}
           className="mt-10 flex flex-col items-center gap-5"
         >
           <div className="flex flex-wrap items-center justify-center gap-3 md:gap-4">
             <button onClick={() => scrollTo("contact")}>
               <ShinyButton>Let&apos;s Connect</ShinyButton>
             </button>
+            <a href="/resume">
+              <ShinyButton>
+                <span className="flex items-center justify-center gap-2">
+                  <FileText className="size-4 text-sky-400" />
+                  <span>See Resume</span>
+                </span>
+              </ShinyButton>
+            </a>
             <a href="/Sai_Krishna_Bykani_Resume.pdf" download="Sai_Krishna_Bykani_Resume.pdf">
               <ShinyButton>
                 <span className="flex items-center justify-center gap-2">
-                  <FileText className="size-4" />
-                  <span>See Resume</span>
+                  <FileCheck2 className="size-4 text-emerald-400" />
+                  <span>View CV</span>
                 </span>
               </ShinyButton>
             </a>
@@ -171,15 +165,13 @@ export default function Hero() {
             {!copied && <Copy className="size-3.5 opacity-60" />}
           </button>
         </motion.div>
-      </div>
+      </motion.div>
 
-      {/* Atmosphere */}
-      <div className="pointer-events-none absolute inset-0 z-0 select-none overflow-hidden">
-        <Stars />
-        <div className="absolute left-1/2 top-[-20%] h-[60vh] w-[80vw] -translate-x-1/2 rounded-full bg-blue-500/20 blur-[120px]" />
-        <Clouds />
+      {/* Atmosphere: live shader sky */}
+      <motion.div style={{ scale: skyScale }} className="pointer-events-none absolute inset-0 z-0 select-none overflow-hidden">
+        <SkyCanvas />
         <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-b from-transparent to-black" />
-      </div>
+      </motion.div>
     </section>
   );
 }
