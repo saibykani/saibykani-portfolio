@@ -31,9 +31,9 @@ function Wing({ flip = false }: { flip?: boolean }) {
   return (
     <motion.svg
       viewBox="0 0 160 90"
-      className={`h-14 w-28 md:h-20 md:w-40 ${flip ? "-scale-x-100" : ""}`}
+      className="h-14 w-28 md:h-20 md:w-40"
       fill="none"
-      style={{ originX: flip ? 0 : 1 }}
+      style={{ originX: 0.5, scaleX: flip ? 1 : -1 }}
       animate={{ rotate: flip ? [0, 6, 0] : [0, -6, 0] }}
       transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
     >

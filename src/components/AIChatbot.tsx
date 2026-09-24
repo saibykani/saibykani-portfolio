@@ -75,11 +75,16 @@ export default function AIChatbot() {
       return `Sai holds a **${edu.degree}** from **${edu.institution}** (${edu.duration}).`;
     }
 
+    if (q.includes("certif") || q.includes("cert") || q.includes("course") || q.includes("ibm") || q.includes("google")) {
+      return `Sai is certified in:\n\n` +
+        resumeData.certifications.map((c) => `• **${c.name}** (${c.issuer}, ${c.issued}) [Verify](${c.url})`).join("\n");
+    }
+
     if (q.includes("achievement") || q.includes("award") || q.includes("recogni")) {
       return `Highlights:\n\n` + resumeData.achievements.map((a) => `• ${a}`).join("\n");
     }
     
-    return `I can help you with Sai Krishna's portfolio details. Try asking me about: "skills", "experience", "projects", "achievements", or "how to contact him"!`;
+    return `I can help you with Sai Krishna's portfolio details. Try asking me about: "skills", "experience", "projects", "certifications", "achievements", or "how to contact him"!`;
   };
 
   const handleSend = (text: string) => {

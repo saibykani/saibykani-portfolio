@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import EffectsLayer from "@/components/EffectsLayer";
 
 export const metadata: Metadata = {
   title: "Sai Krishna Bykani | QA Automation Engineer & SDET Portfolio",
@@ -64,6 +65,8 @@ export default function RootLayout({
         <div className="noise-texture no-print" />
 
         {children}
+
+        <EffectsLayer />
       </body>
     </html>
   );

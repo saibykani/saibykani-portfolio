@@ -49,7 +49,20 @@
           "Logged, tracked, and managed defects using Jira, Azure DevOps, and Spira, including root cause analysis and fix validation."
         ]
       },
-      "technologies": ["Java", "Selenium", "REST Assured", "Postman", "Apache JMeter", "MySQL", "MongoDB", "Jenkins", "GitHub", "Grafana", "Docker", "Azure DevOps"],
+      "technologies": [
+        "Java",
+        "Selenium",
+        "REST Assured",
+        "Postman",
+        "Apache JMeter",
+        "MySQL",
+        "MongoDB",
+        "Jenkins",
+        "GitHub",
+        "Grafana",
+        "Docker",
+        "Azure DevOps"
+      ],
       "achievements": [
         "Recognised for automation testing and API validation contributions that improved regression stability by ~40% and increased automated test coverage across critical payment flows.",
         "Played a key role in performance and load testing of high-volume payment and UPI transaction flows using Apache JMeter, validating system behaviour under 2x–3x peak load conditions.",
@@ -64,8 +77,23 @@
       "category": "FINTECH and Payments",
       "summary": "Automated UI and API test cases for onboarding and transaction flows using Selenium, Cucumber, and REST Assured, ensuring end-to-end validation.",
       "role": "Software Development Engineer in Test",
-      "testingTypes": ["UI Automation", "API Automation", "Backend Validation", "Performance Testing", "Regression Automation"],
-      "technologies": ["Java", "Selenium", "REST Assured", "Apache JMeter", "Postman", "MySQL", "MongoDB", "Jenkins"],
+      "testingTypes": [
+        "UI Automation",
+        "API Automation",
+        "Backend Validation",
+        "Performance Testing",
+        "Regression Automation"
+      ],
+      "technologies": [
+        "Java",
+        "Selenium",
+        "REST Assured",
+        "Apache JMeter",
+        "Postman",
+        "MySQL",
+        "MongoDB",
+        "Jenkins"
+      ],
       "businessImpactBadge": "Production Ready",
       "metrics": {
         "Automation Coverage": "95%",
@@ -79,7 +107,20 @@
         "businessContext": "The system processes high-volume Card and UPI transactions, requiring an automated validation approach that guarantees zero defects in production.",
         "architecture": {
           "type": "payment_flow",
-          "nodes": ["Merchant Portal", "Merchant Checkout", "Payment Gateway", "Payment Switch", "Authorization", "Acquiring Switch", "Issuer Bank", "Clearing", "Settlement", "Reconciliation", "Reports", "Merchant Dashboard"]
+          "nodes": [
+            "Merchant Portal",
+            "Merchant Checkout",
+            "Payment Gateway",
+            "Payment Switch",
+            "Authorization",
+            "Acquiring Switch",
+            "Issuer Bank",
+            "Clearing",
+            "Settlement",
+            "Reconciliation",
+            "Reports",
+            "Merchant Dashboard"
+          ]
         },
         "responsibilities": [
           "Designed the end-to-end regression automation framework from scratch.",
@@ -88,7 +129,12 @@
           "Built data-driven API suites for complex payload validations."
         ],
         "modules": [
-          "Merchant Onboarding", "Virtual POS", "Transaction Routing", "Authorization & Void", "Clearing", "Settlement & Reconciliation"
+          "Merchant Onboarding",
+          "Virtual POS",
+          "Transaction Routing",
+          "Authorization & Void",
+          "Clearing",
+          "Settlement & Reconciliation"
         ],
         "testingStrategy": "A decoupled, risk-based approach prioritizing API contracts first, followed by UI workflows, and finally performance testing.",
         "framework": "Data-Driven Page Object Model using Java, Cucumber, and TestNG.",
@@ -119,18 +165,50 @@
       "category": "Community Management",
       "summary": "End-to-end automation of resident management, visitor approvals, maintenance payments, and community services.",
       "role": "QA Automation Engineer",
-      "testingTypes": ["UI Automation", "API Automation", "Backend Validation"],
-      "technologies": ["Java", "Selenium", "REST Assured", "TestNG", "Postman", "MySQL", "Jenkins"],
-      "techStack": ["Java", "Selenium", "REST Assured", "TestNG", "Postman", "MySQL", "Jenkins"],
+      "testingTypes": [
+        "UI Automation",
+        "API Automation",
+        "Backend Validation"
+      ],
+      "technologies": [
+        "Java",
+        "Selenium",
+        "REST Assured",
+        "TestNG",
+        "Postman",
+        "MySQL",
+        "Jenkins"
+      ],
+      "techStack": [
+        "Java",
+        "Selenium",
+        "REST Assured",
+        "TestNG",
+        "Postman",
+        "MySQL",
+        "Jenkins"
+      ],
       "businessImpactBadge": "Quality Assurance",
-      "metrics": {"Automation Coverage": "85%", "Defect Leakage": "<2%"},
+      "metrics": {
+        "Automation Coverage": "85%",
+        "Defect Leakage": "<2%"
+      },
       "caseStudy": {
         "overview": "Automated core resident workflows, visitor management, and payment processing for gated communities.",
         "businessDomain": "Community Management",
         "businessProblem": "Manual processes caused delays and errors in resident services.",
         "businessContext": "Need reliable automation to ensure timely handling of resident requests.",
-        "responsibilities": ["Implemented Selenium scripts for UI flows", "Created REST API tests for payment services", "Validated backend data integrity"],
-        "modules": ["Resident Registration", "Visitor Management", "Maintenance Payments", "Community Dashboard"],
+        "responsibilities": [
+          "Implemented Selenium scripts for UI flows",
+          "Created REST API tests for payment services",
+          "Validated backend data integrity"
+        ],
+        "modules": [
+          "Resident Registration",
+          "Visitor Management",
+          "Maintenance Payments",
+          "Community Dashboard"
+        ],
         "testingStrategy": "Layered approach: API first, then UI, followed by backend verification.",
         "framework": "Page Object Model with Cucumber BDD",
         "impact": "Reduced manual regression time by 70% and improved release confidence."
@@ -142,22 +220,56 @@
       "category": "NGO Management",
       "summary": "Automation of donor management, beneficiary tracking, campaign planning, and financial reporting.",
       "role": "QA Automation Engineer",
-      "testingTypes": ["UI Automation", "API Automation", "Backend Validation"],
-      "technologies": ["Java", "Selenium", "REST Assured", "TestNG", "Postman", "MySQL", "Jenkins"],
-      "techStack": ["Java", "Selenium", "REST Assured", "TestNG", "Postman", "MySQL", "Jenkins"],
+      "testingTypes": [
+        "UI Automation",
+        "API Automation",
+        "Backend Validation"
+      ],
+      "technologies": [
+        "Java",
+        "Selenium",
+        "REST Assured",
+        "TestNG",
+        "Postman",
+        "MySQL",
+        "Jenkins"
+      ],
+      "techStack": [
+        "Java",
+        "Selenium",
+        "REST Assured",
+        "TestNG",
+        "Postman",
+        "MySQL",
+        "Jenkins"
+      ],
       "businessImpactBadge": "NGO Efficiency",
-      "metrics": {"Automation Coverage": "80%", "Data Accuracy": "100%"},
+      "metrics": {
+        "Automation Coverage": "80%",
+        "Data Accuracy": "100%"
+      },
       "caseStudy": {
         "overview": "Automated donor onboarding, campaign lifecycle, and financial report generation.",
         "businessDomain": "NGO Operations",
         "businessProblem": "Manual tracking led to reporting delays and data inconsistencies.",
         "businessContext": "Need comprehensive automated testing for critical NGO workflows.",
-        "responsibilities": ["Built Selenium suites for donor UI", "Created API tests for campaign services", "Implemented DB validation for financial records"],
-        "modules": ["Donor Management", "Beneficiary Tracking", "Campaign Planning", "Financial Reports"],
+        "responsibilities": [
+          "Built Selenium suites for donor UI",
+          "Created API tests for campaign services",
+          "Implemented DB validation for financial records"
+        ],
+        "modules": [
+          "Donor Management",
+          "Beneficiary Tracking",
+          "Campaign Planning",
+          "Financial Reports"
+        ],
         "testingStrategy": "Data‑driven tests covering all CRUD operations.",
         "framework": "Page Object Model with TestNG",
         "impact": "Achieved 100% data accuracy and cut reporting cycle by 60%.",
-        "challenges": ["Complex relational data models"]
+        "challenges": [
+          "Complex relational data models"
+        ]
       }
     },
     {
@@ -166,54 +278,137 @@
       "category": "Digital Banking & eKYC",
       "summary": "Automated end‑to‑end video KYC onboarding, document verification, and account creation workflows.",
       "role": "Software Development Engineer in Test",
-      "testingTypes": ["UI Automation", "API Automation", "Performance Testing"],
-      "technologies": ["Java", "Selenium", "REST Assured", "Postman", "TestNG", "MySQL", "Jenkins"],
-      "techStack": ["Java", "Selenium", "REST Assured", "Postman", "TestNG", "MySQL", "Jenkins"],
+      "testingTypes": [
+        "UI Automation",
+        "API Automation",
+        "Performance Testing"
+      ],
+      "technologies": [
+        "Java",
+        "Selenium",
+        "REST Assured",
+        "Postman",
+        "TestNG",
+        "MySQL",
+        "Jenkins"
+      ],
+      "techStack": [
+        "Java",
+        "Selenium",
+        "REST Assured",
+        "Postman",
+        "TestNG",
+        "MySQL",
+        "Jenkins"
+      ],
       "businessImpactBadge": "Secure Onboarding",
-      "metrics": {"Automation Coverage": "90%", "KYC Success Rate": "99.5%"},
+      "metrics": {
+        "Automation Coverage": "90%",
+        "KYC Success Rate": "99.5%"
+      },
       "caseStudy": {
         "overview": "Automated video capture, document OCR, facial recognition, and compliance checks for digital account opening.",
         "businessDomain": "Banking & KYC",
         "businessProblem": "High manual effort and compliance risk in traditional onboarding.",
         "businessContext": "Regulatory pressure to digitize KYC without compromising security.",
-        "responsibilities": ["Implemented Selenium flows for video session", "Created API tests for verification services", "Validated backend storage of KYC data"],
-        "modules": ["Customer Registration", "Video Capture", "Document OCR", "Face Matching", "Compliance Checks"],
+        "responsibilities": [
+          "Implemented Selenium flows for video session",
+          "Created API tests for verification services",
+          "Validated backend storage of KYC data"
+        ],
+        "modules": [
+          "Customer Registration",
+          "Video Capture",
+          "Document OCR",
+          "Face Matching",
+          "Compliance Checks"
+        ],
         "testingStrategy": "Combine UI video flow tests with API contract validation.",
         "framework": "Hybrid Page Object Model with Cucumber BDD",
         "impact": "Reduced onboarding time from days to minutes and ensured 99.5% verification accuracy."
       }
     }
-
   ],
   "skills": {
     "categories": [
       {
         "title": "Programming & Automation",
-        "skills": ["Java (Test Automation)", "Selenium WebDriver", "Cucumber (BDD)", "TestNG", "Maven", "Page Object Model (POM)", "Data-Driven Testing"]
+        "skills": [
+          "Java (Test Automation)",
+          "Selenium WebDriver",
+          "Cucumber (BDD)",
+          "TestNG",
+          "Maven",
+          "Page Object Model (POM)",
+          "Data-Driven Testing"
+        ]
       },
       {
         "title": "API & Integration Testing",
-        "skills": ["REST Assured", "Postman", "Newman (Postman CLI)", "REST APIs", "JSON Validation", "XML Validation", "API Automation Frameworks", "API Workflow Validation", "Transaction Validation"]
+        "skills": [
+          "REST Assured",
+          "Postman",
+          "Newman (Postman CLI)",
+          "REST APIs",
+          "JSON Validation",
+          "XML Validation",
+          "API Automation Frameworks",
+          "API Workflow Validation",
+          "Transaction Validation"
+        ]
       },
       {
         "title": "Performance & Load Testing",
-        "skills": ["Apache JMeter", "Load Testing", "Stress Testing", "Spike Testing", "Endurance Testing", "Distributed JMeter (Master–Slave)", "Performance Bottleneck Analysis"]
+        "skills": [
+          "Apache JMeter",
+          "Load Testing",
+          "Stress Testing",
+          "Spike Testing",
+          "Endurance Testing",
+          "Distributed JMeter (Master–Slave)",
+          "Performance Bottleneck Analysis"
+        ]
       },
       {
         "title": "Backend & Database Validation",
-        "skills": ["MongoDB", "Backend Data Validation", "Data Reconciliation", "Log Analysis"]
+        "skills": [
+          "MongoDB",
+          "Backend Data Validation",
+          "Data Reconciliation",
+          "Log Analysis"
+        ]
       },
       {
         "title": "CI/CD, DevOps & Monitoring",
-        "skills": ["Jenkins", "GitHub", "Gitea", "Grafana Monitoring", "SLA Validation"]
+        "skills": [
+          "Jenkins",
+          "GitHub",
+          "Gitea",
+          "Grafana Monitoring",
+          "SLA Validation"
+        ]
       },
       {
         "title": "Defect & Test Management",
-        "skills": ["Jira", "Spira", "Defect Tracking", "Root Cause Analysis (RCA)", "Test Planning", "Test Case Design", "Test Execution", "Test Reporting"]
+        "skills": [
+          "Jira",
+          "Spira",
+          "Defect Tracking",
+          "Root Cause Analysis (RCA)",
+          "Test Planning",
+          "Test Case Design",
+          "Test Execution",
+          "Test Reporting"
+        ]
       },
       {
         "title": "Methodologies",
-        "skills": ["Agile", "Scrum", "SDLC", "STLC"]
+        "skills": [
+          "Agile",
+          "Scrum",
+          "SDLC",
+          "STLC"
+        ]
       }
     ]
   },
@@ -228,5 +423,48 @@
     "Recognised for automation testing and API validation contributions that improved regression stability by ~40% and increased automated test coverage across critical payment flows.",
     "Played a key role in performance and load testing of high-volume payment and UPI transaction flows using Apache JMeter, validating system behaviour under 2x–3x peak load conditions.",
     "Supported successful release sign-offs by ensuring end-to-end test coverage across UI automation, API testing, backend validation, and integration testing, reducing post-release defects and rework."
+  ],
+  "certifications": [
+    {
+      "id": "ibm-ai-fundamentals",
+      "name": "Artificial Intelligence Fundamentals",
+      "issuer": "IBM",
+      "platform": "IBM SkillsBuild",
+      "issued": "Jul 2026",
+      "issuedFull": "Jul 16, 2026",
+      "credentialId": "5ed2870e-6583-444b-8dfc-ae8448c7f5bf",
+      "url": "https://www.credly.com/badges/5ed2870e-6583-444b-8dfc-ae8448c7f5bf",
+      "image": "/certs/ibm-ai-fundamentals.jpg",
+      "skills": [
+        "AI Capabilities",
+        "Artificial Intelligence (AI)"
+      ],
+      "accent": "#0f62fe",
+      "moreSkills": 8
+    },
+    {
+      "id": "google-ai-essentials",
+      "name": "Google AI Essentials",
+      "issuer": "Google",
+      "platform": "Coursera",
+      "issued": "Jun 2026",
+      "issuedFull": "Jun 10, 2026",
+      "credentialId": "FYPDH0BZMKD5",
+      "url": "https://coursera.org/verify/specialization/FYPDH0BZMKD5",
+      "image": "/certs/google-ai-essentials.jpg",
+      "skills": [
+        "Artificial Intelligence (AI)",
+        "AI Productivity Tools"
+      ],
+      "courses": [
+        "Introduction to AI",
+        "Maximize Productivity With AI Tools",
+        "Discover the Art of Prompting",
+        "Use AI Responsibly",
+        "Stay Ahead of the AI Curve"
+      ],
+      "accent": "#34a853",
+      "moreSkills": 9
+    }
   ]
 }

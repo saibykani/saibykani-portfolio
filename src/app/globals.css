@@ -76,6 +76,30 @@ html.lenis body {
   color: transparent;
 }
 
+/* Race car wheels */
+.car-wheel-spin {
+  animation: car-wheel 0.25s linear infinite;
+}
+@keyframes car-wheel {
+  to { transform: rotate(360deg); }
+}
+
+/* Animated monogram gradient */
+.mono-gradient {
+  background-image: linear-gradient(110deg, #ffffff 0%, #ffffff 35%, #7dd3fc 45%, #c084fc 52%, #ffffff 62%, #ffffff 100%);
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: mono-sweep 4.5s ease-in-out infinite;
+  padding-right: 0.04em;
+}
+@keyframes mono-sweep {
+  0%, 20% { background-position: 100% 0; }
+  60%, 100% { background-position: 0% 0; }
+}
+
 /* Bottom page blur fade */
 .blur-wrapper {
   bottom: 0;
@@ -192,6 +216,23 @@ html.lenis body {
   }
   .no-print {
     display: none !important;
+  }
+  /* scroll-reveal animations must not hide content on paper */
+  .print-page,
+  .print-page * {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+  html {
+    background: #ffffff !important;
+  }
+  /* gradients are background-images, which print:bg-white does not clear */
+  .print-page,
+  .print-page * {
+    background-image: none !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
   }
   .print-page {
     margin: 0 !important;

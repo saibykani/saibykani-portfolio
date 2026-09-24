@@ -62,10 +62,12 @@ void main() {
   float detail = fbm(dp * 3.1 - w * 2.0 + vec2(-t * 2.5, 0.0));
   float billow = 1.0 - abs(2.0 * fbm(dp * 1.7 + 4.1) - 1.0);   // puffy ridges
 
-  // coverage: heavy banks at the left/right edges, lighter veil across the middle
+  // coverage: tall cloud banks that run the full height of the left/right edges,
+  // with a clear open sky through the middle (where the headline sits)
   float ex = abs(p.x) / (aspect * 0.5);
-  float edge = smoothstep(0.25, 1.0, ex);
-  float coverage = 0.47 + edge * 0.12 + smoothstep(0.55, 1.0, uv.y) * 0.05;
+  float wobble = (fbm(vec2(uv.y * 2.5, t * 0.5)) - 0.5) * 0.22;     // ragged inner edge of the banks
+  float edge = smoothstep(0.30 + wobble, 0.95, ex);
+  float coverage = 0.24 + edge * 0.5 + smoothstep(0.7, 1.0, uv.y) * 0.1;
   float d = base * 0.55 + billow * 0.28 + detail * 0.30;
   d = smoothstep(1.0 - coverage - 0.08, 1.0 - coverage + 0.32, d);
 
@@ -81,7 +83,10 @@ void main() {
   vec3 cloud = vec3(0.07, 0.2, 0.46);    // cloud body
   vec3 rim   = vec3(0.24, 0.40, 0.78);    // lit cloud edges
 
-  vec3 col = mix(gap, sky, smoothstep(0.0, 0.55, d));
+  // open sky: smooth mid blue with a faint haze texture
+  vec3 col = sky * (0.86 + 0.22 * base);
+  // shadowed pockets around the cloud banks
+  col = mix(col, gap, smoothstep(0.05, 0.5, d) * (1.0 - lit) * 0.85);
   col = mix(col, cloud, smoothstep(0.45, 1.0, d) * (0.55 + 0.45 * lit));
   col += rim * pow(d, 3.0) * lit * 0.28;
 
@@ -94,7 +99,8 @@ void main() {
   col += vec3(0.8, 0.88, 1.0) * s * (1.0 - smoothstep(0.3, 0.9, d)) * 0.9;
 
   // fade to black toward the bottom (the reference is near-black below ~80%)
-  col *= smoothstep(0.04, 0.5, uv.y);
+  // (edges keep their clouds lower down, so the banks read as extending the full height)
+  col *= smoothstep(0.0, mix(0.42, 0.2, edge), uv.y);
 
   gl_FragColor = vec4(col, 1.0);
 }

@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   Award,
+  BadgeCheck,
   Briefcase,
   Code2,
   Copy,
@@ -40,6 +41,7 @@ export default function CommandMenu({ open, onClose }: { open: boolean; onClose:
       { group: "Navigate", label: "Experience", Icon: Briefcase, run: () => scrollToId("experience") },
       { group: "Navigate", label: "Skills", Icon: Code2, run: () => scrollToId("skills") },
       { group: "Navigate", label: "Achievements", Icon: Award, run: () => scrollToId("achievements") },
+      { group: "Navigate", label: "Certifications", Icon: BadgeCheck, run: () => scrollToId("certifications") },
       { group: "Navigate", label: "Contact", Icon: Mail, run: () => scrollToId("contact") },
       { group: "Resume", label: "Open resume page", Icon: FileText, run: () => (window.location.href = "/resume") },
       {

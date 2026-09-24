@@ -9,6 +9,7 @@ import Ribbon from "@/components/sections/Ribbon";
 import About from "@/components/sections/About";
 import Experience from "@/components/sections/Experience";
 import Achievements from "@/components/sections/Achievements";
+import Certifications from "@/components/sections/Certifications";
 import Contact from "@/components/sections/Contact";
 import Footer from "@/components/Footer";
 import AIChatbot from "@/components/AIChatbot";
@@ -49,6 +50,10 @@ export default function Home() {
 
         <div id="achievements">
           <Achievements />
+        </div>
+
+        <div id="certifications">
+          <Certifications />
         </div>
 
         <Contact />

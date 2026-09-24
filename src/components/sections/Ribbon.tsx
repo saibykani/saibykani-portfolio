@@ -1,3 +1,6 @@
+"use client";
+
+import { motion, useScroll, useSpring, useTransform, useVelocity } from "framer-motion";
 import { Marquee } from "@/components/ui/primitives";
 
 const words = [
@@ -21,11 +24,15 @@ function Sparkle() {
 }
 
 export default function Ribbon() {
+  const { scrollY } = useScroll();
+  const vel = useSpring(useVelocity(scrollY), { stiffness: 300, damping: 50 });
+  const skew = useTransform(vel, [-2500, 0, 2500], [8, 0, -8]);
+  const lift = useTransform(vel, [-2500, 0, 2500], [-10, 0, 10]);
   return (
     <section className="overflow-hidden pb-20 pt-10">
       <div className="relative scale-[1.1]">
         <div className="z-0 translate-y-10 rotate-6 bg-gradient-to-r from-[#6799fe] to-[#0a255b] py-4 opacity-60 md:rotate-3 lg:translate-y-16 lg:py-8" />
-        <div className="relative z-[2] flex -rotate-3 items-center justify-center overflow-hidden bg-gradient-to-r from-[#6799fe] to-[#0255fb] py-1.5 will-change-transform lg:py-2">
+        <motion.div style={{ skewX: skew, y: lift, rotate: -3 }} className="relative z-[2] flex items-center justify-center overflow-hidden bg-gradient-to-r from-[#6799fe] to-[#0255fb] py-1.5 will-change-transform lg:py-2">
           <div className="mask-x flex overflow-hidden">
             <Marquee duration="40s">
               {words.map((w) => (
@@ -38,7 +45,7 @@ export default function Ribbon() {
               ))}
             </Marquee>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

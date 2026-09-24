@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
-import { Award, ChevronDown, Command, Download, FileText, GraduationCap } from "lucide-react";
+import { Award, BadgeCheck, ChevronDown, Command, Download, FileText, GraduationCap } from "lucide-react";
 import { GitHubIcon, LinkedInIcon } from "@/components/ui/brandIcons";
 import resumeData from "@/data/resumeData.json";
 import CommandMenu, { scrollToId } from "@/components/CommandMenu";
@@ -40,6 +40,7 @@ function MoreMenu({ onPick }: { onPick: () => void }) {
   const list = [
     { Icon: FileText, title: "Resume", desc: "Printable one-page resume", href: "/resume" },
     { Icon: Download, title: "Download CV", desc: "Get the PDF version", href: "/Sai_Krishna_Bykani_Resume.pdf", download: true },
+    { Icon: Award, title: "Achievements", desc: "Milestones worth celebrating", href: "/#achievements" },
     { Icon: LinkedInIcon, title: "LinkedIn", desc: "Let's connect professionally", href: linkedin, external: true },
     { Icon: GitHubIcon, title: "GitHub", desc: "Code & automation frameworks", href: github, external: true },
   ];
@@ -55,16 +56,17 @@ function MoreMenu({ onPick }: { onPick: () => void }) {
         <button
           onClick={() => {
             onPick();
-            scrollToId("achievements");
+            scrollToId("certifications");
           }}
           className="group relative h-[188px] overflow-hidden rounded-xl border border-white/10 text-left"
         >
-          <div className="absolute inset-0 bg-[radial-gradient(90%_80%_at_30%_20%,rgba(39,61,180,0.9),rgba(15,9,38,0.9))] transition-transform duration-500 group-hover:scale-110" />
-          <Award className="absolute right-4 top-4 size-16 text-white/15 transition-transform duration-500 group-hover:rotate-12 group-hover:scale-110" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
+          <Image src="/certs/ibm-ai-fundamentals.jpg" alt="" fill sizes="300px" className="object-cover object-top transition-transform duration-500 group-hover:scale-110" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/50 to-black/10" />
           <div className="absolute bottom-4 left-4">
-            <p className="text-lg font-semibold text-white">Achievements</p>
-            <p className="text-sm text-white/70">Milestones worth celebrating</p>
+            <p className="flex items-center gap-2 text-lg font-semibold text-white">
+              <BadgeCheck className="size-5 text-sky-400" /> Certifications
+            </p>
+            <p className="text-sm text-white/70">IBM &amp; Google AI credentials</p>
           </div>
         </button>
         <button

@@ -7,6 +7,7 @@ import { ArrowRight, Check, Copy, FileCheck2, FileText, Mail } from "lucide-reac
 import resumeData from "@/data/resumeData.json";
 import { ShinyButton } from "@/components/ui/primitives";
 import SkyCanvas from "@/components/ui/SkyCanvas";
+import FlightLayer from "@/components/ui/FlightLayer";
 
 function Words({ text, delay = 0, className = "" }: { text: string; delay?: number; className?: string }) {
   return (
@@ -170,6 +171,7 @@ export default function Hero() {
       {/* Atmosphere: live shader sky */}
       <motion.div style={{ scale: skyScale }} className="pointer-events-none absolute inset-0 z-0 select-none overflow-hidden">
         <SkyCanvas />
+        <FlightLayer />
         <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-b from-transparent to-black" />
       </motion.div>
     </section>
