@@ -76,6 +76,16 @@ html.lenis body {
   color: transparent;
 }
 
+/* Aircraft signal lights */
+@keyframes beacon {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.15; }
+}
+@keyframes strobe {
+  0%, 8% { opacity: 1; }
+  12%, 100% { opacity: 0; }
+}
+
 /* Race car wheels */
 .car-wheel-spin {
   animation: car-wheel 0.25s linear infinite;

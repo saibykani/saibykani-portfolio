@@ -1,49 +1,10 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useScroll, useSpring, useTransform, useVelocity, type MotionValue } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion, useInView, useScroll, useSpring, useTransform, useVelocity, type MotionValue } from "framer-motion";
 import { Flag, Timer, Zap } from "lucide-react";
 import resumeData from "@/data/resumeData.json";
-
-/* Top-down F1 car, nose to the right. */
-function F1Car({ livery, number, id }: { livery: [string, string, string]; number: string; id: string }) {
-  return (
-    <svg viewBox="0 0 150 56" className="w-full" aria-hidden="true">
-      <defs>
-        <linearGradient id={`liv-${id}`} x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0" stopColor={livery[0]} />
-          <stop offset="0.55" stopColor={livery[1]} />
-          <stop offset="1" stopColor={livery[2]} />
-        </linearGradient>
-      </defs>
-      {/* rear wing */}
-      <rect x="2" y="6" width="10" height="44" rx="2" fill={`url(#liv-${id})`} />
-      <rect x="4" y="8" width="3" height="40" fill="#0b0b0b" opacity="0.5" />
-      {/* rear tyres */}
-      <rect x="16" y="1" width="22" height="12" rx="3" fill="#111" stroke="#2a2a2a" />
-      <rect x="16" y="43" width="22" height="12" rx="3" fill="#111" stroke="#2a2a2a" />
-      {/* body / sidepods */}
-      <path d="M12 20 L40 14 L70 14 L92 20 L128 23 L140 26 L140 30 L128 33 L92 36 L70 42 L40 42 L12 36 Z" fill={`url(#liv-${id})`} />
-      <path d="M40 18 L70 18 L88 23 L88 33 L70 38 L40 38 Z" fill="#000" opacity="0.18" />
-      {/* engine cover stripe */}
-      <path d="M14 27 H120" stroke="white" strokeOpacity="0.6" strokeWidth="1.4" />
-      {/* cockpit + halo */}
-      <ellipse cx="80" cy="28" rx="10" ry="6" fill="#050505" />
-      <path d="M72 28 A8 6 0 0 1 90 28" stroke="#d4d4d8" strokeWidth="1.6" fill="none" />
-      <circle cx="80" cy="28" r="3.2" fill={livery[2]} />
-      {/* front tyres */}
-      <rect x="100" y="3" width="18" height="11" rx="3" fill="#111" stroke="#2a2a2a" />
-      <rect x="100" y="42" width="18" height="11" rx="3" fill="#111" stroke="#2a2a2a" />
-      {/* front wing */}
-      <path d="M134 6 L146 10 L146 46 L134 50 Z" fill={`url(#liv-${id})`} />
-      <rect x="140" y="8" width="3" height="40" fill="white" opacity="0.5" />
-      {/* number */}
-      <text x="50" y="31.5" fontSize="9" fontWeight="900" fill="white" fontFamily="Arial" fontStyle="italic">
-        {number}
-      </text>
-    </svg>
-  );
-}
+import F1Car from "@/components/ui/F1Car";
 
 function Car({
   x,
@@ -78,23 +39,79 @@ function Car({
       </motion.span>
       {/* exhaust flicker */}
       <motion.span style={{ opacity: flame }} className="-mr-2 block h-2 w-5 animate-pulse rounded-full bg-gradient-to-l from-orange-300 via-rose-500 to-transparent blur-[2px]" />
-      <span className="block w-[150px] [filter:drop-shadow(0_8px_10px_rgba(0,0,0,0.7))] md:w-[190px]">
+      <span className="block w-[120px] [filter:drop-shadow(0_8px_10px_rgba(0,0,0,0.7))] md:w-[160px]">
         <F1Car livery={livery} number={number} id={id} />
       </span>
     </motion.div>
   );
 }
 
+/* F1 start gantry: five red lights come on one by one, then all go out -> race start. */
+function StartLights({ active }: { active: boolean }) {
+  const [lit, setLit] = useState(0);
+  const [out, setOut] = useState(false);
+  useEffect(() => {
+    if (!active) return;
+    setLit(0);
+    setOut(false);
+    const timers = [1, 2, 3, 4, 5].map((n) => setTimeout(() => setLit(n), n * 550));
+    timers.push(setTimeout(() => setOut(true), 5 * 550 + 900));
+    return () => timers.forEach(clearTimeout);
+  }, [active]);
+  return (
+    <div className="flex flex-col items-center gap-2">
+      <div className="flex gap-2 rounded-lg border border-white/10 bg-black/80 p-2 shadow-[0_10px_30px_rgba(0,0,0,0.6)]">
+        {[1, 2, 3, 4, 5].map((n) => {
+          const on = !out && lit >= n;
+          return (
+            <div key={n} className="flex flex-col gap-1.5 rounded-md bg-zinc-900 p-1.5">
+              {[0, 1].map((r) => (
+                <span
+                  key={r}
+                  className={`block size-4 rounded-full transition-all duration-150 md:size-5 ${
+                    on
+                      ? "bg-red-500 shadow-[0_0_14px_4px_rgba(239,68,68,0.85)]"
+                      : out
+                        ? "bg-emerald-500/80 shadow-[0_0_10px_2px_rgba(16,185,129,0.6)]"
+                        : "bg-zinc-800"
+                  }`}
+                />
+              ))}
+            </div>
+          );
+        })}
+      </div>
+      <AnimatePresence>
+        {out && (
+          <motion.span
+            initial={{ opacity: 0, scale: 0.6, y: -6 }}
+            animate={{ opacity: [0, 1, 1, 0.9], scale: [0.6, 1.15, 1] }}
+            exit={{ opacity: 0 }}
+            className="font-arcade text-[10px] text-emerald-300 [text-shadow:0_0_12px_rgba(52,211,153,0.9)] md:text-xs"
+          >
+            LIGHTS OUT!
+          </motion.span>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 export default function RaceTrack() {
   const ref = useRef<HTMLElement>(null);
+  const inView = useInView(ref, { amount: 0.35 });
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const p = useSpring(scrollYProgress, { stiffness: 90, damping: 22, mass: 0.4 });
 
   // Car 07 leads early; car 99 overtakes around the middle of the section
   const x1 = useTransform(p, [0, 0.45, 1], ["-25vw", "48vw", "115vw"]);
   const x2 = useTransform(p, [0, 0.45, 1], ["-45vw", "40vw", "135vw"]);
+  const x3 = useTransform(p, [0, 0.3, 0.7, 1], ["-60vw", "20vw", "70vw", "112vw"]);
+  const x4 = useTransform(p, [0, 0.55, 1], ["-80vw", "30vw", "125vw"]);
   const w1 = useTransform(p, (v) => Math.sin(v * 40) * 3);
   const w2 = useTransform(p, (v) => Math.cos(v * 36) * 3);
+  const w3 = useTransform(p, (v) => Math.sin(v * 30 + 1) * 4);
+  const w4 = useTransform(p, (v) => Math.cos(v * 44 + 2) * 3);
 
   const vel = useVelocity(scrollYProgress);
   const speed = useSpring(useTransform(vel, (v) => Math.min(1, Math.abs(v) * 1.5)), { stiffness: 120, damping: 20 });
@@ -124,7 +141,7 @@ export default function RaceTrack() {
       </div>
 
       {/* track */}
-      <div className="relative h-[230px] w-full overflow-hidden md:h-[260px]">
+      <div className="relative h-[340px] w-full overflow-hidden md:h-[400px]">
         <div className="absolute inset-0 bg-[linear-gradient(180deg,#141414,#1c1c1c_50%,#141414)]" />
         <div className="absolute inset-0 opacity-[0.18] [background-image:radial-gradient(rgba(255,255,255,0.35)_1px,transparent_1px)] [background-size:6px_6px]" />
         {/* kerbs */}
@@ -139,7 +156,7 @@ export default function RaceTrack() {
         {/* lane line */}
         <motion.div
           style={{ backgroundPosition: laneShift }}
-          className="absolute inset-x-0 top-1/2 h-[3px] -translate-y-1/2 opacity-60 [background-image:repeating-linear-gradient(90deg,#fafafa_0_40px,transparent_40px_90px)]"
+          className="absolute inset-x-0 top-[48%] h-[3px] opacity-60 [background-image:repeating-linear-gradient(90deg,#fafafa_0_40px,transparent_40px_90px)]"
         />
         {/* skid marks */}
         <div className="absolute left-[30%] top-[30%] h-1 w-40 -rotate-2 rounded-full bg-black/40 blur-[1px]" />
@@ -155,8 +172,15 @@ export default function RaceTrack() {
           <Flag className="size-8 fill-white" />
         </motion.span>
 
-        <Car x={x1} lane="16%" livery={["#FF0080", "#7928CA", "#38bdf8"]} number="07" id="a" wobble={w1} speed={speed} />
-        <Car x={x2} lane="56%" livery={["#f59e0b", "#ef4444", "#fde047"]} number="99" id="b" wobble={w2} speed={speed} />
+        <Car x={x1} lane="8%" livery={["#FF0080", "#7928CA", "#38bdf8"]} number="07" id="a" wobble={w1} speed={speed} />
+        <Car x={x2} lane="30%" livery={["#f59e0b", "#ef4444", "#fde047"]} number="99" id="b" wobble={w2} speed={speed} />
+        <Car x={x3} lane="52%" livery={["#10b981", "#0ea5e9", "#a7f3d0"]} number="44" id="c" wobble={w3} speed={speed} />
+        <Car x={x4} lane="72%" livery={["#e5e7eb", "#6b7280", "#f43f5e"]} number="16" id="d" wobble={w4} speed={speed} />
+
+        {/* start gantry */}
+        <div className="absolute left-1/2 top-3 z-20 -translate-x-1/2">
+          <StartLights active={inView} />
+        </div>
 
         <div className="pointer-events-none absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-black to-transparent" />
         <div className="pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-black to-transparent" />

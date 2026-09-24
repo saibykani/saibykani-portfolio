@@ -12,6 +12,8 @@ import Achievements from "@/components/sections/Achievements";
 import Certifications from "@/components/sections/Certifications";
 import RaceTrack from "@/components/sections/RaceTrack";
 import BugHunt from "@/components/sections/BugHunt";
+import RoadDivider from "@/components/ui/RoadDivider";
+import ScrollScene from "@/components/ui/ScrollScene";
 import Contact from "@/components/sections/Contact";
 import Footer from "@/components/Footer";
 import AIChatbot from "@/components/AIChatbot";
@@ -30,38 +32,58 @@ export default function Home() {
       </div>
 
       <main className="w-full bg-black">
-        <Bento />
+        <ScrollScene>
+          <Bento />
+        </ScrollScene>
+
+        <RoadDivider livery={["#FF0080", "#7928CA", "#38bdf8"]} number="07" id="r1" />
 
         <div id="projects">
           <Projects />
         </div>
 
+        <RoadDivider livery={["#f59e0b", "#ef4444", "#fde047"]} number="99" id="r2" reverse />
+
         <div id="skills">
-          <Skills />
+          <ScrollScene>
+            <Skills />
+          </ScrollScene>
         </div>
 
         <Ribbon />
 
         <div id="about">
-          <About />
+          <ScrollScene>
+            <About />
+          </ScrollScene>
         </div>
 
         <div id="experience">
-          <Experience />
+          <ScrollScene>
+            <Experience />
+          </ScrollScene>
         </div>
 
         <RaceTrack />
 
         <div id="achievements">
-          <Achievements />
+          <ScrollScene>
+            <Achievements />
+          </ScrollScene>
         </div>
+
+        <RoadDivider livery={["#10b981", "#0ea5e9", "#a7f3d0"]} number="44" id="r3" />
 
         <div id="certifications">
           <Certifications />
         </div>
 
+        <RoadDivider livery={["#e5e7eb", "#6b7280", "#f43f5e"]} number="16" id="r4" reverse />
+
         <div id="game">
-          <BugHunt />
+          <ScrollScene>
+            <BugHunt />
+          </ScrollScene>
         </div>
 
         <Contact />

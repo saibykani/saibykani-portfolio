@@ -5,8 +5,12 @@ import { motion, useReducedMotion } from "framer-motion";
 /* Side-profile airliner silhouette (nose to the right) with nav lights. */
 function Airliner({ className = "" }: { className?: string }) {
   return (
-    <svg viewBox="0 0 120 42" className={className} aria-hidden="true">
+    <svg viewBox="0 0 150 42" className={className} aria-hidden="true" overflow="visible">
       <defs>
+        <linearGradient id="beam" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stopColor="#fffbe6" stopOpacity="0.9" />
+          <stop offset="1" stopColor="#fffbe6" stopOpacity="0" />
+        </linearGradient>
         <linearGradient id="fuse" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0" stopColor="#c7d6ff" stopOpacity="0.9" />
           <stop offset="0.45" stopColor="#6d83c9" stopOpacity="0.9" />
@@ -26,7 +30,15 @@ function Airliner({ className = "" }: { className?: string }) {
       {/* near wing + engine */}
       <path d="M52 24.5 L37 39 L47 39 L75 24.5Z" fill="url(#fuse)" />
       <rect x="47" y="27.5" width="12" height="4.2" rx="2" fill="#1b2553" />
-      {/* nav lights */}
+      {/* landing light beam */}
+      <path d="M116 22 L150 14 L150 30 Z" fill="url(#beam)" opacity="0.5" />
+      {/* nav lights (with glow halos) */}
+      <circle cx="39" cy="38.6" r="4" fill="#ff3b3b" opacity="0.35">
+        <animate attributeName="opacity" values="0.5;0;0.5" dur="1.2s" repeatCount="indefinite" />
+      </circle>
+      <circle cx="4" cy="4" r="5" fill="#ffffff" opacity="0">
+        <animate attributeName="opacity" values="0;0;0.8;0;0" dur="1.6s" repeatCount="indefinite" />
+      </circle>
       <circle cx="39" cy="38.6" r="1.4" fill="#ff3b3b">
         <animate attributeName="opacity" values="1;0.2;1" dur="1.2s" repeatCount="indefinite" />
       </circle>
@@ -52,61 +64,6 @@ function Jet({ className = "" }: { className?: string }) {
         <animate attributeName="opacity" values="0.1;1;0.1" dur="0.8s" repeatCount="indefinite" />
       </circle>
     </svg>
-  );
-}
-
-/* B-2 Spirit flying wing, top-down, nose to the right. */
-function B2({ className = "" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 120 50" className={className} aria-hidden="true">
-      <defs>
-        <linearGradient id="b2-skin" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#3a4461" />
-          <stop offset="0.5" stopColor="#1a2033" />
-          <stop offset="1" stopColor="#0b0f1c" />
-        </linearGradient>
-      </defs>
-      <path
-        d="M114 25 L8 1 L21 7 L27 14 L41 11 L51 20 L59 25 L51 30 L41 39 L27 36 L21 43 L8 49 Z"
-        fill="url(#b2-skin)"
-        stroke="#8fa3d9"
-        strokeOpacity="0.35"
-        strokeWidth="0.6"
-      />
-      {/* cockpit + intakes */}
-      <path d="M100 23.4 L106 25 L100 26.6 Z" fill="#6f86c7" fillOpacity="0.8" />
-      <path d="M78 20 L86 21.5 L78 22.6 Z M78 27.4 L86 28.5 L78 30 Z" fill="#05070d" />
-      {/* engine glow on the trailing edge */}
-      <ellipse cx="52" cy="21" rx="3" ry="0.9" fill="#7dd3fc" opacity="0.6">
-        <animate attributeName="opacity" values="0.3;0.8;0.3" dur="0.6s" repeatCount="indefinite" />
-      </ellipse>
-      <ellipse cx="52" cy="29" rx="3" ry="0.9" fill="#7dd3fc" opacity="0.6">
-        <animate attributeName="opacity" values="0.8;0.3;0.8" dur="0.6s" repeatCount="indefinite" />
-      </ellipse>
-      {/* wingtip lights */}
-      <circle cx="9" cy="2" r="1.1" fill="#ff4b4b">
-        <animate attributeName="opacity" values="1;0.1;1" dur="1.4s" repeatCount="indefinite" />
-      </circle>
-      <circle cx="9" cy="48" r="1.1" fill="#3bff8a">
-        <animate attributeName="opacity" values="0.1;1;0.1" dur="1.4s" repeatCount="indefinite" />
-      </circle>
-    </svg>
-  );
-}
-
-function Bomber({ top, delay }: { top: string; delay: number }) {
-  return (
-    <motion.div
-      className="absolute left-0"
-      style={{ top }}
-      initial={{ x: "-30vw", y: 0, rotate: 0 }}
-      animate={{ x: "120vw", y: [0, -18, 6, -10], rotate: [0, -2, 1.5, 0] }}
-      transition={{ duration: 34, delay, repeat: Infinity, repeatDelay: 14, ease: "linear" }}
-    >
-      <span className="block w-[190px] [filter:drop-shadow(0_10px_18px_rgba(0,0,0,0.55))_drop-shadow(0_0_10px_rgba(125,160,255,0.25))] md:w-[240px]">
-        <B2 className="w-full" />
-      </span>
-    </motion.div>
   );
 }
 
@@ -145,6 +102,25 @@ function Flight({ top, duration, delay, repeatDelay, reverse = false, width, opa
   );
 }
 
+/* A far-away plane at night: just its blinking nav lights and strobe, drifting slowly. */
+function NightTraffic({ top, duration, delay, reverse = false, scale = 1 }: { top: string; duration: number; delay: number; reverse?: boolean; scale?: number }) {
+  return (
+    <motion.div
+      className="absolute left-0"
+      style={{ top, scale }}
+      initial={{ x: reverse ? "105vw" : "-5vw" }}
+      animate={{ x: reverse ? "-5vw" : "105vw", y: [0, -8, 0] }}
+      transition={{ duration, delay, repeat: Infinity, ease: "linear" }}
+    >
+      <span className="relative block h-3 w-6">
+        <span className="absolute left-0 top-1 size-1 rounded-full bg-red-500 shadow-[0_0_6px_2px_rgba(239,68,68,0.9)] [animation:beacon_1.2s_ease-in-out_infinite]" />
+        <span className="absolute right-0 top-1 size-1 rounded-full bg-emerald-400 shadow-[0_0_6px_2px_rgba(52,211,153,0.9)] [animation:beacon_1.2s_ease-in-out_infinite_0.6s]" />
+        <span className="absolute left-1/2 top-0 size-1.5 -translate-x-1/2 rounded-full bg-white shadow-[0_0_10px_4px_rgba(255,255,255,0.9)] [animation:strobe_1.8s_linear_infinite]" style={{ animationDelay: `${delay % 1.8}s` }} />
+      </span>
+    </motion.div>
+  );
+}
+
 function ShootingStar({ top, left, delay }: { top: string; left: string; delay: number }) {
   return (
     <motion.span
@@ -162,14 +138,25 @@ export default function FlightLayer() {
   if (reduce) return null;
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden">
-      {/* B-2 Spirit gliding through the middle band */}
-      <Bomber top="36%" delay={6} />
       {/* main airliner crossing the middle */}
       <Flight top="44%" duration={26} delay={1.5} repeatDelay={6} width={120} climb={-40} />
       {/* distant airliner the other way, higher up */}
       <Flight top="22%" duration={40} delay={9} repeatDelay={10} width={56} opacity={0.55} reverse climb={-12} />
       {/* quick jet pass below the headline */}
       <Flight top="62%" duration={9} delay={14} repeatDelay={16} width={46} opacity={0.8} kind="jet" climb={-60} />
+
+      {/* more airliners at different altitudes and directions */}
+      <Flight top="30%" duration={32} delay={12} repeatDelay={9} width={84} opacity={0.75} reverse climb={-20} />
+      <Flight top="70%" duration={22} delay={20} repeatDelay={12} width={70} opacity={0.65} climb={-50} />
+      <Flight top="14%" duration={12} delay={5} repeatDelay={18} width={40} opacity={0.7} kind="jet" reverse climb={-10} />
+
+      {/* distant night traffic: blinking signal lights only */}
+      <NightTraffic top="9%" duration={70} delay={0} />
+      <NightTraffic top="18%" duration={85} delay={10} reverse scale={0.8} />
+      <NightTraffic top="26%" duration={95} delay={25} scale={0.7} />
+      <NightTraffic top="52%" duration={80} delay={4} reverse scale={0.9} />
+      <NightTraffic top="6%" duration={110} delay={40} reverse scale={0.6} />
+      <NightTraffic top="40%" duration={100} delay={55} scale={0.75} />
 
       <ShootingStar top="12%" left="18%" delay={3} />
       <ShootingStar top="8%" left="62%" delay={8} />
