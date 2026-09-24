@@ -11,7 +11,7 @@ import Experience from "@/components/sections/Experience";
 import Achievements from "@/components/sections/Achievements";
 import Certifications from "@/components/sections/Certifications";
 import BugHunt from "@/components/sections/BugHunt";
-import RaceShowcase from "@/components/sections/RaceShowcase";
+import GlobalMission from "@/components/sections/GlobalMission";
 import ScrollScene from "@/components/ui/ScrollScene";
 import Contact from "@/components/sections/Contact";
 import Footer from "@/components/Footer";
@@ -42,7 +42,7 @@ export default function Home() {
           <Bento />
         </ScrollScene>
 
-        <RaceShowcase />
+        <GlobalMission />
 
         <div id="projects">
           <Projects />

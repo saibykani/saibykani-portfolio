@@ -459,6 +459,11 @@ export default function Hero3D({ weather }: { weather: Weather }) {
     addFlight(buildAirliner(glow, "#0ea5e9"), [80, 9, -72], [-80, 10.5, -72], 48, 42, 10, "#6f7fa6");
     addFlight(buildAirliner(glow, "#f43f5e"), [-2, -1.5, -230], [2.5, 7, 12], 42, 17, 21, "#5d6a88", undefined, 0.25); // head-on approach
     addFlight(buildAirliner(glow, "#f59e0b"), [-95, 15, -120], [95, 17, -120], 64, 58, 32, "#5f6f96");
+    // more traffic: extra airliners at different altitudes, depths and directions
+    addFlight(buildAirliner(glow, "#10b981"), [90, -4, -48], [-90, -2.5, -48], 40, 30, 16, "#6a7fa8");
+    addFlight(buildAirliner(glow, "#e11d48"), [-110, 22, -150], [110, 24, -150], 70, 64, 44, "#56638a");
+    addFlight(buildAirliner(glow, "#38bdf8"), [100, 5, -95], [-100, 7, -95], 55, 50, 3, "#5d6d96");
+    addFlight(buildAirliner(glow, "#a855f7"), [-85, 11, -60], [85, 12.5, -60], 44, 36, 27, "#6a7aa0");
     const jetOffsets = [new THREE.Vector3(0, 0, 0), new THREE.Vector3(2.4, -0.6, -2.4), new THREE.Vector3(2.4, -0.6, 2.4)];
     jetOffsets.forEach((o) => addFlight(buildJet(glow), [72, -2, -38], [-72, 1, -38], 36, 7, 6, "#b08a6a", o));
 
