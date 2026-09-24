@@ -114,26 +114,24 @@ export default function AIChatbot() {
 
   return (
     <>
-      {/* Floating Toggle Button */}
+      {/* Floating Toggle Button: small round icon */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="group fixed bottom-4 right-4 z-50 flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-3 text-base text-white shadow-lg shadow-blue-600/30 transition-all duration-300 hover:-translate-y-0.5 hover:bg-blue-500 hover:shadow-blue-500/50 active:scale-95 focus:outline-none md:bottom-6 md:right-6 md:px-5 md:text-lg no-print"
+        aria-label={isOpen ? "Close chat" : "Chat with Sai's assistant"}
+        className="group fixed bottom-4 right-4 z-50 flex size-12 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-lg shadow-blue-600/40 ring-1 ring-white/20 transition-all duration-300 hover:scale-110 hover:shadow-blue-500/60 active:scale-95 focus:outline-none md:bottom-6 md:right-6 no-print"
       >
-        {isOpen ? (
-          <X className="w-5 h-5" />
-        ) : (
-          <span className="relative flex size-3">
+        {isOpen ? <X className="w-5 h-5" /> : <MessageSquare className="w-5 h-5 transition-transform group-hover:-rotate-12" />}
+        {!isOpen && (
+          <span className="absolute right-0.5 top-0.5 flex size-3">
             <span className="absolute inline-flex size-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-            <span className="relative inline-flex size-3 rounded-full border-2 border-emerald-400" />
+            <span className="relative inline-flex size-3 rounded-full border-2 border-[#0b0b0b] bg-emerald-400" />
           </span>
         )}
-        <span className="hidden sm:inline">{isOpen ? "Close chat" : "Chat with me, I am online!"}</span>
-        {!isOpen && <MessageSquare className="w-5 h-5 sm:hidden" />}
       </button>
 
       {/* Chat Drawer Dialog */}
       {isOpen && (
-        <div className="fixed bottom-24 right-4 md:right-6 w-[360px] max-w-[90vw] h-[480px] rounded-2xl bg-[#09090b] border border-white/[0.06] z-50 flex flex-col overflow-hidden animate-in slide-in-from-bottom-5 duration-300 shadow-2xl shadow-black/80">
+        <div className="fixed bottom-20 right-4 md:bottom-24 md:right-6 w-[360px] max-w-[90vw] h-[480px] rounded-2xl bg-[#09090b] border border-white/[0.06] z-50 flex flex-col overflow-hidden animate-in slide-in-from-bottom-5 duration-300 shadow-2xl shadow-black/80">
           {/* Header */}
           <div className="px-5 py-4 bg-[#050508]/90 border-b border-white/[0.06] flex items-center justify-between">
             <div className="flex items-center space-x-2">
