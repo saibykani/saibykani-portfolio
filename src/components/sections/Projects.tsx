@@ -1,8 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { ArrowRight, X, Layers, Target, Award, HelpCircle, CheckCircle, GitBranch, Cpu, Workflow, Shield, Zap, ExternalLink } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion, useMotionValue, useSpring } from "framer-motion";
+import { ArrowUpRight, CheckCircle2, CircleCheck, Terminal, X } from "lucide-react";
 import resumeData from "@/data/resumeData.json";
+import { SectionHeading } from "@/components/ui/primitives";
+import { TechIcon } from "@/components/ui/techIcons";
 
 interface CaseStudy {
   overview?: string;
@@ -34,440 +37,415 @@ interface ProjectData {
   role: string;
   testingTypes?: string[];
   technologies: string[];
-  techStack?: string[];
   businessImpactBadge: string;
   metrics: Record<string, string>;
   caseStudy: CaseStudy;
 }
 
-const projectIcons: Record<string, React.ReactNode> = {
-  psp: <Shield className="w-5 h-5" />,
-  rwa: <Layers className="w-5 h-5" />,
-  ppms: <Workflow className="w-5 h-5" />,
-  vcip: <Cpu className="w-5 h-5" />,
+const layers: Record<string, { bg: string; accent: string }> = {
+  psp: { bg: "linear-gradient(10deg, #2932CB 49.9%, #2932CB 81.7%, #7980FF 99.88%, #F9D793 113.5%)", accent: "#7980FF" },
+  rwa: { bg: "linear-gradient(10deg, #14B8A6 49.9%, #14B8A6 81.7%, #5EEAD4 99.88%, #F9D793 113.5%)", accent: "#5EEAD4" },
+  ppms: { bg: "linear-gradient(10deg, #DB2777 49.9%, #DB2777 81.7%, #F472B6 99.88%, #F9D793 113.5%)", accent: "#F472B6" },
+  vcip: { bg: "linear-gradient(10deg, #7E22CE 49.9%, #7E22CE 81.7%, #C084FC 99.88%, #F9D793 113.5%)", accent: "#C084FC" },
 };
+const fallbackLayer = layers.psp;
 
-const projectAccents: Record<string, { border: string; glow: string; text: string; bg: string; dot: string; gradient: string; ring: string }> = {
-  psp:  { border: "border-orange-500/20", glow: "from-orange-500/10 via-amber-500/5", text: "text-orange-400", bg: "bg-orange-500/10", dot: "bg-orange-400", gradient: "from-orange-500 to-amber-500", ring: "ring-orange-500/20" },
-  rwa:  { border: "border-cyan-500/20",   glow: "from-cyan-500/10 via-teal-500/5",   text: "text-cyan-400",   bg: "bg-cyan-500/10",   dot: "bg-cyan-400",   gradient: "from-cyan-500 to-teal-500",   ring: "ring-cyan-500/20" },
-  ppms: { border: "border-violet-500/20", glow: "from-violet-500/10 via-purple-500/5", text: "text-violet-400", bg: "bg-violet-500/10", dot: "bg-violet-400", gradient: "from-violet-500 to-purple-500", ring: "ring-violet-500/20" },
-  vcip: { border: "border-emerald-500/20",glow: "from-emerald-500/10 via-green-500/5",text: "text-emerald-400",bg: "bg-emerald-500/10",dot: "bg-emerald-400",gradient: "from-emerald-500 to-green-500",ring: "ring-emerald-500/20" },
-};
-
-const defaultAccent = { border: "border-white/10", glow: "from-white/5 via-white/2", text: "text-slate-400", bg: "bg-white/5", dot: "bg-white", gradient: "from-white to-slate-400", ring: "ring-white/20" };
-
-export default function Projects() {
-  const [selectedProject, setSelectedProject] = useState<ProjectData | null>(null);
-  const [isVisible, setIsVisible] = useState(false);
-  const projectsList = (resumeData.projects ?? []) as ProjectData[];
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setIsVisible(true); },
-      { threshold: 0.1 }
-    );
-    const el = document.getElementById("projects");
-    if (el) observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
-  // Lock body scroll when modal is open
-  useEffect(() => {
-    if (selectedProject) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => { document.body.style.overflow = ""; };
-  }, [selectedProject]);
-
+/* A rendered "screenshot" of a test run dashboard for each project */
+function ProjectMock({ project }: { project: ProjectData }) {
+  const accent = (layers[project.id] ?? fallbackLayer).accent;
+  const flow = project.caseStudy.architecture?.nodes ?? project.caseStudy.modules ?? [];
+  const metrics = Object.entries(project.metrics ?? {});
   return (
-    <section id="projects" className="py-32 relative overflow-hidden">
-
-      {/* Ambient blurs */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[1px] bg-gradient-to-r from-transparent via-orange-500/20 to-transparent" />
-      <div className="absolute top-[5%] left-[-10%] w-[600px] h-[600px] rounded-full bg-orange-500/[0.02] filter blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-[10%] right-[-8%] w-[500px] h-[500px] rounded-full bg-violet-500/[0.02] filter blur-[120px] pointer-events-none" />
-
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-
-        {/* ── Section Header ── */}
-        <div
-          className={`max-w-3xl mb-20 space-y-5 transition-all duration-1000 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
-        >
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-orange-500/[0.08] border border-orange-500/20">
-              <Zap className="w-3 h-3 text-orange-400" />
-              <span className="text-orange-400 text-[10px] font-bold tracking-[0.15em] uppercase">Engineering Portfolio</span>
+    <div className="relative aspect-[1203/753] w-full max-w-[85%] translate-y-5 overflow-hidden rounded-t-lg border border-white/10 bg-[#0c0c0f] text-left shadow-2xl">
+      {/* window chrome */}
+      <div className="flex items-center gap-1.5 border-b border-white/10 bg-white/[0.03] px-3 py-2">
+        <span className="size-2 rounded-full bg-red-400/80" />
+        <span className="size-2 rounded-full bg-yellow-400/80" />
+        <span className="size-2 rounded-full bg-green-400/80" />
+        <span className="ml-3 truncate font-mono text-[9px] text-white/40 sm:text-[10px]">
+          qa-dashboard / {project.id} / regression-suite
+        </span>
+      </div>
+      <div className="grid h-full grid-cols-5 gap-2 p-2 sm:gap-3 sm:p-3">
+        {/* metrics column */}
+        <div className="col-span-2 flex flex-col gap-2">
+          {metrics.slice(0, 3).map(([k, v]) => (
+            <div key={k} className="rounded-md border border-white/10 bg-white/[0.03] p-1.5 sm:p-2.5">
+              <div className="font-outfit text-sm font-semibold sm:text-xl" style={{ color: accent }}>
+                {v}
+              </div>
+              <div className="truncate font-mono text-[7px] uppercase tracking-wider text-white/40 sm:text-[9px]">{k}</div>
+            </div>
+          ))}
+          <div className="hidden flex-1 rounded-md border border-white/10 bg-white/[0.03] p-2 sm:block">
+            <div className="flex h-full items-end gap-1">
+              {[40, 65, 52, 80, 72, 90, 85, 96].map((h, i) => (
+                <div key={i} className="flex-1 rounded-sm" style={{ height: `${h}%`, background: accent, opacity: 0.25 + i * 0.08 }} />
+              ))}
             </div>
           </div>
-          <h2 className="text-4xl sm:text-[3.25rem] font-black tracking-tight text-white leading-[1.08]">
-            Project<br />
-            <span className="bg-gradient-to-r from-orange-400 via-amber-400 to-orange-500 bg-clip-text text-transparent">
-              Overview
-            </span>
-          </h2>
-          <p className="text-[13px] text-slate-500 max-w-md leading-relaxed font-medium">
-            Enterprise-grade QA automation frameworks built across FinTech, Banking, Community, and NGO domains — delivering measurable impact at scale.
-          </p>
+        </div>
+        {/* flow + log column */}
+        <div className="col-span-3 flex flex-col gap-2">
+          <div className="rounded-md border border-white/10 bg-white/[0.03] p-1.5 sm:p-2.5">
+            <div className="mb-1.5 font-mono text-[7px] uppercase tracking-wider text-white/40 sm:text-[9px]">Validated flow</div>
+            <div className="flex flex-wrap gap-1">
+              {flow.slice(0, 8).map((n) => (
+                <span key={n} className="inline-flex items-center gap-1 rounded bg-white/5 px-1.5 py-0.5 text-[7px] text-white/70 sm:text-[9px]">
+                  <CircleCheck className="size-2 text-emerald-400 sm:size-2.5" />
+                  {n}
+                </span>
+              ))}
+            </div>
+          </div>
+          <div className="flex-1 overflow-hidden rounded-md border border-white/10 bg-black/60 p-1.5 font-mono text-[7px] leading-relaxed sm:p-2.5 sm:text-[9px]">
+            <div className="flex items-center gap-1 text-white/40">
+              <Terminal className="size-2.5" /> mvn test -Dsuite={project.id}
+            </div>
+            {(project.testingTypes ?? []).slice(0, 5).map((t) => (
+              <div key={t} className="text-white/60">
+                <span className="text-emerald-400">✔ PASS</span> {t}
+              </div>
+            ))}
+            <div className="mt-1 text-sky-300">BUILD SUCCESS · {project.businessImpactBadge}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function TechChips({ techs, small = false }: { techs: string[]; small?: boolean }) {
+  return (
+    <div className="flex flex-wrap gap-2">
+      {techs.map((t) => (
+        <span
+          key={t}
+          className={`inline-flex items-center gap-1.5 rounded-md border border-white/10 bg-white/5 ${
+            small ? "px-2 py-0.5 text-xs" : "px-2.5 py-1 text-sm"
+          } text-white/80`}
+        >
+          <TechIcon name={t} className={small ? "size-3.5" : "size-4"} />
+          {t}
+        </span>
+      ))}
+    </div>
+  );
+}
+
+function ProjectCard({
+  project,
+  index,
+  onOpen,
+  onActive,
+}: {
+  project: ProjectData;
+  index: number;
+  onOpen: () => void;
+  onActive: (i: number) => void;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [hover, setHover] = useState(false);
+  const mx = useMotionValue(0);
+  const my = useMotionValue(0);
+  const sx = useSpring(mx, { stiffness: 400, damping: 35 });
+  const sy = useSpring(my, { stiffness: 400, damping: 35 });
+  const layer = layers[project.id] ?? fallbackLayer;
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([e]) => e.isIntersecting && onActive(index), {
+      rootMargin: "-45% 0px -45% 0px",
+    });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [onActive, index]);
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 40, filter: "blur(8px)" }}
+      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+      className="flex w-full flex-col lg:pr-10"
+    >
+      <button
+        onClick={onOpen}
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}
+        onMouseMove={(e) => {
+          const r = e.currentTarget.getBoundingClientRect();
+          mx.set(e.clientX - r.left);
+          my.set(e.clientY - r.top);
+        }}
+        className="group relative block overflow-hidden rounded-2xl bg-[#f2f2f20c] p-1 text-left shadow-border lg:cursor-none lg:rounded-3xl lg:p-2"
+      >
+        <div className="absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,rgba(0,0,0,0)_5%,rgba(255,255,255,0.8)_35%,rgb(255,255,255)_50%,rgba(255,255,255,0.8)_65%,rgba(0,0,0,0)_95%)]" />
+        <div className="relative z-0 flex size-full flex-col items-center justify-between overflow-hidden rounded-xl bg-gradient-to-b from-black/35 to-black/45 max-lg:pt-4 lg:rounded-2xl">
+          <div
+            className="absolute inset-0 -z-10 transition-transform duration-500 ease-in-out group-hover:scale-105"
+            style={{ background: layer.bg }}
+          />
+          <div className="absolute inset-x-0 top-0 z-10 h-[0.8px] bg-[linear-gradient(90deg,rgba(0,0,0,0)_20%,rgb(255,255,255)_50%,rgba(0,0,0,0)_80%)] opacity-70" />
+          <div className="hidden w-full flex-row items-center justify-between gap-8 px-10 py-8 text-white/80 lg:flex">
+            <h3 className="text-xl tracking-tight xl:text-2xl">{project.summary}</h3>
+            <ArrowUpRight className="size-6 shrink-0 transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1" />
+          </div>
+          <ProjectMock project={project} />
         </div>
 
-        {/* ── Projects Grid ── */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-          {projectsList.map((project, idx) => {
-            const accent = projectAccents[project.id] ?? defaultAccent;
-            const icon = projectIcons[project.id] ?? <Layers className="w-5 h-5" />;
-            const techList = project.techStack ?? project.technologies ?? [];
+        {/* custom follow cursor */}
+        <motion.span
+          style={{ left: sx, top: sy }}
+          animate={{ scale: hover ? 1 : 0, opacity: hover ? 1 : 0 }}
+          transition={{ duration: 0.2 }}
+          className="pointer-events-none absolute z-30 hidden -translate-x-1/2 -translate-y-1/2 items-center gap-1 rounded-full bg-white px-4 py-2 text-sm font-medium text-black shadow-xl lg:flex"
+        >
+          View case study <ArrowUpRight className="size-4" />
+        </motion.span>
+      </button>
 
-            return (
-              <div
-                key={project.id}
-                className={`group relative rounded-[20px] transition-all duration-700 hover:-translate-y-1.5 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"}`}
-                style={{ transitionDelay: isVisible ? `${idx * 150}ms` : "0ms" }}
-              >
-                {/* Animated gradient border */}
-                <div className={`absolute -inset-[1px] rounded-[20px] bg-gradient-to-br ${accent.glow} to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700`} />
+      {/* Mobile meta */}
+      <button onClick={onOpen} className="mb-12 mt-6 flex flex-col text-left lg:hidden">
+        <h3 className="line-clamp-1 text-base text-white/80">{project.title}</h3>
+        <p className="mt-1 text-sm text-white/50">{project.summary}</p>
+        <div className="mt-3">
+          <TechChips techs={project.technologies} small />
+        </div>
+      </button>
+    </motion.div>
+  );
+}
 
-                {/* Card body */}
-                <div className={`relative rounded-[20px] bg-[#070b16]/95 border ${accent.border} group-hover:border-white/[0.12] backdrop-blur-sm transition-all duration-500 overflow-hidden`}>
+function DetailPanel({ project }: { project: ProjectData }) {
+  const cs = project.caseStudy;
+  const accent = (layers[project.id] ?? fallbackLayer).accent;
+  return (
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={project.id}
+        initial={{ opacity: 0, y: 12, filter: "blur(6px)" }}
+        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+        exit={{ opacity: 0, y: -12, filter: "blur(6px)" }}
+        transition={{ duration: 0.4 }}
+        className="flex flex-col gap-5"
+      >
+        <div className="flex items-center gap-2">
+          <span className="h-px w-8" style={{ background: accent }} />
+          <span className="font-mono text-xs uppercase tracking-widest text-white/60">{project.category}</span>
+        </div>
+        <h3 className="font-instrument text-4xl text-white">{project.title}</h3>
+        <p className="text-sm font-light leading-relaxed text-neutral-300">{cs.overview ?? project.summary}</p>
+        {cs.responsibilities && (
+          <ul className="flex flex-col gap-2.5">
+            {cs.responsibilities.slice(0, 4).map((r) => (
+              <li key={r} className="flex gap-2 text-sm font-light text-neutral-300">
+                <CheckCircle2 className="mt-0.5 size-4 shrink-0" style={{ color: accent }} />
+                {r}
+              </li>
+            ))}
+          </ul>
+        )}
+        <TechChips techs={project.technologies} small />
+      </motion.div>
+    </AnimatePresence>
+  );
+}
 
-                  {/* Floating shimmer line on hover */}
-                  <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/[0.08] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+function CaseStudyModal({ project, onClose }: { project: ProjectData; onClose: () => void }) {
+  const cs = project.caseStudy;
+  const accent = (layers[project.id] ?? fallbackLayer).accent;
 
-                  <div className="p-7 flex flex-col h-full relative z-10">
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [onClose]);
 
-                    {/* ── Header: Icon + Title + Badge ── */}
-                    <div className="flex items-start justify-between mb-6">
-                      <div className="flex items-start gap-3.5">
-                        <div className={`p-2.5 rounded-2xl ${accent.bg} ${accent.text} ring-1 ${accent.ring} transition-transform duration-500 group-hover:scale-110`}>
-                          {icon}
-                        </div>
-                        <div>
-                          <h3 className="text-[16px] font-extrabold text-white leading-tight tracking-[-0.01em]">
-                            {project.title}
-                          </h3>
-                          <span className="text-[10px] text-slate-600 font-semibold mt-1 block tracking-wide uppercase">{project.category}</span>
-                        </div>
-                      </div>
-                      <span className={`px-3 py-1.5 rounded-full text-[9px] font-bold ${accent.bg} ${accent.text} flex items-center gap-1.5 shrink-0 ring-1 ${accent.ring}`}>
-                        <span className={`w-[5px] h-[5px] rounded-full ${accent.dot} animate-pulse`} />
-                        {project.businessImpactBadge}
-                      </span>
-                    </div>
+  const text: [string, string | undefined][] = [
+    ["Business Problem", cs.businessProblem],
+    ["Business Context", cs.businessContext],
+    ["Testing Strategy", cs.testingStrategy],
+    ["Framework", cs.framework],
+    ["UI Automation", cs.uiAutomation],
+    ["API Automation", cs.apiAutomation],
+    ["DB Validation", cs.dbValidation],
+    ["Performance Testing", cs.performanceTesting],
+    ["CI/CD", cs.cicd],
+  ];
+  const lists: [string, string[] | undefined][] = [
+    ["Key Responsibilities", cs.responsibilities],
+    ["Challenges Solved", cs.challenges],
+    ["Achievements", cs.achievements],
+    ["Testing Metrics", cs.testingMetrics],
+  ];
 
-                    {/* ── Role ── */}
-                    <div className="flex items-center gap-2.5 mb-4 pb-4 border-b border-white/[0.04]">
-                      <span className="text-[8px] text-slate-600 font-bold uppercase tracking-[0.15em]">Role</span>
-                      <div className="h-3 w-[1px] bg-white/[0.06]" />
-                      <span className="text-[11px] text-slate-400 font-medium">{project.role}</span>
-                    </div>
-
-                    {/* ── Summary ── */}
-                    <p className="text-[12px] text-slate-500 leading-[1.7] mb-6 font-medium flex-grow">
-                      {project.summary}
-                    </p>
-
-                    {/* ── Architecture Flow ── */}
-                    {project.caseStudy?.architecture?.nodes && (
-                      <div className="mb-6">
-                        <div className="flex items-center gap-1.5 mb-3">
-                          <GitBranch className="w-3 h-3 text-slate-700" />
-                          <span className="text-[8px] text-slate-600 font-bold uppercase tracking-[0.15em]">Architecture Flow</span>
-                        </div>
-                        <div className="flex flex-wrap items-center gap-1">
-                          {project.caseStudy.architecture.nodes.slice(0, 5).map((node, i, arr) => (
-                            <div key={node} className="flex items-center gap-1">
-                              <span className={`px-2 py-1 rounded-md text-[9px] font-semibold border whitespace-nowrap transition-colors ${i === 0 ? `${accent.border} ${accent.text} ${accent.bg}` : "border-white/[0.05] text-slate-500 bg-white/[0.02] group-hover:border-white/[0.08]"}`}>
-                                {node}
-                              </span>
-                              {i < arr.length - 1 && (
-                                <ArrowRight className="w-2.5 h-2.5 text-slate-800 shrink-0" />
-                              )}
-                            </div>
-                          ))}
-                          {project.caseStudy.architecture.nodes.length > 5 && (
-                            <span className="text-[9px] text-slate-700 ml-1 font-medium">+{project.caseStudy.architecture.nodes.length - 5} more</span>
-                          )}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* ── Metrics ── */}
-                    <div className={`grid gap-2 mb-6 ${Object.keys(project.metrics).length >= 3 ? "grid-cols-3" : "grid-cols-2"}`}>
-                      {Object.entries(project.metrics).slice(0, 3).map(([key, val]) => (
-                        <div key={key} className="text-center py-3 px-2 rounded-xl bg-white/[0.02] border border-white/[0.04] group-hover:border-white/[0.07] transition-colors">
-                          <span className="text-[17px] font-black text-white block tracking-tight">{val}</span>
-                          <span className="text-[7px] text-slate-600 uppercase tracking-[0.12em] font-bold mt-0.5 block">{key}</span>
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* ── Tech pills ── */}
-                    <div className="flex flex-wrap gap-1.5 mb-6">
-                      {techList.map((tech) => (
-                        <span
-                          key={tech}
-                          className="px-2.5 py-[3px] rounded-full text-[9px] font-semibold bg-white/[0.03] border border-white/[0.05] text-slate-600 hover:text-slate-300 hover:border-white/[0.12] hover:bg-white/[0.06] transition-all duration-300 cursor-default"
-                        >
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
-
-                    {/* ── CTA ── */}
-                    <button
-                      onClick={() => setSelectedProject(project)}
-                      className={`w-full py-3.5 rounded-2xl border ${accent.border} bg-gradient-to-r from-white/[0.02] to-white/[0.01] text-[10px] font-bold text-slate-500 uppercase tracking-[0.12em] flex items-center justify-center gap-2.5 hover:from-white/[0.06] hover:to-white/[0.03] hover:text-white hover:border-white/[0.15] transition-all duration-500 group/btn`}
-                    >
-                      View Project Details
-                      <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-1.5 transition-transform duration-300" />
-                    </button>
-                  </div>
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[6000] flex items-end justify-center bg-black/70 backdrop-blur-md sm:items-center sm:p-6"
+      onClick={onClose}
+    >
+      <motion.div
+        initial={{ y: 60, opacity: 0, scale: 0.97 }}
+        animate={{ y: 0, opacity: 1, scale: 1 }}
+        exit={{ y: 60, opacity: 0, scale: 0.97 }}
+        transition={{ type: "spring", damping: 26, stiffness: 260 }}
+        onClick={(e) => e.stopPropagation()}
+        className="relative max-h-[92vh] w-full max-w-4xl overflow-y-auto rounded-t-3xl border border-white/10 bg-zinc-950 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.6)] sm:rounded-3xl"
+      >
+        <div className="relative overflow-hidden p-6 sm:p-10" style={{ background: (layers[project.id] ?? fallbackLayer).bg }}>
+          <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-black/70" />
+          <button
+            onClick={onClose}
+            className="absolute right-4 top-4 z-10 flex size-9 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur transition hover:bg-black/60"
+            aria-label="Close"
+          >
+            <X className="size-4" />
+          </button>
+          <div className="relative">
+            <span className="rounded-full bg-black/40 px-3 py-1 font-mono text-[11px] uppercase tracking-widest text-white/80 backdrop-blur">
+              {project.category}
+            </span>
+            <h3 className="mt-4 font-instrument text-4xl text-white sm:text-5xl">{project.title}</h3>
+            <p className="mt-2 text-sm text-white/80">{project.role}</p>
+            <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
+              {Object.entries(project.metrics ?? {}).map(([k, v]) => (
+                <div key={k} className="rounded-xl border border-white/15 bg-black/30 p-3 backdrop-blur">
+                  <div className="font-outfit text-2xl font-semibold text-white">{v}</div>
+                  <div className="font-mono text-[10px] uppercase tracking-widest text-white/60">{k}</div>
                 </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-8 p-6 sm:p-10">
+          {cs.overview && <p className="text-base font-light leading-relaxed text-neutral-300">{cs.overview}</p>}
+
+          {cs.architecture?.nodes && (
+            <div>
+              <h4 className="mb-3 font-mono text-xs uppercase tracking-widest text-white/50">Architecture Flow</h4>
+              <div className="flex flex-wrap items-center gap-2">
+                {cs.architecture.nodes.map((n, i) => (
+                  <span key={n} className="flex items-center gap-2">
+                    <span className="rounded-md border border-white/10 bg-white/5 px-2.5 py-1 text-xs text-white/80">{n}</span>
+                    {i < cs.architecture!.nodes!.length - 1 && <span style={{ color: accent }}>→</span>}
+                  </span>
+                ))}
               </div>
-            );
-          })}
+            </div>
+          )}
+
+          {cs.modules && (
+            <div>
+              <h4 className="mb-3 font-mono text-xs uppercase tracking-widest text-white/50">Modules Covered</h4>
+              <div className="flex flex-wrap gap-2">
+                {cs.modules.map((m) => (
+                  <span key={m} className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs text-white/70">
+                    {m}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            {text
+              .filter(([, v]) => v)
+              .map(([k, v]) => (
+                <div key={k} className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+                  <h4 className="mb-2 font-mono text-[11px] uppercase tracking-widest" style={{ color: accent }}>
+                    {k}
+                  </h4>
+                  <p className="text-sm font-light leading-relaxed text-neutral-300">{v}</p>
+                </div>
+              ))}
+          </div>
+
+          <div className="grid gap-6 sm:grid-cols-2">
+            {lists
+              .filter(([, v]) => v && v.length)
+              .map(([k, v]) => (
+                <div key={k}>
+                  <h4 className="mb-3 font-mono text-xs uppercase tracking-widest text-white/50">{k}</h4>
+                  <ul className="flex flex-col gap-2">
+                    {v!.map((item) => (
+                      <li key={item} className="flex gap-2 text-sm font-light text-neutral-300">
+                        <CheckCircle2 className="mt-0.5 size-4 shrink-0" style={{ color: accent }} />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+          </div>
+
+          {cs.impact && (
+            <div className="rounded-2xl border border-white/10 bg-gradient-to-br from-white/[0.06] to-transparent p-6">
+              <h4 className="mb-2 font-mono text-xs uppercase tracking-widest text-white/50">Impact</h4>
+              <p className="font-instrument text-2xl leading-snug text-white">{cs.impact}</p>
+            </div>
+          )}
+
+          {cs.lessonsLearned && (
+            <p className="border-l-2 pl-4 text-sm italic text-neutral-400" style={{ borderColor: accent }}>
+              {cs.lessonsLearned}
+            </p>
+          )}
+
+          <div>
+            <h4 className="mb-3 font-mono text-xs uppercase tracking-widest text-white/50">Tech Stack</h4>
+            <TechChips techs={project.technologies} />
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+export default function Projects() {
+  const projects = (resumeData.projects ?? []) as unknown as ProjectData[];
+  const [active, setActive] = useState(0);
+  const [open, setOpen] = useState<ProjectData | null>(null);
+
+  return (
+    <section className="container relative z-[2] w-full py-10">
+      <SectionHeading eyebrow="Featured Highlights" title="Polished" highlight="work" className="mb-20 md:mb-24" />
+
+      <div className="relative mx-auto flex w-full max-lg:max-w-xl">
+        <div className="mx-auto flex flex-col lg:max-w-[65%] lg:gap-y-28">
+          {projects.map((p, i) => (
+            <ProjectCard key={p.id} project={p} onOpen={() => setOpen(p)} index={i} onActive={setActive} />
+          ))}
+        </div>
+
+        {/* Sticky details */}
+        <div className="relative hidden w-[35%] lg:block">
+          <div className="sticky top-32 pl-6 pr-2">
+            {projects[active] && <DetailPanel project={projects[active]} />}
+            <button
+              onClick={() => projects[active] && setOpen(projects[active])}
+              className="group mt-8 inline-flex items-center gap-2 font-mono text-sm text-white"
+            >
+              Read full case study
+              <span className="flex size-[25px] items-center justify-center rounded-full border border-white/10 bg-white/5 transition-all duration-500 group-hover:bg-white/10">
+                <ArrowUpRight className="size-3.5 transition-transform group-hover:rotate-45" />
+              </span>
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* ════════════════ Full-Screen Project Detail Modal ════════════════ */}
-      {selectedProject && (() => {
-        const accent = projectAccents[selectedProject.id] ?? defaultAccent;
-        const cs = selectedProject.caseStudy;
-        const techList = selectedProject.techStack ?? selectedProject.technologies ?? [];
-
-        return (
-          <div
-            className="fixed inset-0 z-50 overflow-y-auto bg-black/80 backdrop-blur-2xl flex items-start sm:items-center justify-center p-3 sm:p-6 animate-in fade-in duration-300"
-            onClick={(e) => { if (e.target === e.currentTarget) setSelectedProject(null); }}
-          >
-            <div className="w-full max-w-4xl max-h-[94vh] rounded-3xl bg-[#070b16] border border-white/[0.06] overflow-hidden flex flex-col animate-in fade-in slide-in-from-bottom-4 duration-500 shadow-2xl shadow-black/50">
-
-              {/* ── Modal Header ── */}
-              <div className="px-8 py-6 bg-gradient-to-r from-[#070b16] to-[#0a0f1e] border-b border-white/[0.04] flex items-center justify-between shrink-0">
-                <div className="flex items-center gap-4">
-                  <div className={`p-3 rounded-2xl ${accent.bg} ${accent.text} ring-1 ${accent.ring}`}>
-                    {projectIcons[selectedProject.id] ?? <Layers className="w-5 h-5" />}
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-[9px] text-slate-600 font-bold uppercase tracking-[0.15em]">Project Details</span>
-                      <span className={`px-2 py-0.5 rounded-full text-[8px] font-bold ${accent.bg} ${accent.text} flex items-center gap-1`}>
-                        <span className={`w-1 h-1 rounded-full ${accent.dot}`} />
-                        {selectedProject.businessImpactBadge}
-                      </span>
-                    </div>
-                    <h3 className="text-xl font-black text-white tracking-[-0.02em]">{selectedProject.title}</h3>
-                  </div>
-                </div>
-                <button
-                  onClick={() => setSelectedProject(null)}
-                  className="p-2.5 rounded-xl bg-white/[0.04] border border-white/[0.06] text-slate-600 hover:text-white hover:bg-white/[0.08] transition-all duration-300"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
-
-              {/* ── Modal Content ── */}
-              <div className="flex-1 overflow-y-auto">
-                <div className="p-8 space-y-8">
-
-                  {/* Quick stats bar */}
-                  <div className="flex flex-wrap items-center gap-3">
-                    <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/[0.03] border border-white/[0.05]">
-                      <span className="text-[9px] text-slate-600 font-bold uppercase tracking-wider">Domain</span>
-                      <span className="text-[11px] text-slate-300 font-semibold">{selectedProject.category}</span>
-                    </div>
-                    <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/[0.03] border border-white/[0.05]">
-                      <span className="text-[9px] text-slate-600 font-bold uppercase tracking-wider">Role</span>
-                      <span className="text-[11px] text-slate-300 font-semibold">{selectedProject.role}</span>
-                    </div>
-                    <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/[0.03] border border-white/[0.05]">
-                      <span className="text-[9px] text-slate-600 font-bold uppercase tracking-wider">Stack</span>
-                      <span className="text-[11px] text-slate-300 font-semibold">{techList.length} Tools</span>
-                    </div>
-                  </div>
-
-                  {/* Overview */}
-                  {cs?.overview && (
-                    <div className="space-y-3">
-                      <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-slate-600 block">Overview</span>
-                      <p className="text-slate-300 text-[13px] leading-[1.8] font-medium">{cs.overview}</p>
-                    </div>
-                  )}
-
-                  {/* Problem / Context */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {cs?.businessProblem && (
-                      <div className="p-5 rounded-2xl bg-red-500/[0.04] border border-red-500/[0.1] space-y-3">
-                        <div className="flex items-center gap-2 text-red-400">
-                          <Target className="w-4 h-4" />
-                          <span className="text-[9px] font-bold uppercase tracking-[0.15em]">Business Problem</span>
-                        </div>
-                        <p className="text-slate-300 text-[12px] leading-[1.7]">{cs.businessProblem}</p>
-                      </div>
-                    )}
-                    {cs?.businessContext && (
-                      <div className={`p-5 rounded-2xl bg-white/[0.02] border ${accent.border} space-y-3`}>
-                        <div className={`flex items-center gap-2 ${accent.text}`}>
-                          <Award className="w-4 h-4" />
-                          <span className="text-[9px] font-bold uppercase tracking-[0.15em]">Context</span>
-                        </div>
-                        <p className="text-slate-300 text-[12px] leading-[1.7]">{cs.businessContext}</p>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Architecture Flow */}
-                  {cs?.architecture?.nodes && cs.architecture.nodes.length > 0 && (
-                    <div className="space-y-3">
-                      <div className="flex items-center gap-2">
-                        <GitBranch className="w-4 h-4 text-slate-600" />
-                        <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-slate-600">Architecture Flow</span>
-                      </div>
-                      <div className="p-5 rounded-2xl bg-[#060a14] border border-white/[0.04] overflow-x-auto">
-                        <div className="flex items-center gap-2 min-w-max">
-                          {cs.architecture.nodes.map((node, i, arr) => (
-                            <div key={node} className="flex items-center gap-2">
-                              <div className={`px-3.5 py-2 rounded-xl text-[10px] font-semibold border transition-colors ${i === 0 ? `${accent.border} ${accent.text} ${accent.bg}` : "border-white/[0.06] text-slate-500 bg-white/[0.02]"}`}>
-                                {node}
-                              </div>
-                              {i < arr.length - 1 && (
-                                <div className="flex items-center">
-                                  <div className="w-4 h-[1px] bg-white/[0.06]" />
-                                  <ArrowRight className="w-3 h-3 text-slate-700" />
-                                </div>
-                              )}
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Responsibilities */}
-                  {cs?.responsibilities && cs.responsibilities.length > 0 && (
-                    <div className="space-y-4">
-                      <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-slate-600 block">Key Responsibilities</span>
-                      <div className="space-y-2.5">
-                        {cs.responsibilities.map((item, i) => (
-                          <div key={i} className="flex items-start gap-3 p-3 rounded-xl bg-white/[0.01] border border-white/[0.03] hover:border-white/[0.06] transition-colors">
-                            <CheckCircle className={`w-4 h-4 ${accent.text} mt-0.5 shrink-0`} />
-                            <span className="text-[12px] text-slate-300 leading-[1.6]">{item}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Modules */}
-                  {cs?.modules && cs.modules.length > 0 && (
-                    <div className="space-y-3">
-                      <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-slate-600 block">Modules Tested</span>
-                      <div className="flex flex-wrap gap-2">
-                        {cs.modules.map((mod) => (
-                          <span key={mod} className={`px-3.5 py-1.5 rounded-full text-[10px] font-semibold border ${accent.border} ${accent.text} bg-white/[0.02]`}>
-                            {mod}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Framework & Strategy */}
-                  {(cs?.framework || cs?.testingStrategy) && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border-t border-b border-white/[0.04] py-6">
-                      {cs?.framework && (
-                        <div className="space-y-2">
-                          <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-slate-600 block">Framework Design</span>
-                          <div className="p-4 rounded-xl bg-[#060a14] border border-white/[0.04]">
-                            <p className="text-slate-300 text-[12px] leading-[1.7]">{cs.framework}</p>
-                          </div>
-                        </div>
-                      )}
-                      {cs?.testingStrategy && (
-                        <div className="space-y-2">
-                          <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-slate-600 block">Testing Strategy</span>
-                          <div className="p-4 rounded-xl bg-[#060a14] border border-white/[0.04]">
-                            <p className="text-slate-300 text-[12px] leading-[1.7]">{cs.testingStrategy}</p>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  )}
-
-                  {/* Challenges */}
-                  {cs?.challenges && cs.challenges.length > 0 && (
-                    <div className="space-y-3">
-                      <div className="flex items-center gap-2 text-amber-500">
-                        <HelpCircle className="w-4 h-4" />
-                        <span className="text-[9px] font-bold uppercase tracking-[0.15em]">Engineering Challenges</span>
-                      </div>
-                      <div className="space-y-2">
-                        {cs.challenges.map((c, i) => (
-                          <div key={i} className="pl-4 py-2.5 border-l-2 border-amber-500/20 bg-amber-500/[0.02] rounded-r-xl">
-                            <p className="text-slate-300 text-[12px] leading-[1.6]">{c}</p>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Metrics */}
-                  {selectedProject.metrics && Object.keys(selectedProject.metrics).length > 0 && (
-                    <div className="space-y-4">
-                      <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-slate-600 block">Verification Metrics</span>
-                      <div className={`grid gap-3 ${Object.keys(selectedProject.metrics).length >= 3 ? "grid-cols-3" : "grid-cols-2"}`}>
-                        {Object.entries(selectedProject.metrics).map(([key, val]) => (
-                          <div key={key} className={`p-5 rounded-2xl border ${accent.border} bg-[#060a14] text-center`}>
-                            <span className="text-2xl font-black text-white block tracking-tight">{val}</span>
-                            <span className="text-[8px] text-slate-600 uppercase tracking-[0.12em] font-bold mt-1.5 block">{key}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Tech Stack */}
-                  <div className="space-y-3">
-                    <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-slate-600 block">Technology Stack</span>
-                    <div className="flex flex-wrap gap-2">
-                      {techList.map((tech) => (
-                        <span key={tech} className={`px-3 py-1.5 rounded-lg text-[10px] font-semibold border ${accent.border} text-slate-400 bg-white/[0.02]`}>
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Impact */}
-                  {cs?.impact && (
-                    <div className={`p-6 rounded-2xl bg-gradient-to-br ${accent.glow} to-transparent border ${accent.border} space-y-2.5`}>
-                      <div className="flex items-center gap-2">
-                        <Zap className={`w-4 h-4 ${accent.text}`} />
-                        <span className={`text-[9px] ${accent.text} font-bold uppercase tracking-[0.15em]`}>Business Impact</span>
-                      </div>
-                      <p className="text-slate-200 text-[13px] leading-[1.7] font-medium">{cs.impact}</p>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* ── Modal Footer ── */}
-              <div className="px-8 py-5 bg-[#060a14] border-t border-white/[0.04] flex items-center justify-between shrink-0">
-                <span className="text-[10px] text-slate-700 font-medium">{selectedProject.category} • {selectedProject.role}</span>
-                <button
-                  onClick={() => setSelectedProject(null)}
-                  className={`px-7 py-2.5 rounded-full bg-gradient-to-r ${accent.gradient} text-black font-bold text-[11px] tracking-wider uppercase hover:opacity-90 transition-all duration-300 shadow-lg`}
-                >
-                  Close
-                </button>
-              </div>
-
-            </div>
-          </div>
-        );
-      })()}
+      <AnimatePresence>{open && <CaseStudyModal project={open} onClose={() => setOpen(null)} />}</AnimatePresence>
     </section>
   );
 }

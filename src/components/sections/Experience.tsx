@@ -1,329 +1,134 @@
 "use client";
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import CountUp from "react-countup";
-import Image from "next/image";
+import { motion } from "framer-motion";
+import { Briefcase, CalendarDays, CheckCircle2, MapPin } from "lucide-react";
 import resumeData from "@/data/resumeData.json";
-import { Briefcase, Calendar, MapPin, Building2, CheckCircle2, ChevronRight, X } from "lucide-react";
+import { Reveal, SectionHeading } from "@/components/ui/primitives";
+import { TechIcon } from "@/components/ui/techIcons";
+
+const kpiLabels: Record<string, string> = {
+  testCases: "Test Cases",
+  apisTested: "APIs Tested",
+  yearsExp: "Years Exp.",
+  regressionReduced: "Regression Reduced",
+  stability: "Stability",
+  peakLoad: "Peak Load",
+  modules: "Modules",
+  suites: "Suites",
+};
+
+// Radial backgrounds borrowed from the testimonial cards style
+const cardBgs = [
+  "bg-[radial-gradient(94.21%_78.4%_at_50%_29.91%,rgba(39,61,180,0.7),rgba(15,9,38,0.4))]",
+  "bg-[radial-gradient(84.35%_70.19%_at_50%_38.11%,rgba(2,96,101,0.57),rgba(5,136,178,0.06))]",
+  "bg-[radial-gradient(90%_75%_at_50%_30%,rgba(126,34,206,0.55),rgba(20,8,38,0.3))]",
+  "bg-[radial-gradient(88%_72%_at_50%_32%,rgba(219,39,119,0.45),rgba(30,8,24,0.3))]",
+  "bg-[radial-gradient(90%_75%_at_50%_30%,rgba(20,184,166,0.45),rgba(4,30,30,0.3))]",
+];
 
 export default function Experience() {
-  const exp = resumeData.experience[0];
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.08
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 15, scale: 0.98 },
-    show: { opacity: 1, y: 0, scale: 1, transition: { type: "spring" as const, stiffness: 100, damping: 15 } }
-  };
-
-  const [logoError, setLogoError] = useState(false);
-  const [modalLogoError, setModalLogoError] = useState(false);
-
-  const kpiData = [
-    { label: "Automated Test Cases", value: 1000, suffix: "+" },
-    { label: "APIs Tested", value: 750, suffix: "+" },
-    { label: "Years Experience", value: 3, suffix: "+" },
-    { label: "Regression Time Reduced", value: 40, suffix: "%" },
-    { label: "Release Stability", value: 99.8, suffix: "%", decimals: 1 },
-    { label: "Peak Load Verified", value: 3, suffix: "×" },
-  ];
-
-  const badges = ["UI Automation", "API Automation", "Performance Testing", "Backend Validation"];
-
-  const summary = "Building enterprise automation frameworks for payment gateway systems, merchant acquiring, API validation, performance testing and release automation.";
-
-  const milestones = [
-    { 
-      id: "UI Automation", 
-      title: "UI Automation & E2E Testing", 
-      content: [
-        "Architected scalable Selenium WebDriver frameworks using Java, implementing Page Object Model (POM) and BDD approaches to maintain 1000+ UI test cases.",
-        "Engineered robust handling for dynamic iframes in payment gateway pages, ensuring seamless cross-tab workflow testing for merchant onboarding.",
-        "Integrated OCR and advanced assertions to validate dynamic financial reporting charts across Safari, Chrome, and Edge browsers.",
-        "Achieved a 40% reduction in regression cycles by implementing parallel test execution workflows via Selenium Grid and Docker containers."
-      ] 
-    },
-    { 
-      id: "API Automation", 
-      title: "API Automation & Backend Validation", 
-      content: [
-        "Designed comprehensive REST Assured test suites, validating over 750+ complex payment gateway and clearing APIs with deep JSON schema verification.",
-        "Implemented custom POJO serialization and deserialization via Jackson to simulate thousands of dynamic merchant transaction payloads in real-time.",
-        "Engineered automated database validation wrappers using JDBC to cross-verify MongoDB transaction logs against MySQL settlement ledgers, ensuring zero data loss.",
-        "Automated OAuth2 token management and webhook verifications for asynchronous acquiring bank responses."
-      ] 
-    },
-    { 
-      id: "Performance Engineering", 
-      title: "Performance & Load Testing", 
-      content: [
-        "Led performance engineering initiatives by designing massive distributed load testing architectures using Apache JMeter and Azure VMs.",
-        "Successfully simulated 3x peak production load (5,000+ TPS) to identify and isolate critical memory leaks and database connection bottlenecks before Black Friday.",
-        "Integrated Grafana and Telegraf for real-time performance observability during stress testing, mapping throughput degradation directly to JVM heap spikes.",
-        "Established baseline performance SLAs for all Tier-1 payment authorization microservices."
-      ] 
-    },
-    { 
-      id: "Framework Development", 
-      title: "Framework Development & CI/CD", 
-      content: [
-        "Built centralized, tightly integrated CI/CD pipelines in Azure DevOps, shifting quality engineering to the absolute left of the development lifecycle.",
-        "Developed custom reporting dashboards using ExtentReports and Allure, providing executive stakeholders with real-time analytics on release stability (99.8%).",
-        "Created scalable framework utilities for dynamic test data generation, reducing test flakiness by 85% across volatile environments.",
-        "Mentored QA teams on shifting from manual exploratory testing to code-first automation strategies."
-      ] 
-    },
-  ];
-
   return (
-    <section id="experience" className="py-24 relative border-t border-white/5">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* Section Header */}
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          className="mb-12 text-center"
-        >
-          <h2 className="text-sm font-bold tracking-widest uppercase text-slate-500 mb-2">
-            Experience
-          </h2>
-          <h2 className="text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-4">
-            Impact & Milestones.
-          </h2>
-        </motion.div>
+    <section className="relative py-10">
+      <SectionHeading eyebrow="Professional Journey" title="Where I've" highlight="made impact" className="container mb-16 md:mb-20" />
 
-        {/* Main Card */}
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="p-8 sm:p-10 rounded-3xl glass-premium border border-white/10 relative overflow-hidden group shadow-2xl bg-[#0a0a0c]"
-        >
-          {/* Subtle background glow */}
-          <div className="absolute top-0 right-0 w-64 h-64 bg-white/[0.02] rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none transition-all duration-500 group-hover:bg-white/[0.04]" />
-          
-          {/* Header: Logo & Company Info */}
-          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-6 relative z-10">
-            <div className="flex items-start space-x-5">
-              <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center p-2 shrink-0 group-hover:bg-white/10 transition-colors relative">
-                {!logoError ? (
-                  <Image 
-                    src="/logo.png" 
-                    alt="Company Logo" 
-                    width={48} 
-                    height={48} 
-                    className="object-contain" 
-                    onError={() => setLogoError(true)} 
-                  />
-                ) : (
-                  <Building2 className="w-8 h-8 text-slate-400" />
-                )}
-              </div>
-              <div>
-                <h4 className="text-2xl font-extrabold text-white tracking-tight mb-1 group-hover:translate-x-1 transition-transform duration-300">{exp.company}</h4>
-                <div className="flex items-center text-xs font-bold text-slate-400 uppercase tracking-wider space-x-3 mb-2">
-                  <span className="text-blue-500 font-black tracking-widest">{exp.industry}</span>
-                  <span className="w-1 h-1 rounded-full bg-slate-600" />
-                  <span>{exp.duration}</span>
-                </div>
-                <div className="flex items-center text-sm font-bold">
-                  <Briefcase className="w-4 h-4 mr-2 text-blue-500" />
-                  <span className="text-blue-500 font-extrabold tracking-wide">{exp.role}</span>
-                </div>
-                <div className="flex items-center text-sm font-medium text-slate-400 mt-1">
-                  <MapPin className="w-4 h-4 mr-2 text-slate-500" />
-                  <span>{exp.location}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Badges */}
-          <div className="mt-8 flex flex-wrap gap-2 relative z-10">
-            {badges.map(badge => (
-              <span key={badge} className="px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-[11px] font-bold tracking-wider text-slate-300 uppercase">
-                {badge}
-              </span>
-            ))}
-          </div>
-
-          {/* Summary */}
-          <p className="mt-6 text-sm text-slate-400 leading-relaxed font-medium max-w-2xl relative z-10">
-            {summary}
-          </p>
-
-          {/* KPIs */}
-          <div className="mt-8 grid grid-cols-2 sm:grid-cols-3 gap-4 relative z-10">
-            {kpiData.map((kpi, index) => (
-              <div key={kpi.label} className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.05] text-center">
-                <div className="text-2xl font-black text-white mb-1">
-                  <CountUp end={kpi.value} suffix={kpi.suffix} decimals={kpi.decimals || 0} duration={2} enableScrollSpy scrollSpyOnce />
-                </div>
-                <div className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">
-                  {kpi.label}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Action Button */}
-          <div className="mt-10 text-center relative z-10">
-            <button 
-              onClick={() => setIsModalOpen(true)}
-              className="group relative inline-flex items-center justify-center px-8 py-3 bg-white text-black text-sm font-bold rounded-full overflow-hidden transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg hover:shadow-white/20"
-            >
-              View Complete Experience
-              <ChevronRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </button>
-          </div>
-        </motion.div>
-      </div>
-
-      {/* Complete Experience Modal */}
-      <AnimatePresence>
-        {isModalOpen && (
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-3xl overflow-y-auto p-4 sm:p-8"
-          >
-            <motion.div 
-              initial={{ opacity: 0, y: 30, scale: 0.98 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 20, scale: 0.98 }}
-              transition={{ type: "spring", damping: 30, stiffness: 300 }}
-              className="w-full max-w-[95vw] lg:max-w-7xl bg-background dark:bg-[#050508] border border-slate-200 dark:border-white/10 rounded-3xl shadow-2xl relative h-[85vh] max-h-[85vh] flex flex-col"
-            >
-              {/* Modal Header */}
-              <div className="sticky top-0 z-20 px-8 py-6 bg-background/90 dark:bg-[#050508]/90 backdrop-blur-xl border-b border-slate-200 dark:border-white/10 flex items-center justify-between rounded-t-3xl">
-                <div>
-                  <h4 className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-1">
-                    Complete Experience
-                  </h4>
-                  <h3 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight">
-                    {exp.company}
-                  </h3>
-                </div>
-                <button
-                  onClick={() => setIsModalOpen(false)}
-                  className="p-2 rounded-full bg-white/5 border border-white/10 text-slate-400 hover:text-white hover:bg-white/10 transition-all"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-
-              {/* Modal Content - Horizontal Layout */}
-              <div className="flex-1 overflow-y-auto p-8 space-y-10">
-                
-                {/* Full-width Company Header Banner */}
-                <div className="p-8 rounded-3xl bg-white/[0.02] border border-white/10 flex flex-col md:flex-row md:items-center justify-between gap-8">
-                  <div className="flex items-center space-x-6">
-                    <div className="w-20 h-20 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center p-3 relative shrink-0">
-                      {!modalLogoError ? (
-                        <Image 
-                          src="/logo.png" 
-                          alt="Logo" 
-                          fill 
-                          className="object-contain p-3" 
-                          onError={() => setModalLogoError(true)} 
-                        />
-                      ) : (
-                        <Building2 className="w-8 h-8 text-slate-400" />
-                      )}
-                    </div>
+      <div className="container flex flex-col gap-10">
+        {resumeData.experience.map((exp) => (
+          <div key={exp.company} className="flex flex-col gap-6">
+            {/* Header card */}
+            <Reveal>
+              <div className="relative overflow-hidden rounded-2xl bg-[#f2f2f20c] p-1 shadow-border lg:rounded-3xl lg:p-2">
+                <div className="absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,rgba(0,0,0,0)_5%,rgba(255,255,255,0.8)_35%,rgb(255,255,255)_50%,rgba(255,255,255,0.8)_65%,rgba(0,0,0,0)_95%)]" />
+                <div className="relative overflow-hidden rounded-xl bg-gradient-to-b from-zinc-900 to-black p-6 md:p-10 lg:rounded-2xl">
+                  <div className="absolute -right-24 -top-24 size-72 rounded-full bg-blue-600/25 blur-3xl" />
+                  <div className="relative flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
                     <div>
-                      <div className="flex flex-wrap items-center gap-3 mb-1.5">
-                        <h4 className="text-2xl font-bold text-white leading-none">{exp.company}</h4>
-                        <span className="px-2.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-[10px] font-bold text-emerald-400 uppercase tracking-wider">
-                          {exp.industry}
+                      <span className="inline-flex items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1 font-mono text-[11px] uppercase tracking-widest text-emerald-300">
+                        <span className="relative flex size-2">
+                          <span className="absolute inline-flex size-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                          <span className="relative inline-flex size-2 rounded-full bg-emerald-400" />
+                        </span>
+                        Current
+                      </span>
+                      <h3 className="mt-4 font-instrument text-3xl text-white md:text-5xl">{exp.role}</h3>
+                      <p className="mt-2 text-lg text-white/80">{exp.company}</p>
+                      <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm font-light text-neutral-400">
+                        <span className="inline-flex items-center gap-1.5">
+                          <CalendarDays className="size-4" /> {exp.duration}
+                        </span>
+                        <span className="inline-flex items-center gap-1.5">
+                          <MapPin className="size-4" /> {exp.location}
+                        </span>
+                        <span className="inline-flex items-center gap-1.5">
+                          <Briefcase className="size-4" /> {exp.industry}
                         </span>
                       </div>
-                      <p className="text-base font-semibold text-blue-400">{exp.role}</p>
-                      
-                      <div className="flex flex-wrap items-center gap-4 mt-3 text-xs text-slate-400">
-                        <div className="flex items-center">
-                          <Calendar className="w-3.5 h-3.5 mr-2 text-slate-500" />
-                          <span>{exp.duration}</span>
-                        </div>
-                        <div className="flex items-center">
-                          <MapPin className="w-3.5 h-3.5 mr-2 text-slate-500" />
-                          <span>{exp.location}</span>
-                        </div>
-                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 lg:w-[46%]">
+                      {Object.entries(exp.kpis).map(([k, v], i) => (
+                        <motion.div
+                          key={k}
+                          initial={{ opacity: 0, y: 12 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ delay: i * 0.05 }}
+                          className="rounded-xl border border-white/10 bg-white/[0.03] px-3 py-3 text-center"
+                        >
+                          <div className="font-outfit text-2xl font-semibold text-white">{v}</div>
+                          <div className="font-mono text-[9px] uppercase tracking-widest text-neutral-500">{kpiLabels[k] ?? k}</div>
+                        </motion.div>
+                      ))}
                     </div>
                   </div>
 
-                  {/* Tech Stack Banner Section */}
-                  <div className="md:max-w-md w-full">
-                    <h5 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3">Core Tech Stack</h5>
+                  <div className="relative mt-8 border-t border-white/10 pt-6">
+                    <p className="mb-3 font-mono text-[11px] uppercase tracking-widest text-neutral-500">Domain</p>
                     <div className="flex flex-wrap gap-2">
-                      {exp.technologies.map(tech => (
-                        <span key={tech} className="px-2.5 py-1 rounded bg-white/5 border border-white/10 text-[10px] font-semibold text-slate-300">
-                          {tech}
+                      {exp.domain.split(",").map((d) => (
+                        <span key={d} className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs text-neutral-300">
+                          {d.trim()}
                         </span>
                       ))}
                     </div>
                   </div>
                 </div>
-
-                {/* Engineering Milestones Horizontal Grid */}
-                <div>
-                  <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6">Impact & Milestones</h4>
-                  
-                  <motion.div 
-                    variants={containerVariants}
-                    initial="hidden"
-                    animate="show"
-                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
-                  >
-                    {milestones.map((milestone) => (
-                      <motion.div 
-                        key={milestone.id} 
-                        variants={itemVariants}
-                        whileHover={{ y: -4, scale: 1.01, borderColor: "rgba(255,255,255,0.15)", boxShadow: "0 10px 30px -10px rgba(0,0,0,0.7)" }}
-                        className="p-6 rounded-3xl border border-white/10 bg-white/[0.02] transition-all flex flex-col justify-between cursor-default"
-                      >
-                        <div>
-                          <h5 className="text-sm font-bold tracking-tight text-white mb-4 border-b border-white/10 pb-3 flex items-center min-h-[40px]">
-                            <span className="w-2 h-2 rounded-full bg-blue-400 mr-2.5 shrink-0" />
-                            {milestone.title}
-                          </h5>
-                          
-                          <ul className="space-y-3">
-                            {milestone.content.map((item, i) => (
-                              <li key={i} className="flex items-start text-xs text-slate-300 leading-relaxed">
-                                <CheckCircle2 className="w-4 h-4 text-emerald-400/80 mr-2.5 shrink-0 mt-0.5" />
-                                <span>{item}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      </motion.div>
-                    ))}
-                  </motion.div>
-                </div>
-
               </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            </Reveal>
+
+            {/* Contributions */}
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {Object.entries(exp.contributions).map(([title, items], i) => (
+                <Reveal key={title} delay={i * 0.06} className={i === 0 ? "lg:col-span-2" : ""}>
+                  <div
+                    className={`${cardBgs[i % cardBgs.length]} relative flex h-full flex-col overflow-hidden rounded-xl bg-black p-5 shadow-border md:rounded-2xl lg:p-6`}
+                  >
+                    <h4 className="mb-3 font-instrument text-2xl font-bold tracking-wide text-white/95">{title}</h4>
+                    <ul className="flex flex-col gap-2.5">
+                      {(items as string[]).map((it) => (
+                        <li key={it} className="flex gap-2 text-sm font-extralight leading-relaxed text-white/85 md:text-base">
+                          <CheckCircle2 className="mt-1 size-4 shrink-0 text-white/60" />
+                          {it}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+
+            {/* Stack */}
+            <Reveal>
+              <div className="flex flex-wrap items-center justify-center gap-2">
+                {exp.technologies.map((t) => (
+                  <span key={t} className="inline-flex items-center gap-2 rounded-md border border-white/10 bg-neutral-900 px-3 py-1 text-sm text-neutral-200">
+                    <TechIcon name={t} className="size-4" />
+                    {t}
+                  </span>
+                ))}
+              </div>
+            </Reveal>
+          </div>
+        ))}
+      </div>
     </section>
   );
 }

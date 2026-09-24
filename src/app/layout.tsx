@@ -1,12 +1,24 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans } from "next/font/google";
+import { Outfit, Instrument_Serif, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import SpotlightCursor from "@/components/SpotlightCursor";
 
-const jakarta = Plus_Jakarta_Sans({
+const outfit = Outfit({
   subsets: ["latin"],
-  variable: "--font-jakarta",
-  weight: ["300", "400", "500", "600", "700", "800"],
+  variable: "--font-outfit",
+  weight: ["200", "300", "400", "500", "600", "700", "800"],
+});
+
+const instrument = Instrument_Serif({
+  subsets: ["latin"],
+  variable: "--font-instrument",
+  weight: "400",
+  style: ["normal", "italic"],
+});
+
+const mono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+  weight: ["400", "500", "700"],
 });
 
 export const metadata: Metadata = {
@@ -54,28 +66,15 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark scroll-smooth">
       <body
-        className={`${jakarta.className} ${jakarta.variable} antialiased bg-background text-foreground min-h-screen relative overflow-x-hidden transition-colors duration-300`}
+        className={`${outfit.className} ${outfit.variable} ${instrument.variable} ${mono.variable} antialiased bg-black text-foreground min-h-screen relative overflow-x-hidden`}
       >
-        {/* Spotlight Follow Glow */}
-        <SpotlightCursor />
+        {/* Bottom viewport blur fade */}
+        <div className="pointer-events-none blur-wrapper fixed left-0 z-40 w-full select-none bg-gradient-to-t from-black/30 to-transparent no-print" />
 
-        {/* Dynamic Faint Grid and Mesh Gradient matching Ahmed's site */}
-        <div className="aurora-container">
-          <div className="aurora-mesh" />
-          <div className="aurora-ambiance">
-            <div className="aurora-sphere-1" />
-            <div className="aurora-sphere-2" />
-          </div>
-          <div className="aurora-grid" />
-        </div>
-        
         {/* Subtle Film Grain Noise */}
-        <div className="noise-texture" />
-        
-        {/* Main Page Layout Wrapper */}
-        <div className="relative z-10">
-          {children}
-        </div>
+        <div className="noise-texture no-print" />
+
+        {children}
       </body>
     </html>
   );

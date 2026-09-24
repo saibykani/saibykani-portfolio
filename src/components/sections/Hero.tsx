@@ -1,200 +1,184 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
-import Link from "next/link";
-import { ArrowRight, Download, Eye, Mail } from "lucide-react";
-import { useState, useEffect } from "react";
+import Image from "next/image";
+import { motion } from "framer-motion";
+import { useMemo, useState } from "react";
+import { ArrowRight, Check, Copy, FileText, Mail } from "lucide-react";
 import resumeData from "@/data/resumeData.json";
+import { ShinyButton } from "@/components/ui/primitives";
 
-const ROLES = [
-  "Software Development Engineer in Test",
-  "QA Automation Engineer",
-  "API Automation Engineer",
-  "Performance Test Engineer",
-  "Quality Engineering Specialist",
-  "Automation Framework Architect",
-  "Backend Test Engineer",
-  "UI Automation Expert",
-  "Mobile Automation Engineer",
-  "Security Test Engineer",
-  "CI/CD Automation Engineer",
-  "Load Testing Specialist",
-  "Site Reliability Engineer (QA)",
-  "Cloud Automation Engineer",
-  "Microservices Test Engineer",
-  "Data Quality Engineer",
-  "E2E Testing Architect",
-  "Agile Test Lead",
-  "System Integration Tester",
-  "Release QA Engineer",
-  "Test Automation Strategist",
-  "Platform QA Engineer",
-  "Database Test Engineer",
-  "API Integration Specialist",
-  "Test Environment Engineer",
-  "QA Operations Engineer",
-  "Automation Tooling Engineer",
-  "Payment Systems QA Engineer",
-  "FinTech QA Engineer",
-  "Transaction Validation Expert",
-  "Scalability Test Engineer",
-  "Chaos Engineering Tester",
-  "DevSecOps QA Engineer",
-  "AI/ML QA Engineer",
-  "Web3 QA Engineer",
-  "Performance Engineering Lead"
-];
+const ease = [0.22, 1, 0.36, 1] as const;
 
-// Provide 40 distinct animations
-const TypewriterText = () => {
-  const [roleIndex, setRoleIndex] = useState(0);
-  const [displayText, setDisplayText] = useState("");
-  const [isDeleting, setIsDeleting] = useState(false);
-
-  useEffect(() => {
-    const currentRole = ROLES[roleIndex];
-    const typingSpeed = 60;
-    const deletingSpeed = 30;
-    const pauseBeforeDelete = 3500;
-    const pauseBeforeType = 300;
-
-    let timeout: NodeJS.Timeout;
-
-    if (isDeleting) {
-      if (displayText.length > 0) {
-        timeout = setTimeout(() => {
-          setDisplayText(currentRole.substring(0, displayText.length - 1));
-        }, deletingSpeed);
-      } else {
-        setIsDeleting(false);
-        setRoleIndex((prev) => (prev + 1) % ROLES.length);
-        timeout = setTimeout(() => {}, pauseBeforeType);
-      }
-    } else {
-      if (displayText.length < currentRole.length) {
-        timeout = setTimeout(() => {
-          setDisplayText(currentRole.substring(0, displayText.length + 1));
-        }, typingSpeed);
-      } else {
-        timeout = setTimeout(() => {
-          setIsDeleting(true);
-        }, pauseBeforeDelete);
-      }
-    }
-
-    return () => clearTimeout(timeout);
-  }, [displayText, isDeleting, roleIndex]);
-
-  useEffect(() => {
-    const roleThemes = ["blue", "orange", "purple", "emerald", "cyan", "rose"];
-    const theme = roleThemes[roleIndex % roleThemes.length];
-    
-    document.documentElement.classList.remove(
-      "theme-blue", "theme-orange", "theme-purple",
-      "theme-emerald", "theme-cyan", "theme-rose"
-    );
-    
-    if (theme !== "blue") {
-      document.documentElement.classList.add(`theme-${theme}`);
-    }
-  }, [roleIndex]);
-
-  return (
-    <span className="bg-gradient-accent bg-clip-text text-transparent font-black tracking-tight text-[32px] sm:text-[48px] md:text-[60px] lg:text-[70px] leading-tight flex items-center justify-center flex-wrap max-w-[90vw] transition-all duration-300">
-      {displayText}
-      {displayText.length > 0 && displayText.length < ROLES[roleIndex].length && (
-        <motion.span
-          animate={{ opacity: [1, 0] }}
-          transition={{ duration: 0.8, repeat: Infinity, repeatType: "reverse" }}
-          className="inline-block w-1 md:w-2 h-[40px] sm:h-[60px] md:h-[70px] lg:h-[80px] bg-accent-theme ml-2"
-        />
-      )}
-    </span>
+function Stars() {
+  // Deterministic pseudo-random star field (avoids hydration mismatch)
+  const stars = useMemo(
+    () =>
+      Array.from({ length: 60 }, (_, i) => {
+        const r = (n: number) => ((Math.sin(i * 928.37 + n * 13.1) + 1) / 2);
+        return { top: r(1) * 70, left: r(2) * 100, size: r(3) * 1.8 + 0.6, delay: r(4) * 4 };
+      }),
+    []
   );
-};
+  return (
+    <div className="absolute inset-0">
+      {stars.map((s, i) => (
+        <span
+          key={i}
+          className="absolute rounded-full bg-white animate-twinkle"
+          style={{ top: `${s.top}%`, left: `${s.left}%`, width: s.size, height: s.size, animationDelay: `${s.delay}s` }}
+        />
+      ))}
+    </div>
+  );
+}
+
+function Clouds() {
+  return (
+    <div className="absolute inset-x-0 bottom-0 h-[55%]">
+      <div className="absolute -bottom-24 -left-[10%] h-72 w-[60%] rounded-[50%] bg-white/[0.07] blur-3xl animate-drift" />
+      <div
+        className="absolute -bottom-32 left-[25%] h-80 w-[55%] rounded-[50%] bg-blue-200/[0.08] blur-3xl animate-drift"
+        style={{ animationDelay: "-6s", animationDuration: "22s" }}
+      />
+      <div
+        className="absolute -bottom-20 -right-[10%] h-64 w-[50%] rounded-[50%] bg-white/[0.06] blur-3xl animate-drift"
+        style={{ animationDelay: "-12s", animationDuration: "26s" }}
+      />
+      <div className="absolute bottom-10 left-[10%] h-24 w-[30%] rounded-[50%] bg-white/[0.05] blur-2xl" />
+      <div className="absolute bottom-16 right-[15%] h-20 w-[25%] rounded-[50%] bg-white/[0.05] blur-2xl" />
+    </div>
+  );
+}
 
 export default function Hero() {
-  const headingLines = ["Engineering Quality", "At Enterprise Scale."];
+  const [copied, setCopied] = useState(false);
+  const { email, name } = resumeData.personal;
+
+  const copyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(email);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1800);
+    } catch {
+      window.location.href = `mailto:${email}`;
+    }
+  };
+
+  const scrollTo = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 80, behavior: "smooth" });
+  };
 
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center pt-20 pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden z-10">
-      
-      <div className="max-w-5xl mx-auto w-full relative z-10 flex flex-col items-center text-center -mt-10">
-        
-        {/* Availability Badge */}
-        <motion.div 
+    <section className="relative grid min-h-screen place-content-center overflow-hidden bg-gradient-to-b from-blue-900 to-black px-4 py-24 text-gray-200">
+      <div className="relative z-10 flex flex-col items-center">
+        {/* Announcement badge */}
+        <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-          className="inline-flex items-center space-x-2 px-4 py-2 rounded-full bg-white/[0.03] border border-white/[0.08] backdrop-blur-md mb-6"
+          transition={{ duration: 0.6, ease }}
+          className="mb-8 hidden md:block"
         >
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-          </span>
-          <span className="text-xs font-bold tracking-widest text-slate-300 uppercase">
-            Available for Opportunities
-          </span>
+          <button
+            onClick={() => scrollTo("projects")}
+            className="group relative inline-flex animate-bounce items-center gap-2 overflow-hidden rounded-full border border-white/10 bg-white/[0.04] px-1 py-1 pr-3 transition-all hover:bg-white/10"
+          >
+            <span className="relative inline-flex shrink-0 items-center justify-center rounded-full bg-blue-700 px-3 py-1 text-xs font-medium text-white">
+              Open to Work
+            </span>
+            <span className="text-sm font-medium text-zinc-200">SDET · Fintech &amp; Payments QA</span>
+            <ArrowRight className="size-4 text-zinc-300 transition-transform group-hover:translate-x-0.5" />
+            <span className="absolute inset-0 -z-10 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shimmer" />
+          </button>
         </motion.div>
 
-        {/* Name / Greeting */}
+        {/* Headline */}
+        <motion.h2
+          initial={{ opacity: 0, y: 24, filter: "blur(8px)" }}
+          animate={{ opacity: 0.9, y: 0, filter: "blur(0px)" }}
+          transition={{ duration: 0.9, delay: 0.1, ease }}
+          className="mt-2 text-center font-outfit text-4xl leading-tight text-zinc-100 sm:text-5xl md:mt-5 lg:text-6xl"
+        >
+          <span className="md:whitespace-nowrap">I help teams ship payment systems</span>
+          <br className="hidden md:block" /> with
+          <span className="bg-gradient-to-b from-zinc-700 via-zinc-200 to-zinc-50 bg-clip-text font-instrument italic tracking-tight text-transparent">
+            {" "}
+            zero-defect confidence
+          </span>
+        </motion.h2>
+
+        {/* Intro line */}
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, delay: 0.3, ease }}
+          className="relative z-20 mt-10 flex flex-col items-center justify-center text-center text-xl tracking-tight sm:flex-row lg:text-2xl"
+        >
+          <span className="flex items-center justify-center bg-gradient-to-t from-gray-600 to-white bg-clip-text text-transparent">
+            Hello, I&apos;m {name}
+            <span className="group relative z-30">
+              <span className="relative mx-2 block aspect-[854/425] w-16 cursor-pointer overflow-hidden rounded-3xl border border-white/10 transition-all duration-500 group-hover:w-24 md:w-20 lg:mx-3">
+                <Image
+                  src="/portrait.png"
+                  alt={name}
+                  fill
+                  sizes="96px"
+                  priority
+                  className="object-cover object-[50%_22%] transition-transform duration-500 group-hover:scale-110"
+                />
+              </span>
+              {/* Hover preview */}
+              <span className="pointer-events-none absolute left-1/2 top-full z-40 mt-3 w-44 -translate-x-1/2 scale-90 overflow-hidden rounded-2xl border border-white/10 bg-zinc-900 opacity-0 shadow-2xl transition-all duration-300 group-hover:scale-100 group-hover:opacity-100">
+                <span className="relative block aspect-[4/5] w-full">
+                  <Image src="/portrait.png" alt="" fill sizes="176px" className="object-cover object-top" />
+                </span>
+              </span>
+            </span>
+          </span>
+          <span className="bg-gradient-to-t from-gray-600 to-white bg-clip-text leading-relaxed text-transparent">
+            {" "}
+            a Software Development Engineer in Test
+          </span>
+        </motion.h1>
+
+        {/* CTAs */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.1 }}
-          className="text-lg sm:text-xl font-bold text-slate-400 mb-2 mt-4"
+          transition={{ duration: 0.9, delay: 0.5, ease }}
+          className="mt-10 flex flex-col items-center gap-5"
         >
-          👋 Hi, I&apos;m Sai Krishna Bykani
-        </motion.div>
-
-        {/* Typewriter Role as Main Focus */}
-        <div className="mb-12 mt-4 min-h-[120px] flex items-center justify-center">
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
+          <div className="flex flex-wrap items-center justify-center gap-3 md:gap-4">
+            <button onClick={() => scrollTo("contact")}>
+              <ShinyButton>Let&apos;s Connect</ShinyButton>
+            </button>
+            <a href="/Sai_Krishna_Bykani_Resume.pdf" download="Sai_Krishna_Bykani_Resume.pdf">
+              <ShinyButton>
+                <span className="flex items-center justify-center gap-2">
+                  <FileText className="size-4" />
+                  <span>See Resume</span>
+                </span>
+              </ShinyButton>
+            </a>
+          </div>
+          <button
+            type="button"
+            onClick={copyEmail}
+            className="flex cursor-pointer items-center gap-2 rounded-full px-3 py-1.5 text-sm font-light text-zinc-400 transition-all duration-300 hover:bg-white/5 hover:text-white"
           >
-            <TypewriterText />
-          </motion.div>
-        </div>
-
-        {/* Description */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-          className="max-w-2xl mx-auto mt-2 mb-12"
-        >
-          <p className="text-base sm:text-lg text-slate-400 leading-relaxed">
-            Building enterprise-grade automation frameworks, validating mission-critical payment systems, and delivering reliable software through UI automation, API testing, backend validation, and performance engineering.
-          </p>
+            {copied ? <Check className="size-4 text-emerald-400" /> : <Mail className="size-4" />}
+            {copied ? "Copied to clipboard!" : email}
+            {!copied && <Copy className="size-3.5 opacity-60" />}
+          </button>
         </motion.div>
+      </div>
 
-        {/* CTA Buttons */}
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.7 }}
-          className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6"
-        >
-          <Link
-            href="#projects"
-            className="group relative px-8 py-4 bg-white text-black text-sm font-bold rounded-full overflow-hidden transition-all hover:scale-[1.02] active:scale-[0.98] shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] flex items-center"
-          >
-            Explore My Work
-            <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </Link>
-          
-          <a
-            href="/Sai_Krishna_Bykani_Resume.pdf"
-            download="Sai_Krishna_Bykani_Resume.pdf"
-            className="group px-8 py-4 text-sm font-bold rounded-full border border-white/10 bg-white/[0.03] text-white hover:bg-white/10 transition-all flex items-center backdrop-blur-md shadow-lg cursor-pointer"
-          >
-            Download Resume
-            <Download className="ml-2 w-4 h-4 group-hover:-translate-y-1 transition-transform" />
-          </a>
-        </motion.div>
-
+      {/* Atmosphere */}
+      <div className="pointer-events-none absolute inset-0 z-0 select-none overflow-hidden">
+        <Stars />
+        <div className="absolute left-1/2 top-[-20%] h-[60vh] w-[80vw] -translate-x-1/2 rounded-full bg-blue-500/20 blur-[120px]" />
+        <Clouds />
+        <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-b from-transparent to-black" />
       </div>
     </section>
   );

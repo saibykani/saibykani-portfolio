@@ -117,7 +117,7 @@ export default function AIChatbot() {
       {/* Floating Toggle Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 right-6 z-50 p-4 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 text-white shadow-xl shadow-blue-500/20 hover:shadow-blue-500/40 hover:scale-105 active:scale-95 transition-all duration-300 focus:outline-none"
+        className="fixed bottom-6 right-6 z-50 p-4 rounded-full border border-white/10 bg-white/10 backdrop-blur-md text-white shadow-lg shadow-black/40 hover:bg-white hover:text-black hover:scale-105 active:scale-95 transition-all duration-300 focus:outline-none no-print"
       >
         {isOpen ? <X className="w-5 h-5" /> : <MessageSquare className="w-5 h-5" />}
         <span className="absolute top-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-400 border border-slate-900 animate-pulse" />

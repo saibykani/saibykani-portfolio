@@ -1,90 +1,139 @@
 "use client";
 
-import { motion } from "framer-motion";
-import resumeData from "@/data/resumeData.json";
 import Image from "next/image";
-import { Terminal, Database, Code2 } from "lucide-react";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { ArrowRight, GraduationCap, Mail } from "lucide-react";
+import resumeData from "@/data/resumeData.json";
+import { Reveal, SectionHeading } from "@/components/ui/primitives";
+
+function LinkedInIcon() {
+  return (
+    <svg className="size-6" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0Z" />
+    </svg>
+  );
+}
+
+function GitHubIcon() {
+  return (
+    <svg className="size-6" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 .3a12 12 0 0 0-3.8 23.38c.6.12.83-.26.83-.57L9 21.07c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.08-.74.09-.73.09-.73 1.2.09 1.83 1.24 1.83 1.24 1.07 1.83 2.8 1.3 3.49 1 .1-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18a4.65 4.65 0 0 1 1.23 3.22c0 4.61-2.8 5.63-5.48 5.92.42.36.81 1.1.81 2.22l-.01 3.29c0 .31.2.69.82.57A12 12 0 0 0 12 .3Z" />
+    </svg>
+  );
+}
+
+function PortraitTile() {
+  const mx = useMotionValue(0);
+  const my = useMotionValue(0);
+  const rx = useSpring(useTransform(my, [-0.5, 0.5], [12, -12]), { stiffness: 150, damping: 15 });
+  const ry = useSpring(useTransform(mx, [-0.5, 0.5], [-12, 12]), { stiffness: 150, damping: 15 });
+
+  return (
+    <div
+      className="relative aspect-square w-60 [perspective:1000px] lg:me-10 lg:mt-20 lg:w-[460px]"
+      onMouseMove={(e) => {
+        const r = e.currentTarget.getBoundingClientRect();
+        mx.set((e.clientX - r.left) / r.width - 0.5);
+        my.set((e.clientY - r.top) / r.height - 0.5);
+      }}
+      onMouseLeave={() => {
+        mx.set(0);
+        my.set(0);
+      }}
+    >
+      <motion.div style={{ rotateX: rx, rotateY: ry, transformStyle: "preserve-3d" }} className="group relative size-full">
+        {/* back glow + logo */}
+        <div className="absolute inset-[8%] rounded-[2.5rem] bg-gradient-to-br from-[#6799fe] via-[#7928CA] to-[#FF0080] opacity-40 blur-2xl transition-opacity duration-500 group-hover:opacity-70" />
+        <div className="absolute inset-0 overflow-hidden rounded-[2.5rem] border border-white/10 bg-zinc-950 shadow-2xl" style={{ transform: "translateZ(20px)" }}>
+          <Image src="/portrait.png" alt={resumeData.personal.name} fill sizes="(max-width: 1024px) 240px, 460px" className="object-cover object-[50%_20%] transition-transform duration-700 group-hover:scale-105" />
+          <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/90 to-transparent" />
+          <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between">
+            <div>
+              <p className="font-instrument text-xl text-white lg:text-2xl">{resumeData.personal.name}</p>
+              <p className="font-mono text-[10px] uppercase tracking-widest text-white/60">SDET · Hyderabad</p>
+            </div>
+            <span className="relative size-9 overflow-hidden rounded-full bg-white lg:size-11">
+              <Image src="/logo.png" alt="" fill sizes="44px" className="object-contain" />
+            </span>
+          </div>
+        </div>
+      </motion.div>
+    </div>
+  );
+}
 
 export default function About() {
+  const { summary, linkedin, github, email } = resumeData.personal;
+  const sentences = summary.match(/[^.]+\.(\s|$)/g) ?? [summary];
+  const paragraphs = [sentences.slice(0, 2).join(""), sentences.slice(2, 4).join(""), sentences.slice(4).join("")].filter((p) => p.trim());
+  const edu = resumeData.education[0];
+
   return (
-    <section id="about" className="py-24 relative border-t border-white/5">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-center lg:items-start">
-          
-          {/* Left Column: Portrait & Title */}
-          <motion.div 
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8 }}
-            className="flex flex-col items-center lg:items-start lg:w-1/3"
-          >
-            <div className="relative w-56 h-[280px] sm:w-64 sm:h-[320px] mb-6 group">
-              <div className="absolute inset-0 rounded-3xl bg-gradient-to-tr from-accent-theme/20 to-accent-gradient-from/20 blur-xl group-hover:blur-2xl transition-all duration-500" />
-              <div className="relative w-full h-full rounded-3xl overflow-hidden border border-white/10 bg-[#0a0a0a]">
-                {/* Fallback to generic image styling if portrait fails to load */}
-                <Image 
-                  src="/portrait.png" 
-                  alt="Sai Krishna Bykani"
-                  fill
-                  className="object-cover transition-all duration-500"
-                  sizes="(max-width: 768px) 224px, 256px"
-                />
+    <section className="container relative overflow-hidden py-10 lg:max-w-full">
+      <div className="relative mx-auto flex max-w-6xl flex-col items-center justify-center gap-8 py-10 lg:flex-row lg:items-start lg:justify-between">
+        <div className="lg:max-w-[60%]">
+          <SectionHeading
+            eyebrow="Know About Me"
+            title="Quality Engineer and a little bit of"
+            highlight="everything"
+            align="left"
+            className="mb-8 md:mb-12 md:mt-20"
+          />
+          <Reveal>
+            <div className="relative z-[5] mx-auto flex max-w-xl flex-col gap-y-8 text-center text-base font-light tracking-wider text-neutral-300 lg:mx-0 lg:max-w-[560px] lg:text-left lg:text-lg">
+              {paragraphs.map((p) => (
+                <p key={p}>{p.trim()}</p>
+              ))}
+
+              <div className="flex items-center gap-4 rounded-2xl border border-white/10 bg-white/[0.03] p-4 text-left">
+                <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-sky-500/15 text-sky-300">
+                  <GraduationCap className="size-5" />
+                </span>
+                <div>
+                  <p className="text-sm font-medium tracking-normal text-white">{edu.degree}</p>
+                  <p className="text-xs tracking-normal text-neutral-400">
+                    {edu.institution} · {edu.duration}
+                  </p>
+                </div>
+              </div>
+
+              <div className="mx-auto -mt-2 flex w-fit gap-4 lg:mx-0">
+                <a href={linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn" className="text-neutral-300 transition-colors hover:text-white">
+                  <LinkedInIcon />
+                </a>
+                <a href={github} target="_blank" rel="noreferrer" aria-label="GitHub" className="text-neutral-300 transition-colors hover:text-white">
+                  <GitHubIcon />
+                </a>
+                <a href={`mailto:${email}`} aria-label="Email" className="text-neutral-300 transition-colors hover:text-white">
+                  <Mail className="size-6" />
+                </a>
               </div>
             </div>
-            <h3 className="text-3xl font-extrabold text-white tracking-tight mb-2 text-center lg:text-left">
-              {resumeData.personal.name}
-            </h3>
-          </motion.div>
-
-          {/* Right Column: Content */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="lg:w-2/3 space-y-8"
-          >
-            <div className="space-y-4">
-              <h2 className="text-sm font-bold tracking-widest uppercase text-slate-500">
-                Professional Summary
-              </h2>
-              <p className="text-lg text-slate-300 leading-relaxed font-medium">
-                {resumeData.personal.summary}
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-8 border-t border-white/10">
-              
-              <div className="space-y-3">
-                <Terminal className="w-5 h-5 text-emerald-400" />
-                <h4 className="text-xs font-bold text-white tracking-wider uppercase">Architecture</h4>
-                <p className="text-xs text-slate-400 leading-relaxed">
-                  Building scalable Page Object Model frameworks for both UI and headless API tests.
-                </p>
-              </div>
-
-              <div className="space-y-3">
-                <Database className="w-5 h-5 text-blue-400" />
-                <h4 className="text-xs font-bold text-white tracking-wider uppercase">Validation</h4>
-                <p className="text-xs text-slate-400 leading-relaxed">
-                  Deep assertions checking database ledger synchronicity and payload contracts.
-                </p>
-              </div>
-
-              <div className="space-y-3">
-                <Code2 className="w-5 h-5 text-purple-400" />
-                <h4 className="text-xs font-bold text-white tracking-wider uppercase">Performance</h4>
-                <p className="text-xs text-slate-400 leading-relaxed">
-                  Load injection simulating peak production volumes to trace system bottlenecks.
-                </p>
-              </div>
-
-            </div>
-
-          </motion.div>
+            <button
+              onClick={() => {
+                const el = document.getElementById("experience");
+                if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 80, behavior: "smooth" });
+              }}
+              className="group mx-auto mt-10 flex w-fit items-center justify-center gap-2 font-mono text-white transition-colors lg:mx-0 lg:justify-start"
+            >
+              See Work Experience
+              <span className="size-[25px] overflow-hidden rounded-full border border-white/10 bg-white/5 transition-all duration-500 group-hover:bg-white/10">
+                <span className="flex w-12 -translate-x-1/2 transition-transform duration-500 ease-in-out group-hover:translate-x-0">
+                  <span className="flex size-6 items-center justify-center">
+                    <ArrowRight className="size-3.5" />
+                  </span>
+                  <span className="flex size-6 items-center justify-center">
+                    <ArrowRight className="size-3.5" />
+                  </span>
+                </span>
+              </span>
+            </button>
+          </Reveal>
         </div>
+
+        <Reveal delay={0.15}>
+          <PortraitTile />
+        </Reveal>
       </div>
     </section>
   );
