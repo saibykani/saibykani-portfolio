@@ -7,7 +7,10 @@ import { ArrowRight, Check, Copy, FileCheck2, FileText, Mail } from "lucide-reac
 import resumeData from "@/data/resumeData.json";
 import { ShinyButton } from "@/components/ui/primitives";
 import SkyCanvas from "@/components/ui/SkyCanvas";
-import FlightLayer from "@/components/ui/FlightLayer";
+import dynamic from "next/dynamic";
+import { useWeather } from "@/components/weather/WeatherContext";
+
+const Hero3D = dynamic(() => import("@/components/three/Hero3D"), { ssr: false });
 
 function Words({ text, delay = 0, className = "" }: { text: string; delay?: number; className?: string }) {
   return (
@@ -32,6 +35,7 @@ const ease = [0.22, 1, 0.36, 1] as const;
 
 export default function Hero() {
   const [copied, setCopied] = useState(false);
+  const { weather } = useWeather();
   const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end start"] });
   const contentY = useTransform(scrollYProgress, [0, 1], [0, 160]);
@@ -59,7 +63,7 @@ export default function Hero() {
       ref={sectionRef}
       className="relative grid min-h-screen place-content-center overflow-hidden bg-gradient-to-b from-[#0a1a4a] via-[#07102e] to-black px-4 py-24 text-gray-200"
     >
-      <motion.div style={{ y: contentY, opacity: contentOpacity }} className="relative z-10 flex flex-col items-center">
+      <motion.div style={{ y: contentY, opacity: contentOpacity }} className="relative z-10 flex flex-col items-center [filter:drop-shadow(0_2px_18px_rgba(0,0,0,0.45))]">
         {/* Announcement badge */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -170,8 +174,8 @@ export default function Hero() {
 
       {/* Atmosphere: live shader sky */}
       <motion.div style={{ scale: skyScale }} className="pointer-events-none absolute inset-0 z-0 select-none overflow-hidden">
-        <SkyCanvas />
-        <FlightLayer />
+        <SkyCanvas weather={weather} />
+        <Hero3D weather={weather} />
         <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-b from-transparent to-black" />
       </motion.div>
     </section>

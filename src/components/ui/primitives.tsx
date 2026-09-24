@@ -1,7 +1,39 @@
 "use client";
 
 import { motion, useInView } from "framer-motion";
-import { useRef, type ReactNode, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type ReactNode, type CSSProperties } from "react";
+
+/* ------------------------------------------------------------------ */
+/* Text that decodes from random glyphs when it scrolls into view       */
+/* ------------------------------------------------------------------ */
+const GLYPHS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#%&*+/<>";
+export function ScrambleText({ text, className = "" }: { text: string; className?: string }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-40px" });
+  const [out, setOut] = useState(text);
+  useEffect(() => {
+    if (!inView) return;
+    let frame = 0;
+    const total = 22;
+    const id = setInterval(() => {
+      frame++;
+      const reveal = Math.floor((frame / total) * text.length);
+      setOut(
+        text
+          .split("")
+          .map((ch, i) => (i < reveal || ch === " " ? ch : GLYPHS[Math.floor(Math.random() * GLYPHS.length)]))
+          .join("")
+      );
+      if (frame >= total) clearInterval(id);
+    }, 38);
+    return () => clearInterval(id);
+  }, [inView, text]);
+  return (
+    <span ref={ref} className={className} aria-label={text}>
+      {out}
+    </span>
+  );
+}
 
 /* ------------------------------------------------------------------ */
 /* Section heading: mono eyebrow + Instrument Serif title + aurora word */
@@ -30,7 +62,7 @@ export function SectionHeading({
       } ${className}`}
     >
       <span className="mb-3 block font-mono font-normal text-xs uppercase tracking-widest text-white/70 md:text-sm [text-shadow:none]">
-        {eyebrow}
+        <ScrambleText text={eyebrow} />
       </span>
       <span className="font-instrument text-white">
         <span>{title}</span>

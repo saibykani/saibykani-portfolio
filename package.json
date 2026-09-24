@@ -11,6 +11,7 @@
   "dependencies": {
     "@types/nodemailer": "^8.0.1",
     "@types/pdfkit": "^0.17.6",
+    "@types/three": "^0.186.0",
     "canvas-confetti": "^1.9.4",
     "cobe": "^2.0.1",
     "framer-motion": "^12.42.0",
@@ -21,7 +22,8 @@
     "pdfkit": "^0.19.1",
     "react": "^19.2.7",
     "react-countup": "^6.5.3",
-    "react-dom": "^19.2.7"
+    "react-dom": "^19.2.7",
+    "three": "^0.186.1"
   },
   "devDependencies": {
     "@types/canvas-confetti": "^1.9.0",

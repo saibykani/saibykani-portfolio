@@ -86,6 +86,12 @@ html.lenis body {
   12%, 100% { opacity: 0; }
 }
 
+/* F1 floor sparks */
+@keyframes spark {
+  0% { transform: translateX(0) scaleX(0.6); opacity: 1; }
+  100% { transform: translateX(-90px) translateY(6px) scaleX(1.4); opacity: 0; }
+}
+
 /* Race car wheels */
 .car-wheel-spin {
   animation: car-wheel 0.25s linear infinite;

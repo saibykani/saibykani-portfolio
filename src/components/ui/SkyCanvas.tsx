@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { onLightning, PALETTES, type Weather } from "@/components/weather/WeatherContext";
 
 /*
  * Animated night sky rendered with a WebGL fragment shader:
@@ -19,6 +20,8 @@ precision highp float;
 uniform vec2 uRes;
 uniform float uTime;
 uniform vec2 uMouse;
+uniform vec3 uGap, uSky, uCloud, uRim, uGlow;
+uniform float uStars, uCover, uGlowAmt, uFlash, uFlashX;
 
 float hash(vec2 p) { p = fract(p * vec2(123.34, 456.21)); p += dot(p, p + 45.32); return fract(p.x * p.y); }
 
@@ -67,7 +70,7 @@ void main() {
   float ex = abs(p.x) / (aspect * 0.5);
   float wobble = (fbm(vec2(uv.y * 2.5, t * 0.5)) - 0.5) * 0.22;     // ragged inner edge of the banks
   float edge = smoothstep(0.30 + wobble, 0.95, ex);
-  float coverage = 0.24 + edge * 0.5 + smoothstep(0.7, 1.0, uv.y) * 0.1;
+  float coverage = 0.24 + edge * 0.5 + smoothstep(0.7, 1.0, uv.y) * 0.1 + uCover;
   float d = base * 0.55 + billow * 0.28 + detail * 0.30;
   d = smoothstep(1.0 - coverage - 0.08, 1.0 - coverage + 0.32, d);
 
@@ -78,10 +81,8 @@ void main() {
   float lit = clamp((d - dl) * 2.2 + 0.5, 0.0, 1.0);
 
   // --- palette sampled from the reference sky ---
-  vec3 gap   = vec3(0.006, 0.06, 0.19);   // dark sky between clouds
-  vec3 sky   = vec3(0.04, 0.13, 0.37);   // overall mid blue
-  vec3 cloud = vec3(0.07, 0.2, 0.46);    // cloud body
-  vec3 rim   = vec3(0.24, 0.40, 0.78);    // lit cloud edges
+  // (palette comes from the active weather theme and is cross-faded on the CPU)
+  vec3 gap = uGap, sky = uSky, cloud = uCloud, rim = uRim;
 
   // open sky: smooth mid blue with a faint haze texture
   vec3 col = sky * (0.86 + 0.22 * base);
@@ -90,13 +91,21 @@ void main() {
   col = mix(col, cloud, smoothstep(0.45, 1.0, d) * (0.55 + 0.45 * lit));
   col += rim * pow(d, 3.0) * lit * 0.28;
 
+  // horizon glow (sunset in summer/autumn, faint city glow at night)
+  float hg = exp(-length((p - vec2(0.0, -0.55)) * vec2(0.9, 2.2)) * 1.6);
+  col += uGlow * hg * uGlowAmt * (1.0 - d * 0.5);
+
+  // lightning: flash lights up the clouds, strongest near the strike
+  float near = exp(-abs(p.x - (uFlashX - 0.5) * aspect) * 1.4);
+  col += vec3(0.72, 0.78, 1.0) * uFlash * (0.25 + d * 1.1) * (0.4 + near);
+
   // gentle vertical grade: slightly brighter/cleaner up top
   col *= (0.9 + 0.2 * smoothstep(0.3, 1.0, uv.y)) * 0.86;
 
   // stars, mostly visible through the gaps
   float s = stars(uv * vec2(aspect, 1.0) + par * 0.3, 110.0, uTime) * 0.8
           + stars(uv * vec2(aspect, 1.0) + par * 0.6 + 11.0, 60.0, uTime * 1.3);
-  col += vec3(0.8, 0.88, 1.0) * s * (1.0 - smoothstep(0.3, 0.9, d)) * 0.9;
+  col += vec3(0.8, 0.88, 1.0) * s * (1.0 - smoothstep(0.3, 0.9, d)) * 0.9 * uStars;
 
   // fade to black toward the bottom (the reference is near-black below ~80%)
   // (edges keep their clouds lower down, so the banks read as extending the full height)
@@ -106,8 +115,10 @@ void main() {
 }
 `;
 
-export default function SkyCanvas({ className = "" }: { className?: string }) {
+export default function SkyCanvas({ className = "", weather = "night" }: { className?: string; weather?: Weather }) {
   const ref = useRef<HTMLCanvasElement>(null);
+  const targetRef = useRef(PALETTES[weather]);
+  targetRef.current = PALETTES[weather];
 
   useEffect(() => {
     const canvas = ref.current;
@@ -142,6 +153,16 @@ export default function SkyCanvas({ className = "" }: { className?: string }) {
     const uRes = gl.getUniformLocation(prog, "uRes");
     const uTime = gl.getUniformLocation(prog, "uTime");
     const uMouse = gl.getUniformLocation(prog, "uMouse");
+    const U = (n: string) => gl.getUniformLocation(prog, n);
+    const uni = { gap: U("uGap"), sky: U("uSky"), cloud: U("uCloud"), rim: U("uRim"), glow: U("uGlow"), stars: U("uStars"), cover: U("uCover"), glowAmt: U("uGlowAmt"), flash: U("uFlash"), flashX: U("uFlashX") };
+    // current (animated) palette, eased toward the theme target every frame
+    const cur = JSON.parse(JSON.stringify(targetRef.current));
+    let flash = 0;
+    let flashX = 0.5;
+    const offLightning = onLightning((x) => {
+      flash = 1;
+      flashX = x;
+    });
 
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     // Render at reduced resolution; clouds are soft so this is invisible and keeps it cheap
@@ -182,6 +203,19 @@ export default function SkyCanvas({ className = "" }: { className?: string }) {
       gl.uniform2f(uRes, canvas.width, canvas.height);
       gl.uniform1f(uTime, reduce ? 20 : (now - start) / 1000 + 20);
       gl.uniform2f(uMouse, mouse.x, mouse.y);
+      const tgt = targetRef.current as any;
+      for (const k of ["gap", "sky", "cloud", "rim", "glow"]) {
+        for (let i = 0; i < 3; i++) cur[k][i] += (tgt[k][i] - cur[k][i]) * 0.04;
+        gl.uniform3f((uni as any)[k], cur[k][0], cur[k][1], cur[k][2]);
+      }
+      for (const k of ["stars", "cover", "glowAmt"]) {
+        cur[k] += (tgt[k] - cur[k]) * 0.04;
+        gl.uniform1f((uni as any)[k], cur[k]);
+      }
+      // flicker-decay like real lightning
+      flash *= 0.9;
+      gl.uniform1f(uni.flash, flash > 0.02 ? flash * (0.7 + Math.random() * 0.3) : 0);
+      gl.uniform1f(uni.flashX, flashX);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
       canvas.dataset.ready = "1";
     };
@@ -192,6 +226,7 @@ export default function SkyCanvas({ className = "" }: { className?: string }) {
       ro.disconnect();
       io.disconnect();
       window.removeEventListener("pointermove", onMove);
+      offLightning();
     };
   }, []);
 

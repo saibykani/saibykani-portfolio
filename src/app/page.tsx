@@ -10,20 +10,26 @@ import About from "@/components/sections/About";
 import Experience from "@/components/sections/Experience";
 import Achievements from "@/components/sections/Achievements";
 import Certifications from "@/components/sections/Certifications";
-import RaceTrack from "@/components/sections/RaceTrack";
 import BugHunt from "@/components/sections/BugHunt";
-import RoadDivider from "@/components/ui/RoadDivider";
+import RaceShowcase from "@/components/sections/RaceShowcase";
 import ScrollScene from "@/components/ui/ScrollScene";
 import Contact from "@/components/sections/Contact";
 import Footer from "@/components/Footer";
 import AIChatbot from "@/components/AIChatbot";
 import SmoothScroll from "@/components/SmoothScroll";
+import ThemeSwitcher from "@/components/ThemeSwitcher";
+import Preloader from "@/components/Preloader";
+import WeatherOverlay from "@/components/weather/WeatherOverlay";
+import { WeatherProvider } from "@/components/weather/WeatherContext";
 import ScrollProgress from "@/components/ScrollProgress";
 
 export default function Home() {
   return (
-    <>
+    <WeatherProvider>
+      <Preloader />
       <SmoothScroll />
+      <WeatherOverlay />
+      <ThemeSwitcher />
       <ScrollProgress />
       <Navbar />
 
@@ -36,13 +42,11 @@ export default function Home() {
           <Bento />
         </ScrollScene>
 
-        <RoadDivider livery={["#FF0080", "#7928CA", "#38bdf8"]} number="07" id="r1" />
+        <RaceShowcase />
 
         <div id="projects">
           <Projects />
         </div>
-
-        <RoadDivider livery={["#f59e0b", "#ef4444", "#fde047"]} number="99" id="r2" reverse />
 
         <div id="skills">
           <ScrollScene>
@@ -64,7 +68,6 @@ export default function Home() {
           </ScrollScene>
         </div>
 
-        <RaceTrack />
 
         <div id="achievements">
           <ScrollScene>
@@ -72,13 +75,9 @@ export default function Home() {
           </ScrollScene>
         </div>
 
-        <RoadDivider livery={["#10b981", "#0ea5e9", "#a7f3d0"]} number="44" id="r3" />
-
         <div id="certifications">
           <Certifications />
         </div>
-
-        <RoadDivider livery={["#e5e7eb", "#6b7280", "#f43f5e"]} number="16" id="r4" reverse />
 
         <div id="game">
           <ScrollScene>
@@ -109,6 +108,6 @@ export default function Home() {
       </div>
 
       <AIChatbot />
-    </>
+    </WeatherProvider>
   );
 }
