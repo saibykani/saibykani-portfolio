@@ -24,7 +24,8 @@
   }
 
   body {
-    background: #000;
+    /* transparent so the fixed 3D theme world (z -10) shows through; <html> stays black */
+    background: transparent;
     color: var(--foreground);
   }
 

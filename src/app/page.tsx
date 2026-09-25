@@ -22,73 +22,82 @@ import Preloader from "@/components/Preloader";
 import WeatherOverlay from "@/components/weather/WeatherOverlay";
 import { WeatherProvider } from "@/components/weather/WeatherContext";
 import ScrollProgress from "@/components/ScrollProgress";
+import ThemeWorld from "@/components/three/ThemeWorldLazy";
 
 export default function Home() {
   return (
     <WeatherProvider>
       <Preloader />
+      <ThemeWorld />
       <SmoothScroll />
       <WeatherOverlay />
       <ThemeSwitcher />
       <ScrollProgress />
       <Navbar />
 
-      <div id="home">
+      <div id="home" data-world="none">
         <Hero />
       </div>
 
-      <main className="w-full bg-black">
-        <ScrollScene>
-          <Bento />
-        </ScrollScene>
-
-        <GlobalMission />
-
-        <div id="projects">
-          <Projects />
-        </div>
-
-        <div id="skills">
+      <main className="w-full">
+        <div data-world="aurora">
           <ScrollScene>
-            <Skills />
+            <Bento />
           </ScrollScene>
         </div>
 
-        <Ribbon />
+        <div data-world="none">
+          <GlobalMission />
+        </div>
 
-        <div id="about">
+        <div id="projects" data-world="cyber">
+          <Projects />
+        </div>
+
+        <div data-world="ocean">
+          <div id="skills">
+            <ScrollScene>
+              <Skills />
+            </ScrollScene>
+          </div>
+
+          <Ribbon />
+        </div>
+
+        <div id="about" data-world="jungle">
           <ScrollScene>
             <About />
           </ScrollScene>
         </div>
 
-        <div id="experience">
+        <div id="experience" data-world="sakura">
           <ScrollScene>
             <Experience />
           </ScrollScene>
         </div>
 
 
-        <div id="achievements">
+        <div id="achievements" data-world="crystal">
           <ScrollScene>
             <Achievements />
           </ScrollScene>
         </div>
 
-        <div id="certifications">
+        <div id="certifications" data-world="asteroid">
           <Certifications />
         </div>
 
-        <div id="game">
+        <div id="game" data-world="synthwave">
           <ScrollScene>
             <BugHunt />
           </ScrollScene>
         </div>
 
-        <Contact />
+        <div data-world="galaxy">
+          <Contact />
+          <Footer />
+        </div>
       </main>
-
-      <Footer />
 
       {/* Floating resume pill */}
       <div className="fixed bottom-[14px] left-[12px] z-40 animate-bounce select-none md:bottom-[20px] md:left-[20px] no-print">

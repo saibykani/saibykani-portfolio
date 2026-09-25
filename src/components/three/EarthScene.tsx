@@ -201,7 +201,9 @@ function smallSat(glow: THREE.Texture, color: string) {
   return { g, light };
 }
 
-export default function EarthScene({ onLabels }: { onLabels?: (labels: { name: string; x: number; y: number; visible: boolean; home?: boolean }[]) => void }) {
+export type SceneLabel = { name: string; x: number; y: number; visible: boolean; home?: boolean; planet?: boolean };
+
+export default function EarthScene({ onLabels }: { onLabels?: (labels: SceneLabel[]) => void }) {
   const mountRef = useRef<HTMLDivElement>(null);
   const labelsCb = useRef(onLabels);
   labelsCb.current = onLabels;
@@ -225,7 +227,7 @@ export default function EarthScene({ onLabels }: { onLabels?: (labels: { name: s
     renderer.domElement.style.cssText = "position:absolute;inset:0;width:100%;height:100%;touch-action:pan-y;cursor:grab;";
 
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(32, 1, 0.05, 400);
+    const camera = new THREE.PerspectiveCamera(32, 1, 0.05, 2000);
     const home = CITIES[0];
 
     const controls = new OrbitControls(camera, renderer.domElement);
@@ -389,18 +391,18 @@ export default function EarthScene({ onLabels }: { onLabels?: (labels: { name: s
     // ---- stars, Milky Way, galaxy ----
     const starsMat = starMaterial(1);
     const milkyMat = starMaterial(0.55);
-    scene.add(new THREE.Points(starField(2600, 120), starsMat));
-    scene.add(new THREE.Points(starField(7000, 125, true), milkyMat));
+    scene.add(new THREE.Points(starField(3000, 800), starsMat));
+    scene.add(new THREE.Points(starField(8000, 820, true), milkyMat));
     const galaxySprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: galaxy, transparent: true, opacity: 0.8, depthWrite: false, blending: THREE.AdditiveBlending }));
-    galaxySprite.position.copy(new THREE.Vector3(-0.6, 0.45, -0.66).normalize().multiplyScalar(110));
-    galaxySprite.scale.set(22, 12, 1);
+    galaxySprite.position.copy(new THREE.Vector3(-0.6, 0.45, -0.66).normalize().multiplyScalar(760));
+    galaxySprite.scale.set(150, 82, 1);
     galaxySprite.material.rotation = 0.5;
     scene.add(galaxySprite);
     for (let i = 0; i < 8; i++) {
       const neb = new THREE.Sprite(new THREE.SpriteMaterial({ map: glow, color: i % 2 ? "#7c3aed" : "#2563eb", transparent: true, opacity: 0.05, blending: THREE.AdditiveBlending, depthWrite: false }));
       const a = (i / 8) * Math.PI * 2;
-      neb.position.copy(new THREE.Vector3(Math.cos(a), (Math.random() - 0.5) * 0.3, Math.sin(a)).applyMatrix4(new THREE.Matrix4().makeRotationZ(0.9)).normalize().multiplyScalar(118));
-      neb.scale.setScalar(40 + Math.random() * 30);
+      neb.position.copy(new THREE.Vector3(Math.cos(a), (Math.random() - 0.5) * 0.3, Math.sin(a)).applyMatrix4(new THREE.Matrix4().makeRotationZ(0.9)).normalize().multiplyScalar(790));
+      neb.scale.setScalar(260 + Math.random() * 200);
       scene.add(neb);
     }
 
@@ -483,6 +485,235 @@ export default function EarthScene({ onLabels }: { onLabels?: (labels: { name: s
       orbitLine(d.r, d.incl, d.node, d.c);
     }
 
+    // ---- more satellites (navigation + weather) ----
+    [
+      { r: 2.05, incl: 0.96, node: 1.0, speed: 0.03, c: "#fde047" },
+      { r: 2.05, incl: 0.96, node: 3.1, speed: 0.03, c: "#fde047" },
+      { r: 1.25, incl: 1.7, node: 0.2, speed: 0.1, c: "#fb7185" },
+      { r: 1.18, incl: 0.9, node: 2.6, speed: 0.11, c: "#67e8f9" },
+    ].forEach((d) => {
+      const s = smallSat(glow, d.c);
+      scene.add(s.g);
+      sats.push({ g: s.g, light: s.light, r: d.r, incl: d.incl, node: d.node, speed: d.speed, ph: Math.random() * Math.PI * 2, blinkPh: Math.random() * 5 });
+      orbitLine(d.r, d.incl, d.node, d.c);
+    });
+
+    // ---- Starlink-style broadband constellation (glowing points) ----
+    const lite = mount.clientWidth < 700;
+    const SL_PLANES = lite ? 8 : 14;
+    const SL_PER = lite ? 6 : 9;
+    const slPos = new Float32Array(SL_PLANES * SL_PER * 3);
+    const slGeo = new THREE.BufferGeometry();
+    slGeo.setAttribute("position", new THREE.BufferAttribute(slPos, 3));
+    const starlink = new THREE.Points(slGeo, new THREE.PointsMaterial({ map: glow, color: "#e0f2fe", size: 0.035, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending }));
+    starlink.frustumCulled = false;
+    scene.add(starlink);
+    const SL_INC = 53 * (Math.PI / 180);
+    const axX = new THREE.Vector3(1, 0, 0);
+    const axY = new THREE.Vector3(0, 1, 0);
+
+    // ---- cargo ships on real ocean lanes ----
+    const LANES: [number, number][][] = [
+      [[12.6, 43.5], [8, 60], [6, 80], [5.9, 95], [1.3, 103.8]],
+      [[40.5, -73.5], [42, -50], [46, -25], [49.5, -5]],
+      [[34, -119], [38, -150], [40, -175], [37, 165], [34, 140]],
+      [[-34.5, 18.5], [-30, 5], [-15, -5], [5, -15], [20, -20], [36, -8]],
+      [[6, 80], [-10, 90], [-25, 105], [-32, 115]],
+      [[-23, -43], [-10, -30], [5, -25], [20, -25]],
+      [[22, 70], [18, 64], [14, 56], [12.6, 45]],
+    ];
+    const lanePts = LANES.map((wps) => {
+      const pts: THREE.Vector3[] = [];
+      for (let i = 0; i < wps.length - 1; i++) {
+        const A = v3(wps[i][0], wps[i][1]);
+        const B = v3(wps[i + 1][0], wps[i + 1][1]);
+        const ang = A.angleTo(B);
+        for (let k = 0; k < 24; k++) {
+          const tt = k / 24;
+          pts.push(A.clone().multiplyScalar(Math.sin((1 - tt) * ang)).add(B.clone().multiplyScalar(Math.sin(tt * ang))).divideScalar(Math.sin(ang)).normalize().multiplyScalar(1.0016));
+        }
+      }
+      const last = wps[wps.length - 1];
+      pts.push(v3(last[0], last[1], 1.0016));
+      const lane = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), new THREE.LineDashedMaterial({ color: "#38bdf8", dashSize: 0.01, gapSize: 0.012, transparent: true, opacity: 0.35, depthWrite: false }));
+      lane.computeLineDistances();
+      scene.add(lane);
+      return pts;
+    });
+    const hullMat = new THREE.MeshStandardMaterial({ color: "#1f2937", roughness: 0.6 });
+    const deckMat = new THREE.MeshStandardMaterial({ color: "#f8fafc", roughness: 0.5 });
+    const boxMats = ["#ef4444", "#3b82f6", "#f59e0b", "#10b981"].map((c) => new THREE.MeshStandardMaterial({ color: c, roughness: 0.6 }));
+    const wakeMat = new THREE.MeshBasicMaterial({ color: "#e0f2fe", transparent: true, opacity: 0.5, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide });
+    const ships = lanePts.flatMap((pts, li) =>
+      [0, 1].map((k) => {
+        const g = new THREE.Group();
+        g.add(new THREE.Mesh(new THREE.BoxGeometry(0.0055, 0.0022, 0.022), hullMat));
+        const bow = new THREE.Mesh(new THREE.ConeGeometry(0.0028, 0.006, 4).rotateX(Math.PI / 2), hullMat);
+        bow.position.z = 0.013;
+        g.add(bow);
+        for (let c = 0; c < 4; c++) {
+          const box = new THREE.Mesh(new THREE.BoxGeometry(0.0045, 0.002, 0.0035), boxMats[(c + li) % 4]);
+          box.position.set(0, 0.002, 0.007 - c * 0.004);
+          g.add(box);
+        }
+        const bridge = new THREE.Mesh(new THREE.BoxGeometry(0.0045, 0.0035, 0.0025), deckMat);
+        bridge.position.set(0, 0.0025, -0.0095);
+        g.add(bridge);
+        g.add(new THREE.Mesh(new THREE.PlaneGeometry(0.012, 0.03).rotateX(-Math.PI / 2).translate(0, -0.0009, -0.026), wakeMat));
+        const lamp = new THREE.Sprite(new THREE.SpriteMaterial({ map: glow, color: "#fef3c7", blending: THREE.AdditiveBlending, depthWrite: false, transparent: true }));
+        lamp.scale.setScalar(0.012);
+        lamp.position.y = 0.004;
+        g.add(lamp);
+        scene.add(g);
+        return { g, pts, u: (k * 0.5 + Math.random() * 0.3) % 1, speed: 0.006 + Math.random() * 0.004, lamp };
+      })
+    );
+
+    // ---- solar system (revealed when zooming out) ----
+    const RADS = Math.PI / 180;
+    const PLANETS = [
+      { name: "Mercury", a: 0.387, L0: 252.25, n: 4.09233445, size: 0.55, colors: ["#8a8a8a", "#b5b5b5", "#6b6b6b"] },
+      { name: "Venus", a: 0.723, L0: 181.98, n: 1.60213034, size: 0.95, colors: ["#e8c98f", "#f3dfb5", "#caa56a"] },
+      { name: "Earth", a: 1.0, L0: 100.46, n: 0.98560912, size: 1, colors: [] as string[] },
+      { name: "Mars", a: 1.524, L0: 355.43, n: 0.5240384, size: 0.75, colors: ["#c1440e", "#e27b58", "#8f2e0b"] },
+      { name: "Jupiter", a: 5.203, L0: 34.4, n: 0.08308529, size: 3.2, colors: ["#d8b48a", "#f3e2c7", "#a86c3c", "#c98f5a"] },
+      { name: "Saturn", a: 9.537, L0: 49.94, n: 0.03344414, size: 2.7, colors: ["#e3cf9d", "#f5e6c0", "#c7a86a"] },
+      { name: "Uranus", a: 19.19, L0: 313.23, n: 0.01172834, size: 1.8, colors: ["#9fe7ef", "#c3f3f7", "#7fd1dc"] },
+      { name: "Neptune", a: 30.07, L0: 304.88, n: 0.00598103, size: 1.7, colors: ["#3f63d8", "#5b82ee", "#2c46a8"] },
+    ];
+    const dispR = (a: number) => 26 * Math.pow(a, 0.6);
+    const solar = new THREE.Group();
+    solar.visible = false;
+    scene.add(solar);
+    const planetTex = (colors: string[], spot: boolean) => {
+      const c = document.createElement("canvas");
+      c.width = 256;
+      c.height = 128;
+      const g = c.getContext("2d")!;
+      for (let y = 0; y < 128; y++) {
+        const band = Math.floor((Math.sin(y * 0.35) * 0.5 + 0.5 + Math.sin(y * 0.11) * 0.3) * colors.length);
+        g.fillStyle = colors[((band % colors.length) + colors.length) % colors.length];
+        g.fillRect(0, y, 256, 1);
+      }
+      for (let i = 0; i < 400; i++) {
+        g.fillStyle = `rgba(0,0,0,${Math.random() * 0.06})`;
+        g.fillRect(Math.random() * 256, Math.random() * 128, Math.random() * 18, 1.5);
+      }
+      if (spot) {
+        g.fillStyle = "rgba(170,60,30,0.8)";
+        g.beginPath();
+        g.ellipse(170, 84, 16, 8, 0, 0, Math.PI * 2);
+        g.fill();
+      }
+      const tx = new THREE.CanvasTexture(c);
+      tx.colorSpace = THREE.SRGBColorSpace;
+      return tx;
+    };
+    const sunCoreMat = new THREE.ShaderMaterial({
+      uniforms: { uTime: { value: 0 } },
+      vertexShader: `varying vec3 vN; varying vec3 vP; void main(){ vN = normalize(normalMatrix * normal); vP = position; gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.0); }`,
+      fragmentShader: `uniform float uTime; varying vec3 vN; varying vec3 vP;
+        float h(vec3 p){ return fract(sin(dot(p, vec3(12.9898,78.233,37.719))) * 43758.5453); }
+        float n3(vec3 p){ vec3 i = floor(p), f = fract(p); f = f*f*(3.0-2.0*f);
+          return mix(mix(mix(h(i),h(i+vec3(1,0,0)),f.x),mix(h(i+vec3(0,1,0)),h(i+vec3(1,1,0)),f.x),f.y),
+                     mix(mix(h(i+vec3(0,0,1)),h(i+vec3(1,0,1)),f.x),mix(h(i+vec3(0,1,1)),h(i+vec3(1,1,1)),f.x),f.y),f.z); }
+        void main(){ vec3 p = vP * 0.9 + vec3(uTime*0.15, 0.0, -uTime*0.1);
+          float g = n3(p) * 0.55 + n3(p*2.3) * 0.3 + n3(p*5.1) * 0.15;
+          vec3 col = mix(vec3(1.0,0.45,0.08), vec3(1.0,0.92,0.55), g);
+          float limb = pow(max(vN.z, 0.0), 0.35);
+          gl_FragColor = vec4(col * (0.75 + 0.6*g) * (0.7 + 0.5*limb), 1.0); }`,
+    });
+    const sunCore = new THREE.Mesh(new THREE.SphereGeometry(6, 64, 32), sunCoreMat);
+    solar.add(sunCore);
+    const solarLight = new THREE.PointLight("#fff4e0", 4, 0, 0);
+    sunCore.add(solarLight);
+    const earthMarker = new THREE.Sprite(new THREE.SpriteMaterial({ map: glow, color: "#34d399", blending: THREE.AdditiveBlending, depthWrite: false, transparent: true }));
+    earthMarker.scale.setScalar(6);
+    solar.add(earthMarker);
+    const coronas: [number, string, number][] = [
+      [34, "#ffb347", 0.55],
+      [80, "#ff7a1a", 0.22],
+    ];
+    for (const [sc, c, o] of coronas) {
+      const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: glow, color: c, blending: THREE.AdditiveBlending, depthWrite: false, transparent: true, opacity: o }));
+      sp.scale.setScalar(sc);
+      sunCore.add(sp);
+    }
+    const planetMeshes = PLANETS.map((pl) => {
+      if (pl.name === "Earth") return { pl, mesh: null as THREE.Mesh | null };
+      const mesh = new THREE.Mesh(new THREE.SphereGeometry(pl.size, 48, 24), new THREE.MeshStandardMaterial({ map: planetTex(pl.colors, pl.name === "Jupiter"), roughness: 0.9 }));
+      solar.add(mesh);
+      return { pl, mesh };
+    });
+    // Saturn's rings: banded, see-through, tilted ~27 degrees to the ecliptic (kept out of the spinning mesh)
+    const ringTexC = document.createElement("canvas");
+    ringTexC.width = 512;
+    ringTexC.height = 4;
+    const rgc = ringTexC.getContext("2d")!;
+    for (let x = 0; x < 512; x++) {
+      const gapCassini = x > 330 && x < 352 ? 0.08 : 1;
+      const a = (0.35 + 0.65 * Math.abs(Math.sin(x * 0.07) * Math.sin(x * 0.021 + 1))) * gapCassini;
+      rgc.fillStyle = `rgba(232,214,168,${x < 8 || x > 504 ? 0 : a * 0.8})`;
+      rgc.fillRect(x, 0, 1, 4);
+    }
+    const ringTex = new THREE.CanvasTexture(ringTexC);
+    ringTex.colorSpace = THREE.SRGBColorSpace;
+    const satRingGeo = new THREE.RingGeometry(1.25, 2.25, 128, 1);
+    {
+      const rp = satRingGeo.attributes.position as THREE.BufferAttribute;
+      const ruv = satRingGeo.attributes.uv as THREE.BufferAttribute;
+      for (let i = 0; i < rp.count; i++) ruv.setXY(i, (Math.hypot(rp.getX(i), rp.getY(i)) - 1.25) / 1.0, 0.5);
+    }
+    const saturnRing = new THREE.Mesh(satRingGeo, new THREE.MeshBasicMaterial({ map: ringTex, side: THREE.DoubleSide, transparent: true, depthWrite: false }));
+    solar.add(saturnRing);
+    const ringTilt = new THREE.Quaternion();
+    const zAxis = new THREE.Vector3(0, 0, 1);
+    const orbitMat = new THREE.LineBasicMaterial({ color: "#94a3b8", transparent: true, opacity: 0, depthWrite: false });
+    const orbitRings = PLANETS.map((pl) => {
+      const pts: THREE.Vector3[] = [];
+      for (let i = 0; i <= 256; i++) pts.push(new THREE.Vector3(Math.cos((i / 256) * Math.PI * 2), Math.sin((i / 256) * Math.PI * 2), 0).multiplyScalar(dispR(pl.a)));
+      const l = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), orbitMat);
+      l.matrixAutoUpdate = false;
+      solar.add(l);
+      return l;
+    });
+    // ecliptic basis in the Earth-fixed frame: e1 points from the Sun toward Earth
+    const e1 = new THREE.Vector3();
+    const e2 = new THREE.Vector3();
+    const eN = new THREE.Vector3();
+    const sunPos = new THREE.Vector3();
+    const planetPos = new Map<string, THREE.Vector3>();
+    const basis = new THREE.Matrix4();
+    const updateSolar = () => {
+      eN.copy(axY).addScaledVector(sunDir, -sunDir.dot(axY)).normalize();
+      e1.copy(sunDir).negate();
+      e2.crossVectors(eN, e1).normalize();
+      sunPos.copy(sunDir).multiplyScalar(dispR(1));
+      sunCore.position.copy(sunPos);
+      const d = Date.now() / 86400000 + 2440587.5 - 2451545.0;
+      const LE = (100.46 + 0.98560912 * d) * RADS;
+      basis.makeBasis(e1, e2, eN).setPosition(sunPos);
+      for (const r of orbitRings) r.matrix.copy(basis);
+      for (const { pl, mesh } of planetMeshes) {
+        const L = (pl.L0 + pl.n * d) * RADS - LE;
+        const R = dispR(pl.a);
+        const pos = sunPos.clone().addScaledVector(e1, Math.cos(L) * R).addScaledVector(e2, Math.sin(L) * R);
+        planetPos.set(pl.name, pos);
+        if (mesh) mesh.position.copy(pos);
+      }
+      const satPos = planetPos.get("Saturn")!;
+      saturnRing.position.copy(satPos);
+      const ringNormal = eN.clone().applyAxisAngle(e1, 27 * RADS);
+      ringTilt.setFromUnitVectors(zAxis, ringNormal);
+      saturnRing.quaternion.copy(ringTilt);
+    };
+    updateSolar();
+    const track = mount.closest<HTMLElement>("[data-earth-track]");
+    const savedOrbit = new THREE.Vector3().copy(camera.position);
+    const overview = new THREE.Vector3();
+    const lookAt = new THREE.Vector3();
+    let zoomOut = 0;
+
     // ---- sizing, visibility, scroll zoom ----
     const resize = () => {
       const w = mount.clientWidth;
@@ -521,14 +752,38 @@ export default function EarthScene({ onLabels }: { onLabels?: (labels: { name: s
         updateAstro();
       }
 
-      // scroll-linked zoom: approach the planet as the section centres on screen
-      const r = mount.getBoundingClientRect();
-      const centre = 1 - Math.min(1, Math.abs(r.top + r.height / 2 - innerHeight / 2) / innerHeight);
+      // progress through the sticky track: 0 arrive, ~0.3 close-up, 1 = whole solar system
+      let prog = 0.3;
+      if (track) {
+        const tr = track.getBoundingClientRect();
+        prog = THREE.MathUtils.clamp(-tr.top / Math.max(1, tr.height - innerHeight), 0, 1);
+      }
+      const outT = THREE.MathUtils.smoothstep(prog, 0.42, 0.95);
+      zoomOut += (outT - zoomOut) * Math.min(1, dt * 3);
+      if (zoomOut < 0.002) zoomOut = 0;
       const far = mount.clientWidth < 700 ? 8.2 : 5.6;
-      const targetDist = far - centre * (mount.clientWidth < 700 ? 1.6 : 1.5);
-      const len = camera.position.length();
-      camera.position.multiplyScalar(1 + (targetDist - len) / len * 0.05);
-      controls.update();
+      const near = THREE.MathUtils.smoothstep(prog, 0.0, 0.3);
+      if (zoomOut === 0) {
+        controls.enabled = true;
+        const targetDist = far - near * (mount.clientWidth < 700 ? 1.6 : 1.5);
+        const len = camera.position.length();
+        camera.position.multiplyScalar(1 + ((targetDist - len) / len) * 0.05);
+        controls.update();
+        savedOrbit.copy(camera.position);
+      } else {
+        controls.enabled = false;
+        const e = zoomOut * zoomOut * (3 - 2 * zoomOut);
+        overview.copy(sunPos).addScaledVector(eN, 330).addScaledVector(e1, 150).addScaledVector(e2, -30);
+        const a = Math.pow(e, 2.0);
+        camera.position.lerpVectors(savedOrbit, overview, a).addScaledVector(eN, Math.sin(Math.PI * a) * 40);
+        const turn = THREE.MathUtils.smoothstep(e, 0.45, 1.0);
+        lookAt.copy(sunPos).addScaledVector(e1, 18).multiplyScalar(turn);
+        camera.lookAt(lookAt);
+      }
+      solar.visible = zoomOut > 0.01;
+      orbitMat.opacity = 0.35 * THREE.MathUtils.smoothstep(zoomOut, 0.25, 0.8);
+      sunSprite.visible = zoomOut < 0.3;
+      sunHalo.visible = zoomOut < 0.3;
 
       // sun, moon
       sunLight.position.copy(sunDir).multiplyScalar(40);
@@ -591,6 +846,44 @@ export default function EarthScene({ onLabels }: { onLabels?: (labels: { name: s
         s.light.material.opacity = (t + s.blinkPh) % 1.4 < 0.1 ? 1 : 0.15;
       }
 
+      // ships sail their lanes
+      for (const sh of ships) {
+        sh.u = (sh.u + sh.speed * dt) % 1;
+        const fi = sh.u * (sh.pts.length - 1);
+        const i0 = Math.floor(fi);
+        const i1 = Math.min(sh.pts.length - 1, i0 + 1);
+        tmp.lerpVectors(sh.pts[i0], sh.pts[i1], fi - i0);
+        sh.g.position.copy(tmp);
+        sh.g.up.copy(tmp).normalize();
+        sh.g.lookAt(sh.pts[Math.min(sh.pts.length - 1, i1 + 1)]);
+        sh.lamp.material.opacity = 0.6 + 0.4 * Math.sin(t * 3 + sh.u * 50);
+      }
+      // starlink shells
+      for (let pi = 0; pi < SL_PLANES; pi++) {
+        const node = (pi / SL_PLANES) * Math.PI * 2;
+        for (let k = 0; k < SL_PER; k++) {
+          const a = (k / SL_PER) * Math.PI * 2 + t * 0.09 + pi * 0.4;
+          tmp2.set(Math.cos(a) * 1.085, 0, Math.sin(a) * 1.085).applyAxisAngle(axX, SL_INC).applyAxisAngle(axY, node);
+          slPos[(pi * SL_PER + k) * 3] = tmp2.x;
+          slPos[(pi * SL_PER + k) * 3 + 1] = tmp2.y;
+          slPos[(pi * SL_PER + k) * 3 + 2] = tmp2.z;
+        }
+      }
+      slGeo.attributes.position.needsUpdate = true;
+      if (solar.visible) {
+        sunCoreMat.uniforms.uTime.value = t;
+        const grow = 1 + zoomOut * 2.2;
+        for (const pm of planetMeshes)
+          if (pm.mesh) {
+            pm.mesh.rotation.y += dt * 0.3;
+            pm.mesh.scale.setScalar(grow);
+          }
+        sunCore.scale.setScalar(1 + zoomOut * 0.8);
+        saturnRing.scale.setScalar(2.7 * grow);
+        earthMarker.material.opacity = THREE.MathUtils.smoothstep(zoomOut, 0.4, 0.9) * (0.7 + 0.3 * Math.sin(t * 3));
+      }
+      if (astroT === 0) updateSolar();
+
       renderer.render(scene, camera);
 
       // project city labels (throttled)
@@ -600,13 +893,20 @@ export default function EarthScene({ onLabels }: { onLabels?: (labels: { name: s
         const w = mount.clientWidth;
         const h = mount.clientHeight;
         const camDir = camera.position.clone().normalize();
-        labelsCb.current(
-          CITIES.map((c) => {
-            const p = cityVecs.get(c.name)!;
-            proj.copy(p).multiplyScalar(1.01).project(camera);
-            return { name: c.name, x: ((proj.x + 1) / 2) * w, y: ((1 - proj.y) / 2) * h, visible: p.dot(camDir) > 0.25, home: c.home };
-          })
-        );
+        const out: SceneLabel[] = CITIES.map((c) => {
+          const p = cityVecs.get(c.name)!;
+          proj.copy(p).multiplyScalar(1.01).project(camera);
+          return { name: c.name, x: ((proj.x + 1) / 2) * w, y: ((1 - proj.y) / 2) * h, visible: zoomOut < 0.08 && p.dot(camDir) > 0.25, home: c.home };
+        });
+        const showPlanets = zoomOut > 0.55;
+        for (const pl of PLANETS) {
+          const p = pl.name === "Earth" ? new THREE.Vector3() : planetPos.get(pl.name)!;
+          proj.copy(p).project(camera);
+          out.push({ name: pl.name === "Earth" ? "Earth · you are here" : pl.name, x: ((proj.x + 1) / 2) * w, y: ((1 - proj.y) / 2) * h, visible: showPlanets && proj.z < 1, home: pl.name === "Earth", planet: true });
+        }
+        proj.copy(sunPos).project(camera);
+        out.push({ name: "Sun", x: ((proj.x + 1) / 2) * w, y: ((1 - proj.y) / 2) * h - 40, visible: showPlanets && proj.z < 1, planet: true });
+        labelsCb.current(out);
       }
     };
     loop();

@@ -56,7 +56,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`font-outfit antialiased bg-black text-foreground min-h-screen relative overflow-x-hidden`}
+        className={`font-outfit antialiased text-foreground min-h-screen relative overflow-x-hidden`}
       >
         {/* Bottom viewport blur fade */}
         <div className="pointer-events-none blur-wrapper fixed left-0 z-40 w-full select-none bg-gradient-to-t from-black/30 to-transparent no-print" />

@@ -117,7 +117,7 @@ export default function Contact() {
   return (
     <div id="contact" ref={wrapRef} className="relative isolate overflow-hidden">
       {/* Fabric background with parallax */}
-      <motion.div style={{ y: textureY }} className="absolute -inset-y-[10%] inset-x-0 -z-10">
+      <motion.div style={{ y: textureY }} className="absolute -inset-y-[10%] inset-x-0 -z-10 opacity-40">
         <FabricTexture />
       </motion.div>
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(70%_45%_at_50%_18%,rgba(37,99,235,0.18),transparent_70%)]" />

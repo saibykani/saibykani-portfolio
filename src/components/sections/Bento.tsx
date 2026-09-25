@@ -12,7 +12,7 @@ import { TechIcon } from "@/components/ui/techIcons";
 const exp = resumeData.experience[0];
 
 const cardBase =
-  "group relative flex size-full flex-col justify-between overflow-hidden rounded-xl bg-[#0b0b0b] transform-gpu [border:1px_solid_rgba(255,255,255,.1)] [box-shadow:0_-20px_80px_-20px_#ffffff1f_inset]";
+  "group relative flex size-full flex-col justify-between overflow-hidden rounded-xl bg-[#0b0b0b]/60 backdrop-blur-md transform-gpu [border:1px_solid_rgba(255,255,255,.1)] [box-shadow:0_-20px_80px_-20px_#ffffff1f_inset]";
 
 function scrollTo(id: string) {
   const el = document.getElementById(id);
