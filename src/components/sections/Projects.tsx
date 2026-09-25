@@ -300,7 +300,6 @@ function CaseStudyModal({ project, onClose }: { project: ProjectData; onClose: (
         exit={{ y: 60, opacity: 0, scale: 0.97 }}
         transition={{ type: "spring", damping: 26, stiffness: 260 }}
         onClick={(e) => e.stopPropagation()}
-        data-lenis-prevent
         className="relative max-h-[92vh] w-full max-w-4xl overflow-y-auto rounded-t-3xl border border-white/10 bg-zinc-950 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.6)] sm:rounded-3xl"
       >
         <div className="relative overflow-hidden p-6 sm:p-10" style={{ background: (layers[project.id] ?? fallbackLayer).bg }}>

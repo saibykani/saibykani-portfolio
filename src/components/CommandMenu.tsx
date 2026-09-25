@@ -127,7 +127,7 @@ export default function CommandMenu({ open, onClose }: { open: boolean; onClose:
               />
               <kbd className="rounded border border-white/10 px-1.5 py-0.5 font-mono text-[10px] text-neutral-400">ESC</kbd>
             </div>
-            <div data-lenis-prevent className="max-h-[50vh] overflow-y-auto p-2">
+            <div className="max-h-[50vh] overflow-y-auto p-2">
               {filtered.length === 0 && <p className="py-8 text-center text-sm text-neutral-500">No results found.</p>}
               {filtered.map((a, i) => {
                 const header = a.group !== lastGroup ? a.group : null;

@@ -152,7 +152,7 @@ export default function AIChatbot() {
           </div>
 
           {/* Messages Log */}
-          <div data-lenis-prevent className="flex-1 overflow-y-auto p-5 space-y-4 text-xs font-sans">
+          <div className="flex-1 overflow-y-auto p-5 space-y-4 text-xs font-sans">
             {messages.map((msg, idx) => (
               <div key={idx} className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}>
                 <div

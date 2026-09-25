@@ -12,88 +12,71 @@ import Achievements from "@/components/sections/Achievements";
 import Certifications from "@/components/sections/Certifications";
 import BugHunt from "@/components/sections/BugHunt";
 import GlobalMission from "@/components/sections/GlobalMission";
-import ScrollScene from "@/components/ui/ScrollScene";
 import Contact from "@/components/sections/Contact";
 import Footer from "@/components/Footer";
 import AIChatbot from "@/components/AIChatbot";
-import SmoothScroll from "@/components/SmoothScroll";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
-import Preloader from "@/components/Preloader";
 import WeatherOverlay from "@/components/weather/WeatherOverlay";
 import { WeatherProvider } from "@/components/weather/WeatherContext";
 import ScrollProgress from "@/components/ScrollProgress";
-import ThemeWorld from "@/components/three/ThemeWorldLazy";
+import PhotoBackdrop from "@/components/PhotoBackdrop";
 
 export default function Home() {
   return (
     <WeatherProvider>
-      <Preloader />
-      <ThemeWorld />
-      <SmoothScroll />
+      <PhotoBackdrop />
       <WeatherOverlay />
       <ThemeSwitcher />
       <ScrollProgress />
       <Navbar />
 
-      <div id="home" data-world="none">
+      <div id="home" data-scene="none">
         <Hero />
       </div>
 
       <main className="w-full">
-        <div data-world="milkyway">
-          <ScrollScene>
-            <Bento />
-          </ScrollScene>
-        </div>
+        <div data-scene="alpine-dawn">
+<Bento />
+</div>
 
-        <div data-world="none">
+        <div data-scene="none">
           <GlobalMission />
         </div>
 
-        <div id="projects" data-world="nyc">
+        <div id="projects" data-scene="nyc-night">
           <Projects />
         </div>
 
-        <div data-world="ocean">
+        <div data-scene="ocean-aerial">
           <div id="skills">
-            <ScrollScene>
-              <Skills />
-            </ScrollScene>
-          </div>
+<Skills />
+</div>
 
           <Ribbon />
         </div>
 
-        <div id="about" data-world="jungle">
-          <ScrollScene>
-            <About />
-          </ScrollScene>
-        </div>
+        <div id="about" data-scene="forest-light">
+<About />
+</div>
 
-        <div id="experience" data-world="port">
-          <ScrollScene>
-            <Experience />
-          </ScrollScene>
-        </div>
+        <div id="experience" data-scene="dubai-sunset">
+<Experience />
+</div>
 
 
-        <div id="achievements" data-world="dragon">
-          <ScrollScene>
-            <Achievements />
-          </ScrollScene>
-        </div>
+        <div id="achievements" data-scene="aurora-peaks">
+<Achievements />
+</div>
 
-        <div id="certifications" data-world="dragon">
+        <div id="certifications" data-scene="lake-sunset">
           <Certifications />
         </div>
 
-        <div id="game" data-world="milkyway">
-          <ScrollScene>
-            <BugHunt />
-          </ScrollScene>
-        </div>
+        <div id="game" data-scene="tokyo-neon">
+<BugHunt />
+</div>
 
-        <div data-world="milkyway">
+        <div data-scene="manhattan-aerial">
           <Contact />
           <Footer />
         </div>
