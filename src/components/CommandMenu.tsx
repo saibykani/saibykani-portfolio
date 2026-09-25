@@ -96,9 +96,9 @@ export default function CommandMenu({ open, onClose }: { open: boolean; onClose:
           className="fixed inset-0 z-[7000] flex items-start justify-center bg-black/60 px-4 pt-[15vh] backdrop-blur-sm"
         >
           <motion.div
-            initial={{ opacity: 0, scale: 0.96, y: -10, filter: "blur(6px)" }}
-            animate={{ opacity: 1, scale: 1, y: 0, filter: "blur(0px)" }}
-            exit={{ opacity: 0, scale: 0.96, y: -10, filter: "blur(6px)" }}
+            initial={{ opacity: 0, scale: 0.96, y: -10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.96, y: -10 }}
             transition={{ type: "spring", stiffness: 400, damping: 32 }}
             onClick={(e) => e.stopPropagation()}
             className="w-full max-w-lg overflow-hidden rounded-2xl border border-white/10 bg-zinc-900/95 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.6)]"

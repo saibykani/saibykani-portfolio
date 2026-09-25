@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { adaptiveResolution } from "@/components/three/adaptive";
 import { onLightning, PALETTES, type Weather } from "@/components/weather/WeatherContext";
 
 /*
@@ -35,7 +36,7 @@ float noise(vec2 p) {
 float fbm(vec2 p) {
   float v = 0.0, a = 0.5;
   mat2 r = mat2(0.8, -0.6, 0.6, 0.8);
-  for (int i = 0; i < 6; i++) { v += a * noise(p); p = r * p * 2.02 + 0.13; a *= 0.5; }
+  for (int i = 0; i < 5; i++) { v += a * noise(p); p = r * p * 2.02 + 0.13; a *= 0.5; }
   return v;
 }
 
@@ -166,7 +167,8 @@ export default function SkyCanvas({ className = "", weather = "night" }: { class
 
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     // Render at reduced resolution; clouds are soft so this is invisible and keeps it cheap
-    const scale = Math.min(window.devicePixelRatio || 1, 1.5) * 0.6;
+    let scale = Math.min(window.devicePixelRatio || 1, 1.5) * 0.5;
+    const maxScale = scale;
 
     const resize = () => {
       const w = Math.max(1, Math.floor(canvas.clientWidth * scale));
@@ -195,9 +197,17 @@ export default function SkyCanvas({ className = "", weather = "night" }: { class
 
     let raf = 0;
     const start = performance.now();
+    let lastNow = performance.now();
+    const tuneRes = adaptiveResolution(maxScale, 0.25, (r) => {
+      scale = r;
+      resize();
+    });
     const frame = (now: number) => {
       raf = requestAnimationFrame(frame);
+      const rawDt = (now - lastNow) / 1000;
+      lastNow = now;
       if (!visible || document.hidden) return;
+      tuneRes(rawDt);
       mouse.x += (target.x - mouse.x) * 0.04;
       mouse.y += (target.y - mouse.y) * 0.04;
       gl.uniform2f(uRes, canvas.width, canvas.height);

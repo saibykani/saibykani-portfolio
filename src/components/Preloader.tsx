@@ -53,7 +53,7 @@ export default function Preloader() {
             transition={{ duration: 0.85, ease: [0.76, 0, 0.24, 1] }}
           />
           <motion.div
-            animate={opening ? { opacity: 0, scale: 1.4, filter: "blur(10px)" } : { opacity: 1, scale: 1 }}
+            animate={opening ? { opacity: 0, scale: 1.4 } : { opacity: 1, scale: 1 }}
             transition={{ duration: 0.6 }}
             className="absolute inset-0 flex flex-col items-center justify-center gap-6"
           >

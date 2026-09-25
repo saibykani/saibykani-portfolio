@@ -58,11 +58,6 @@ export default function RootLayout({
       <body
         className={`font-outfit antialiased text-foreground min-h-screen relative overflow-x-hidden`}
       >
-        {/* Bottom viewport blur fade */}
-        <div className="pointer-events-none blur-wrapper fixed left-0 z-40 w-full select-none bg-gradient-to-t from-black/30 to-transparent no-print" />
-
-        {/* Subtle Film Grain Noise */}
-        <div className="noise-texture no-print" />
 
         {children}
 

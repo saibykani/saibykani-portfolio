@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Check, Copy, FileCheck2, FileText, Mail } from "lucide-react";
 import resumeData from "@/data/resumeData.json";
 import { ShinyButton } from "@/components/ui/primitives";
@@ -18,8 +18,8 @@ function Words({ text, delay = 0, className = "" }: { text: string; delay?: numb
       {text.split(" ").map((w, i) => (
         <motion.span
           key={i}
-          initial={{ opacity: 0, y: 18, filter: "blur(10px)" }}
-          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: delay + i * 0.07, ease }}
           className={`inline-block ${className}`}
         >
@@ -36,6 +36,13 @@ const ease = [0.22, 1, 0.36, 1] as const;
 export default function Hero() {
   const [copied, setCopied] = useState(false);
   const { weather } = useWeather();
+  // download the 3D planes only after the hero text has painted and the browser is idle
+  const [sky3d, setSky3d] = useState(false);
+  useEffect(() => {
+    const ric = (window as any).requestIdleCallback ?? ((cb: () => void) => setTimeout(cb, 600));
+    const h = ric(() => setSky3d(true), { timeout: 1500 });
+    return () => ((window as any).cancelIdleCallback ?? clearTimeout)(h);
+  }, []);
   const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end start"] });
   const contentY = useTransform(scrollYProgress, [0, 1], [0, 160]);
@@ -175,7 +182,7 @@ export default function Hero() {
       {/* Atmosphere: live shader sky */}
       <motion.div style={{ scale: skyScale }} className="pointer-events-none absolute inset-0 z-0 select-none overflow-hidden">
         <SkyCanvas weather={weather} />
-        <Hero3D weather={weather} />
+        {sky3d && <Hero3D weather={weather} />}
         <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-b from-transparent to-black" />
       </motion.div>
     </section>

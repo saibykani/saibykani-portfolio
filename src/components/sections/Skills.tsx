@@ -127,9 +127,9 @@ export default function Skills() {
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeCat}
-                  initial={{ opacity: 0, filter: "blur(6px)" }}
-                  animate={{ opacity: 1, filter: "blur(0px)" }}
-                  exit={{ opacity: 0, filter: "blur(6px)" }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
                   transition={{ duration: 0.3 }}
                 >
                   <p className="mb-4 text-center font-instrument text-2xl text-white md:text-3xl">{categories[activeCat].title}</p>

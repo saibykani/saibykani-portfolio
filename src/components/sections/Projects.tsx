@@ -165,8 +165,8 @@ function ProjectCard({
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 40, filter: "blur(8px)" }}
-      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
       transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
       className="flex w-full flex-col lg:pr-10"
@@ -226,9 +226,9 @@ function DetailPanel({ project }: { project: ProjectData }) {
     <AnimatePresence mode="wait">
       <motion.div
         key={project.id}
-        initial={{ opacity: 0, y: 12, filter: "blur(6px)" }}
-        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-        exit={{ opacity: 0, y: -12, filter: "blur(6px)" }}
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -12 }}
         transition={{ duration: 0.4 }}
         className="flex flex-col gap-5"
       >

@@ -6,11 +6,10 @@ import { motion } from "framer-motion";
 // through them, a live dot pulses, and the letters split apart on hover.
 export default function Monogram({ className = "text-[28px]", animate = true }: { className?: string; animate?: boolean }) {
   const letter = {
-    hidden: { y: "70%", opacity: 0, filter: "blur(6px)" },
+    hidden: { y: "70%", opacity: 0 },
     show: (i: number) => ({
       y: "0%",
       opacity: 1,
-      filter: "blur(0px)",
       transition: { delay: 0.15 + i * 0.12, duration: 0.7, ease: [0.22, 1, 0.36, 1] as const },
     }),
   };

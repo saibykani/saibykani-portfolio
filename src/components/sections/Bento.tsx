@@ -12,7 +12,7 @@ import { TechIcon } from "@/components/ui/techIcons";
 const exp = resumeData.experience[0];
 
 const cardBase =
-  "group relative flex size-full flex-col justify-between overflow-hidden rounded-xl bg-[#0b0b0b]/60 backdrop-blur-md transform-gpu [border:1px_solid_rgba(255,255,255,.1)] [box-shadow:0_-20px_80px_-20px_#ffffff1f_inset]";
+  "group relative flex size-full flex-col justify-between overflow-hidden rounded-xl bg-[#0b0b0b]/75 transform-gpu [border:1px_solid_rgba(255,255,255,.1)] [box-shadow:0_-20px_80px_-20px_#ffffff1f_inset]";
 
 function scrollTo(id: string) {
   const el = document.getElementById(id);
@@ -214,6 +214,27 @@ function DotGlobe() {
   useEffect(() => {
     const canvas = ref.current;
     if (!canvas) return;
+    // don't spin up a WebGL context until the card is about to be seen
+    let started = false;
+    let stop = () => {};
+    const gate = new IntersectionObserver(
+      ([e]) => {
+        if (!e.isIntersecting || started) return;
+        started = true;
+        gate.disconnect();
+        stop = start();
+      },
+      { rootMargin: "300px" }
+    );
+    gate.observe(canvas);
+    return () => {
+      gate.disconnect();
+      stop();
+    };
+  }, []);
+
+  function start() {
+    const canvas = ref.current!;
     const size = canvas.offsetWidth;
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     let phi = 3.7; // start with India facing the viewer
@@ -241,7 +262,7 @@ function DotGlobe() {
         opacity: 0.95,
       });
     } catch {
-      return;
+      return () => {};
     }
     let raf = 0;
     let visible = true;
@@ -260,7 +281,8 @@ function DotGlobe() {
       io.disconnect();
       globe?.destroy();
     };
-  }, []);
+  }
+
   return <canvas ref={ref} className="aspect-square w-full opacity-0 transition-opacity duration-1000" />;
 }
 
@@ -402,8 +424,8 @@ export default function Bento() {
   return (
     <section className="w-full px-4 py-10 md:px-5">
       <motion.div
-        initial={{ opacity: 0, y: 30, filter: "blur(8px)" }}
-        whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-80px" }}
         transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
         className="mx-auto grid w-full grid-cols-6 gap-4 md:auto-rows-[19rem]"

@@ -78,6 +78,7 @@ export default function WeatherOverlay() {
 
     let raf = 0;
     let t = 0;
+    let cleared = false;
     const loop = () => {
       raf = requestAnimationFrame(loop);
       if (document.hidden) return;
@@ -95,8 +96,20 @@ export default function WeatherOverlay() {
 
       const sv = scrollY - lastScroll; // particles react to scroll (parallax)
       lastScroll = scrollY;
+      // inside a 3D theme world the seasonal particles are rendered in 3D instead
+      const inWorld = !!document.documentElement.dataset.world && document.documentElement.dataset.world !== "none";
+      if (inWorld) {
+        if (!cleared) ctx.clearRect(0, 0, W, H);
+        cleared = true;
+        return;
+      }
+      if (kind === "none" || !parts.length) {
+        if (!cleared) ctx.clearRect(0, 0, W, H);
+        cleared = true;
+        return;
+      }
+      cleared = false;
       ctx.clearRect(0, 0, W, H);
-      if (kind === "none" || !parts.length) return;
       ctx.globalAlpha = 1;
 
       for (const p of parts) {

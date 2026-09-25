@@ -40,7 +40,7 @@ export default function Home() {
       </div>
 
       <main className="w-full">
-        <div data-world="aurora">
+        <div data-world="milkyway">
           <ScrollScene>
             <Bento />
           </ScrollScene>
@@ -50,7 +50,7 @@ export default function Home() {
           <GlobalMission />
         </div>
 
-        <div id="projects" data-world="cyber">
+        <div id="projects" data-world="nyc">
           <Projects />
         </div>
 
@@ -70,30 +70,30 @@ export default function Home() {
           </ScrollScene>
         </div>
 
-        <div id="experience" data-world="sakura">
+        <div id="experience" data-world="port">
           <ScrollScene>
             <Experience />
           </ScrollScene>
         </div>
 
 
-        <div id="achievements" data-world="crystal">
+        <div id="achievements" data-world="dragon">
           <ScrollScene>
             <Achievements />
           </ScrollScene>
         </div>
 
-        <div id="certifications" data-world="asteroid">
+        <div id="certifications" data-world="dragon">
           <Certifications />
         </div>
 
-        <div id="game" data-world="synthwave">
+        <div id="game" data-world="milkyway">
           <ScrollScene>
             <BugHunt />
           </ScrollScene>
         </div>
 
-        <div data-world="galaxy">
+        <div data-world="milkyway">
           <Contact />
           <Footer />
         </div>
