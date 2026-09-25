@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { useCallback, useEffect, useState } from "react";
-import { ArrowRight, Check, Copy, FileCheck2, FileText, Mail } from "lucide-react";
+import { ArrowRight, Check, Copy, FileText, Mail } from "lucide-react";
 import resumeData from "@/data/resumeData.json";
 import { ShinyButton } from "@/components/ui/primitives";
 import TimeSky, { PHASE_META, type SkyPhase } from "@/components/ui/TimeSky";
@@ -29,6 +29,14 @@ const ROLES = [
   "Release Quality Guardian",
 ];
 
+const HEADLINES = [
+  "I help teams ship payment systems",
+  "I break software before users do",
+  "I turn flaky suites into green pipelines",
+  "I automate what matters most",
+  "I guard every transaction end to end",
+];
+
 const TAGLINES = [
   "zero-defect confidence",
   "production-ready quality",
@@ -36,6 +44,9 @@ const TAGLINES = [
   "flawless releases",
   "rock-solid reliability",
   "lightning-fast regression",
+  "confidence at every release",
+  "data-driven test coverage",
+  "millions of transactions validated",
 ];
 
 function useRotator(length: number, ms: number, delay = 0) {
@@ -71,12 +82,43 @@ function Rotating({ items, index, className = "" }: { items: string[]; index: nu
   );
 }
 
+/* Classic typewriter: types a role, holds, deletes, moves to the next. */
+function Typewriter({ items, className = "" }: { items: string[]; className?: string }) {
+  const [idx, setIdx] = useState(0);
+  const [text, setText] = useState("");
+  const [deleting, setDeleting] = useState(false);
+  useEffect(() => {
+    const full = items[idx];
+    let ms = deleting ? 28 : 55;
+    if (!deleting && text === full) ms = 1700;
+    if (deleting && text === "") ms = 250;
+    const id = setTimeout(() => {
+      if (!deleting && text === full) setDeleting(true);
+      else if (deleting && text === "") {
+        setDeleting(false);
+        setIdx((i) => (i + 1) % items.length);
+      } else setText(full.slice(0, text.length + (deleting ? -1 : 1)));
+    }, ms);
+    return () => clearTimeout(id);
+  }, [text, deleting, idx, items]);
+  return (
+    <span className={`sm:whitespace-nowrap ${className}`}>
+      {text}
+      <span className="ml-0.5 inline-block h-[1.05em] w-[2px] translate-y-[0.15em] animate-pulse bg-sky-300" />
+    </span>
+  );
+}
+
+/* Self-contained rotator so only this word re-renders. */
+function AutoRotating({ items, ms, delay = 0, className = "" }: { items: string[]; ms: number; delay?: number; className?: string }) {
+  const i = useRotator(items.length, ms, delay);
+  return <Rotating items={items} index={i} className={className} />;
+}
+
 export default function Hero() {
   const [copied, setCopied] = useState(false);
   const [phase, setPhase] = useState<SkyPhase | null>(null);
   const onPhase = useCallback((p: SkyPhase) => setPhase(p), []);
-  const roleIdx = useRotator(ROLES.length, 2600, 1200);
-  const tagIdx = useRotator(TAGLINES.length, 3400, 2000);
   const { email, name } = resumeData.personal;
 
   const copyEmail = async () => {
@@ -123,9 +165,9 @@ export default function Hero() {
           transition={{ duration: 0.8, delay: 0.1, ease }}
           className="text-center font-outfit text-4xl font-medium leading-tight text-white sm:text-5xl lg:text-6xl"
         >
-          <span className="md:whitespace-nowrap">I help teams ship payment systems</span>
+          <AutoRotating items={HEADLINES} ms={4200} delay={3000} className="max-md:whitespace-normal" />
           <br />
-          with <Rotating items={TAGLINES} index={tagIdx} className="pr-1 font-instrument font-normal italic text-white/95" />
+          with <AutoRotating items={TAGLINES} ms={2800} delay={1500} className="pr-1 font-instrument font-normal italic text-white/95" />
         </motion.h2>
 
         {/* Intro line with rotating roles */}
@@ -150,7 +192,7 @@ export default function Hero() {
           </span>
           <span className="flex items-center gap-2">
             <span>a</span>
-            <Rotating items={ROLES} index={roleIdx} className="font-semibold text-sky-200" />
+            <Typewriter items={ROLES} className="font-semibold text-sky-200" />
           </span>
         </motion.h1>
 
@@ -165,14 +207,6 @@ export default function Hero() {
                 <span className="flex items-center justify-center gap-2">
                   <FileText className="size-4 text-sky-300" />
                   <span>See Resume</span>
-                </span>
-              </ShinyButton>
-            </a>
-            <a href="/Sai_Krishna_Bykani_Resume.pdf" download="Sai_Krishna_Bykani_Resume.pdf">
-              <ShinyButton>
-                <span className="flex items-center justify-center gap-2">
-                  <FileCheck2 className="size-4 text-emerald-300" />
-                  <span>View CV</span>
                 </span>
               </ShinyButton>
             </a>

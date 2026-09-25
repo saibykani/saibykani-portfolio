@@ -30,24 +30,24 @@ export default function Home() {
       <ScrollProgress />
       <Navbar />
 
-      <div id="home" data-scene="none">
+      <div id="home" data-scene="none" className="relative">
         <Hero />
       </div>
 
       <main className="w-full">
-        <div data-scene="alpine-dawn">
+        <div data-scene="alpine-dawn" className="relative z-[2]">
 <Bento />
 </div>
 
-        <div data-scene="none">
+        <div data-scene="none" data-sky-off className="relative z-[2]">
           <GlobalMission />
         </div>
 
-        <div id="projects" data-scene="nyc-night">
+        <div id="projects" data-scene="nyc-night" className="relative z-[2]">
           <Projects />
         </div>
 
-        <div data-scene="ocean-aerial">
+        <div data-scene="ocean-aerial" className="relative z-[2]">
           <div id="skills">
 <Skills />
 </div>
@@ -55,28 +55,28 @@ export default function Home() {
           <Ribbon />
         </div>
 
-        <div id="about" data-scene="forest-light">
+        <div id="about" data-scene="forest-light" className="relative z-[2]">
 <About />
 </div>
 
-        <div id="experience" data-scene="dubai-sunset">
+        <div id="experience" data-scene="dubai-sunset" className="relative z-[2]">
 <Experience />
 </div>
 
 
-        <div id="achievements" data-scene="aurora-peaks">
+        <div id="achievements" data-scene="aurora-peaks" className="relative z-[2]">
 <Achievements />
 </div>
 
-        <div id="certifications" data-scene="lake-sunset">
+        <div id="certifications" data-scene="lake-sunset" className="relative z-[2]">
           <Certifications />
         </div>
 
-        <div id="game" data-scene="tokyo-neon">
+        <div id="game" data-scene="tokyo-neon" className="relative z-[2]">
 <BugHunt />
 </div>
 
-        <div data-scene="manhattan-aerial">
+        <div data-scene="manhattan-aerial" className="relative z-[2]">
           <Contact />
           <Footer />
         </div>
