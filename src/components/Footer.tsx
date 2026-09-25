@@ -44,7 +44,7 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="relative z-20 border-t border-white/5 bg-black/75 no-print">
+    <footer className="relative z-20 border-t border-white/5 bg-black/60 backdrop-blur-sm no-print">
       <section className="container py-10">
         <div className="relative mb-10 flex flex-col items-center gap-6 md:flex-row">
           <div className="flex flex-1 flex-col items-start gap-4 md:flex-row md:justify-between">
@@ -88,7 +88,7 @@ export default function Footer() {
 
         <div className="flex flex-col-reverse items-center justify-between gap-4 border-t border-white/10 pt-6 sm:flex-row">
           <p className="text-sm text-neutral-400">
-            © {new Date().getFullYear()} {name}. All rights reserved. · Photography via Unsplash
+            © {new Date().getFullYear()} {name}. All rights reserved.
           </p>
           <button
             onClick={() => go("home")}

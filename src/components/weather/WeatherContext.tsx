@@ -25,7 +25,7 @@ export const PALETTES: Record<Weather, SkyPalette> = {
 };
 
 export const WEATHER_META: Record<Weather, { label: string; particle: "none" | "snow" | "rain" | "leaves" | "fireflies" }> = {
-  night: { label: "Clear sky", particle: "none" },
+  night: { label: "Starry night", particle: "none" },
   winter: { label: "Winter", particle: "snow" },
   summer: { label: "Summer", particle: "fireflies" },
   rain: { label: "Monsoon storm", particle: "rain" },

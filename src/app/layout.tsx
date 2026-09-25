@@ -47,12 +47,6 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark scroll-smooth">
       <head>
-        {/* pick the hero sky for the visitor's local time and start downloading it before any JS boots */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(){try{var q=new URLSearchParams(location.search).get('sky');var h=new Date().getHours();var p=q||(h>=5&&h<9?'sunrise':h>=9&&h<16?'day':h>=16&&h<19?'sunset':'night');var m=innerWidth<768?'-m':'';var l=document.createElement('link');l.rel='preload';l.as='image';l.href='/photos/hero-'+p+m+'.webp';l.setAttribute('fetchpriority','high');document.head.appendChild(l);}catch(e){}})();`,
-          }}
-        />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         {/* eslint-disable-next-line @next/next/no-page-custom-font */}

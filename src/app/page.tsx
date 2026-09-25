@@ -12,71 +12,88 @@ import Achievements from "@/components/sections/Achievements";
 import Certifications from "@/components/sections/Certifications";
 import BugHunt from "@/components/sections/BugHunt";
 import GlobalMission from "@/components/sections/GlobalMission";
+import ScrollScene from "@/components/ui/ScrollScene";
 import Contact from "@/components/sections/Contact";
 import Footer from "@/components/Footer";
 import AIChatbot from "@/components/AIChatbot";
+import SmoothScroll from "@/components/SmoothScroll";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
+import Preloader from "@/components/Preloader";
 import WeatherOverlay from "@/components/weather/WeatherOverlay";
 import { WeatherProvider } from "@/components/weather/WeatherContext";
 import ScrollProgress from "@/components/ScrollProgress";
-import PhotoBackdrop from "@/components/PhotoBackdrop";
+import ThemeWorld from "@/components/three/ThemeWorldLazy";
 
 export default function Home() {
   return (
     <WeatherProvider>
-      <PhotoBackdrop />
+      <Preloader />
+      <ThemeWorld />
+      <SmoothScroll />
       <WeatherOverlay />
       <ThemeSwitcher />
       <ScrollProgress />
       <Navbar />
 
-      <div id="home" data-scene="none" className="relative">
+      <div id="home" data-world="none">
         <Hero />
       </div>
 
       <main className="w-full">
-        <div data-scene="alpine-dawn" className="relative z-[2]">
-<Bento />
-</div>
+        <div data-world="aurora">
+          <ScrollScene>
+            <Bento />
+          </ScrollScene>
+        </div>
 
-        <div data-scene="none" data-sky-off className="relative z-[2]">
+        <div data-world="none">
           <GlobalMission />
         </div>
 
-        <div id="projects" data-scene="nyc-night" className="relative z-[2]">
+        <div id="projects" data-world="cyber">
           <Projects />
         </div>
 
-        <div data-scene="ocean-aerial" className="relative z-[2]">
+        <div data-world="ocean">
           <div id="skills">
-<Skills />
-</div>
+            <ScrollScene>
+              <Skills />
+            </ScrollScene>
+          </div>
 
           <Ribbon />
         </div>
 
-        <div id="about" data-scene="forest-light" className="relative z-[2]">
-<About />
-</div>
+        <div id="about" data-world="jungle">
+          <ScrollScene>
+            <About />
+          </ScrollScene>
+        </div>
 
-        <div id="experience" data-scene="dubai-sunset" className="relative z-[2]">
-<Experience />
-</div>
+        <div id="experience" data-world="sakura">
+          <ScrollScene>
+            <Experience />
+          </ScrollScene>
+        </div>
 
 
-        <div id="achievements" data-scene="aurora-peaks" className="relative z-[2]">
-<Achievements />
-</div>
+        <div id="achievements" data-world="crystal">
+          <ScrollScene>
+            <Achievements />
+          </ScrollScene>
+        </div>
 
-        <div id="certifications" data-scene="lake-sunset" className="relative z-[2]">
+        <div id="certifications" data-world="asteroid">
           <Certifications />
         </div>
 
-        <div id="game" data-scene="tokyo-neon" className="relative z-[2]">
-<BugHunt />
-</div>
+        <div id="game" data-world="synthwave">
+          <ScrollScene>
+            <BugHunt />
+          </ScrollScene>
+        </div>
 
-        <div data-scene="manhattan-aerial" className="relative z-[2]">
+        <div data-world="galaxy">
           <Contact />
           <Footer />
         </div>

@@ -26,8 +26,8 @@ const kpiLabels: Record<string, string> = {
 function Section({ n, title, Icon, children }: { n: string; title: string; Icon: typeof Award; children: ReactNode }) {
   return (
     <motion.section
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: 24, filter: "blur(6px)" }}
+      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.7, ease }}
       className="mb-10 print:mb-5 print:break-inside-avoid-page"
@@ -133,8 +133,8 @@ export default function ResumePage() {
             </motion.div>
             <div className="min-w-0 flex-1">
               <motion.h1
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, y: 16, filter: "blur(8px)" }}
+                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                 transition={{ duration: 0.8, delay: 0.35, ease }}
                 className="font-instrument text-4xl leading-none text-white sm:text-5xl print:text-3xl print:text-slate-900"
               >

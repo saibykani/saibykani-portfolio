@@ -46,9 +46,9 @@ function MoreMenu({ onPick }: { onPick: () => void }) {
   ];
   return (
     <motion.div
-      initial={{ opacity: 0, y: -8, scale: 0.98 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      exit={{ opacity: 0, y: -8, scale: 0.98 }}
+      initial={{ opacity: 0, y: -8, scale: 0.98, filter: "blur(6px)" }}
+      animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+      exit={{ opacity: 0, y: -8, scale: 0.98, filter: "blur(6px)" }}
       transition={{ duration: 0.2 }}
       className="grid w-[650px] grid-cols-2 gap-4 rounded-2xl border border-white/[0.08] bg-zinc-900/[0.98] p-4 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.6),0_0_0_1px_rgba(255,255,255,0.06)_inset]"
     >
@@ -175,8 +175,8 @@ export default function Navbar() {
         className="fixed top-2.5 z-[5000] w-full md:top-4 no-print"
       >
         <motion.nav
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, y: -20, filter: "blur(6px)" }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="flex w-full items-center justify-between px-4 py-1.5 md:px-6"
         >

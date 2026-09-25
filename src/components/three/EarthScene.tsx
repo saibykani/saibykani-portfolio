@@ -2,7 +2,6 @@
 
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
-import { adaptiveResolution } from "@/components/three/adaptive";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { latLonToVec, moonState, subsolarPoint } from "@/components/three/astro";
 
@@ -218,12 +217,8 @@ export default function EarthScene({ onLabels }: { onLabels?: (labels: SceneLabe
     } catch {
       return;
     }
-    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+    const dpr = Math.min(window.devicePixelRatio || 1, 1.75);
     renderer.setPixelRatio(dpr);
-    const tuneRes = adaptiveResolution(dpr, 0.6, (r) => {
-      renderer.setPixelRatio(r);
-      renderer.setSize(mount.clientWidth, mount.clientHeight, false);
-    });
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.15;
@@ -747,10 +742,8 @@ export default function EarthScene({ onLabels }: { onLabels?: (labels: SceneLabe
     let raf = 0;
     const loop = () => {
       raf = requestAnimationFrame(loop);
-      const rawDt = clock.getDelta();
-      const dt = Math.min(rawDt, 0.05);
+      const dt = Math.min(clock.getDelta(), 0.05);
       if (!visible || document.hidden) return;
-      tuneRes(rawDt);
       const t = clock.elapsedTime;
 
       astroT += dt;

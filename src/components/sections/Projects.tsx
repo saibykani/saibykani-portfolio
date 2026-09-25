@@ -165,8 +165,8 @@ function ProjectCard({
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: 40, filter: "blur(8px)" }}
+      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
       viewport={{ once: true, margin: "-80px" }}
       transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
       className="flex w-full flex-col lg:pr-10"
@@ -226,9 +226,9 @@ function DetailPanel({ project }: { project: ProjectData }) {
     <AnimatePresence mode="wait">
       <motion.div
         key={project.id}
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -12 }}
+        initial={{ opacity: 0, y: 12, filter: "blur(6px)" }}
+        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+        exit={{ opacity: 0, y: -12, filter: "blur(6px)" }}
         transition={{ duration: 0.4 }}
         className="flex flex-col gap-5"
       >
@@ -300,6 +300,7 @@ function CaseStudyModal({ project, onClose }: { project: ProjectData; onClose: (
         exit={{ y: 60, opacity: 0, scale: 0.97 }}
         transition={{ type: "spring", damping: 26, stiffness: 260 }}
         onClick={(e) => e.stopPropagation()}
+        data-lenis-prevent
         className="relative max-h-[92vh] w-full max-w-4xl overflow-y-auto rounded-t-3xl border border-white/10 bg-zinc-950 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.6)] sm:rounded-3xl"
       >
         <div className="relative overflow-hidden p-6 sm:p-10" style={{ background: (layers[project.id] ?? fallbackLayer).bg }}>

@@ -202,7 +202,7 @@ export default function Contact() {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1, duration: 0.5 }}
-                  className="group flex items-center gap-4 rounded-2xl border border-white/10 bg-black/60 p-5 transition-colors hover:border-white/20 hover:bg-white/[0.05]"
+                  className="group flex items-center gap-4 rounded-2xl border border-white/10 bg-black/40 p-5 backdrop-blur-sm transition-colors hover:border-white/20 hover:bg-white/[0.05]"
                 >
                   <span className="flex size-14 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-white transition-colors duration-300 group-hover:bg-white group-hover:text-black">
                     <Icon className="size-6" />
@@ -220,7 +220,7 @@ export default function Contact() {
           </Reveal>
 
           <Reveal delay={0.15}>
-            <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-black/70 p-6 sm:p-10">
+            <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-black/50 p-6 backdrop-blur-md sm:p-10">
               <AnimatePresence mode="wait">
                 {status === "success" ? (
                   <motion.div

@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Hand, Moon, Satellite, Sun } from "lucide-react";
 import { SectionHeading } from "@/components/ui/primitives";
@@ -17,15 +17,6 @@ const fmtLon = (v: number) => `${Math.abs(v).toFixed(1)}°${v >= 0 ? "E" : "W"}`
 export default function GlobalMission() {
   const [labels, setLabels] = useState<SceneLabel[]>([]);
   const [now, setNow] = useState<Date | null>(null);
-  const trackRef = useRef<HTMLDivElement>(null);
-  const [armed, setArmed] = useState(false);
-  useEffect(() => {
-    const el = trackRef.current;
-    if (!el) return;
-    const io = new IntersectionObserver(([e]) => e.isIntersecting && (setArmed(true), io.disconnect()), { rootMargin: "100% 0px" });
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
 
   useEffect(() => {
     setNow(new Date());
@@ -41,10 +32,10 @@ export default function GlobalMission() {
     <section className="relative pt-12">
       <SectionHeading eyebrow="Mission Control" title="Around the world," highlight="around the clock" className="container mb-8" />
 
-      <div ref={trackRef} data-earth-track className="relative h-[260vh]">
+      <div data-earth-track className="relative h-[260vh]">
       <div className="sticky top-0 mx-auto flex h-[100svh] w-full items-center overflow-hidden md:px-5">
         <div className="relative h-[92svh] w-full overflow-hidden rounded-none bg-[radial-gradient(80%_70%_at_50%_45%,#0b1638_0%,#03040a_70%)] md:rounded-3xl md:shadow-border">
-          {armed && <EarthScene onLabels={setLabels} />}
+          <EarthScene onLabels={setLabels} />
 
           {/* city labels that follow the globe */}
           <div className="pointer-events-none absolute inset-0">
