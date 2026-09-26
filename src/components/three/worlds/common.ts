@@ -1,13 +1,13 @@
 import * as THREE from "three";
 
-export type WorldId = "aurora" | "city" | "ocean" | "jungle" | "sakura" | "summit" | "alpine" | "desert" | "beach";
+export type WorldId = "aurora" | "city" | "galaxy" | "jungle" | "balloons" | "summit" | "alpine" | "desert" | "beach";
 
 export const WORLD_META: Record<WorldId, { label: string; emoji: string }> = {
   aurora: { label: "Arctic Northern Lights", emoji: "🏔️" },
   city: { label: "Night City", emoji: "🌃" },
-  ocean: { label: "Deep Ocean", emoji: "🌊" },
+  galaxy: { label: "Milky Way", emoji: "🌌" },
   jungle: { label: "Rainforest", emoji: "🌿" },
-  sakura: { label: "Kyoto Cherry Garden", emoji: "🌸" },
+  balloons: { label: "Balloons at Sunrise", emoji: "🎈" },
   summit: { label: "Golden Summit", emoji: "⛰️" },
   alpine: { label: "Alpine Lake Sunrise", emoji: "🌄" },
   desert: { label: "Desert Dunes", emoji: "🏜️" },

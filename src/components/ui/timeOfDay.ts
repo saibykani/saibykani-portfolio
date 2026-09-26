@@ -20,6 +20,14 @@ export function localHour(): number {
   return d.getHours() + d.getMinutes() / 60;
 }
 
+/* Greeting by the clock (separate from the sky phase): 11:05 AM is still morning. */
+export function greetForHour(h: number) {
+  if (h >= 5 && h < 12) return "Good morning";
+  if (h >= 12 && h < 17) return "Good afternoon";
+  if (h >= 17 && h < 21) return "Good evening";
+  return "Good night";
+}
+
 export function phaseForHour(h: number): SkyPhase {
   if (h >= 5 && h < 8.5) return "sunrise";
   if (h >= 8.5 && h < 16.5) return "day";

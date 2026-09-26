@@ -54,7 +54,7 @@ export default function Home() {
           <Projects />
         </div>
 
-        <div data-world="ocean">
+        <div data-world="galaxy">
           <div id="skills">
             <ScrollScene>
               <Skills />
@@ -70,7 +70,7 @@ export default function Home() {
           </ScrollScene>
         </div>
 
-        <div id="experience" data-world="sakura">
+        <div id="experience" data-world="balloons">
           <ScrollScene>
             <Experience />
           </ScrollScene>

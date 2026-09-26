@@ -4,7 +4,7 @@ import Image from "next/image";
 import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Check, Copy, FileText, Mail, MapPin } from "lucide-react";
-import { formatTime, localHour, PHASE_META, phaseForHour, type SkyPhase } from "@/components/ui/timeOfDay";
+import { formatTime, greetForHour, localHour, PHASE_META, phaseForHour, type SkyPhase } from "@/components/ui/timeOfDay";
 import resumeData from "@/data/resumeData.json";
 import { ShinyButton } from "@/components/ui/primitives";
 import SkyCanvas from "@/components/ui/SkyCanvas";
@@ -114,9 +114,17 @@ function Typewriter({ items, className = "" }: { items: string[]; className?: st
 function TimeBadge({ onPhase }: { onPhase: (p: SkyPhase) => void }) {
   const [now, setNow] = useState<Date | null>(null);
   useEffect(() => {
-    const tick = () => setNow(new Date());
+    // check every second, re-render only when the minute changes -> always matches the system clock
+    let last = -1;
+    const tick = () => {
+      const d = new Date();
+      if (d.getMinutes() !== last) {
+        last = d.getMinutes();
+        setNow(d);
+      }
+    };
     tick();
-    const id = setInterval(tick, 30_000);
+    const id = setInterval(tick, 1000);
     return () => clearInterval(id);
   }, []);
   const phase = now ? phaseForHour(localHour()) : null;
@@ -128,7 +136,7 @@ function TimeBadge({ onPhase }: { onPhase: (p: SkyPhase) => void }) {
   return (
     <span className="flex flex-wrap items-center justify-center gap-2 font-mono text-[11px] uppercase tracking-[0.2em] text-white/85">
       <span className="rounded-full bg-black/30 px-3 py-1 ring-1 ring-white/15">
-        {meta.emoji} {meta.greet} · {formatTime(now)}
+        {meta.emoji} {greetForHour(localHour())} · {formatTime(now)}
       </span>
       <span className="inline-flex items-center gap-1.5 rounded-full bg-black/30 px-3 py-1 ring-1 ring-white/15">
         <MapPin className="size-3 text-rose-300" /> Hyderabad · {formatTime(now, "Asia/Kolkata")} IST

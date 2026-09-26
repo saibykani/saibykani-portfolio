@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { desertExtras } from "./extra";
 import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
 import { canvasTex, Ctx, Fader, fbm2, glowTex, rand, World } from "./common";
 
@@ -568,6 +569,10 @@ export function desert(ctx: Ctx): World {
   sunL.position.copy(SUN).multiplyScalar(100);
   group.add(sunL);
 
+  // dust devils + airliner with contrail
+  const extras = desertExtras(f, lite, duneH);
+  group.add(extras.group);
+
   const tmpQ = new THREE.Quaternion(),
     tmpP = new THREE.Vector3(),
     tmpS = new THREE.Vector3(1, 1, 1),
@@ -583,6 +588,7 @@ export function desert(ctx: Ctx): World {
     fogDensity: 0.0031,
     update: (t, dt) => {
       U.uTime.value = t;
+      extras.update(t);
       uScale.value = window.innerHeight * Math.min(window.devicePixelRatio || 1, lite ? 1 : 1.35) * 0.87;
       // vehicles
       for (let i = 0; i < nV; i++) {

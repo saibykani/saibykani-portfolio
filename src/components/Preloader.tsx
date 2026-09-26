@@ -25,12 +25,12 @@ export default function Preloader() {
     const tick = (now: number) => {
       elapsed += Math.min(now - last, 60);
       last = now;
-      const t = Math.min(1, elapsed / 1500);
+      const t = Math.min(1, elapsed / 700);
       setN(Math.round((1 - Math.pow(1 - t, 3)) * 100));
       if (t < 1) raf = requestAnimationFrame(tick);
       else {
         setOpening(true);
-        setTimeout(() => setShow(false), 900);
+        setTimeout(() => setShow(false), 450);
       }
     };
     raf = requestAnimationFrame(tick);

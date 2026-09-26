@@ -3,14 +3,15 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import * as THREE from "three";
+import { adaptiveResolution } from "./adaptive";
 import { WORLD_META, type World, type WorldId } from "./worlds/common";
-import { ocean } from "./worlds/worldsA";
+import { balloons, galaxy } from "./worlds/extra";
 import { city } from "./worlds/city";
 import { alpine, aurora, summit } from "./worlds/mountains";
-import { jungle, sakura } from "./worlds/forest";
+import { jungle } from "./worlds/forest";
 import { beach, desert } from "./worlds/coast";
 
-const FACTORIES: Record<WorldId, typeof ocean> = { aurora, city, ocean, jungle, sakura, summit, alpine, desert, beach };
+const FACTORIES: Record<WorldId, typeof city> = { aurora, city, galaxy, jungle, balloons, summit, alpine, desert, beach };
 
 /* ?world=city previews a single world full-screen (handy for design work). */
 const forcedWorld = () => {
@@ -41,11 +42,16 @@ export default function ThemeWorld() {
 
     let renderer: THREE.WebGLRenderer;
     try {
-      renderer = new THREE.WebGLRenderer({ antialias: !lite, powerPreference: "high-performance" });
+      renderer = new THREE.WebGLRenderer({ antialias: false, powerPreference: "high-performance" });
     } catch {
       return;
     }
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, lite ? 1 : 1.35));
+    const maxDpr = Math.min(window.devicePixelRatio || 1, lite ? 1 : 1.25);
+    renderer.setPixelRatio(maxDpr);
+    const tuneRes = adaptiveResolution(maxDpr, 0.6, (r) => {
+      renderer.setPixelRatio(r);
+      renderer.setSize(window.innerWidth, window.innerHeight, false);
+    });
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.setClearColor("#000000");
@@ -106,6 +112,7 @@ export default function ThemeWorld() {
       const fdt = Math.min(raw, 0.5); // fades follow real time, even on slow devices
       if (document.hidden) return;
       const t = clock.elapsedTime;
+      if (active !== "none") tuneRes(raw);
 
       checkT += fdt;
       if (checkT > 0.15) {
