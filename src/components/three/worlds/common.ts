@@ -1,17 +1,17 @@
 import * as THREE from "three";
 
-export type WorldId = "aurora" | "cyber" | "ocean" | "jungle" | "sakura" | "crystal" | "asteroid" | "synthwave" | "galaxy";
+export type WorldId = "aurora" | "city" | "ocean" | "jungle" | "sakura" | "summit" | "alpine" | "desert" | "beach";
 
 export const WORLD_META: Record<WorldId, { label: string; emoji: string }> = {
-  aurora: { label: "Northern Lights", emoji: "🌌" },
-  cyber: { label: "Neon City", emoji: "🌃" },
+  aurora: { label: "Arctic Northern Lights", emoji: "🏔️" },
+  city: { label: "Night City", emoji: "🌃" },
   ocean: { label: "Deep Ocean", emoji: "🌊" },
   jungle: { label: "Rainforest", emoji: "🌿" },
-  sakura: { label: "Sakura Dusk", emoji: "🌸" },
-  crystal: { label: "Crystal Cave", emoji: "💎" },
-  asteroid: { label: "Asteroid Belt", emoji: "🪐" },
-  synthwave: { label: "Synthwave", emoji: "🕹️" },
-  galaxy: { label: "Deep Space", emoji: "✨" },
+  sakura: { label: "Kyoto Cherry Garden", emoji: "🌸" },
+  summit: { label: "Golden Summit", emoji: "⛰️" },
+  alpine: { label: "Alpine Lake Sunrise", emoji: "🌄" },
+  desert: { label: "Desert Dunes", emoji: "🏜️" },
+  beach: { label: "Tropical Coast", emoji: "🏝️" },
 };
 
 export type Ctx = { lite: boolean };
@@ -23,6 +23,9 @@ export type World = {
   fogDensity: number;
   fade: Fader;
   update: (t: number, dt: number) => void;
+  /* Optional camera path for this world (defaults: pos (0, 0.6, 9) looking at (0, 0.4, -8)).
+   * ThemeWorld eases toward it and layers a small pointer sway on top. */
+  view?: (t: number, pos: THREE.Vector3, look: THREE.Vector3) => void;
 };
 
 /* Tracks every material / light / uniform in a world so the whole world can fade in and out. */

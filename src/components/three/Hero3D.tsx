@@ -4,17 +4,25 @@ import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
 import { onLightning, type Weather } from "@/components/weather/WeatherContext";
+import { localHour, phaseForHour } from "@/components/ui/timeOfDay";
+
+/* Lighting follows the visitor's local time of day; a storm overrides it. */
+const themeKey = (w: Weather) => (w === "rain" ? "rain" : phaseForHour(localHour()));
 
 /* ---------------------------------------------------------------------------
  * Premium 3D sky layered over the shader background:
  *  - detailed airliners + a jet formation flying STRAIGHT lines through
  *    drifting cloud layers, with lit cabin windows, nav strobes, contrails
- *  - stargazing sky: twinkling star field, Milky Way band, slowly glowing
- *    constellations (Orion, Big Dipper), distant "night traffic" lights
+ *  - realistic night sky (twinkling stars only after dark), distant "night traffic" lights
+ *  - lighting follows the visitor's local time of day
  *  - lightning bolts + flash lighting during storms
  * ------------------------------------------------------------------------- */
 
-const THEME: Record<Weather, { cloud: string; cloudOpacity: number; fog: string; hemiSky: string; hemiGround: string; key: string; keyI: number; stars: number }> = {
+type SkyTheme = { cloud: string; cloudOpacity: number; fog: string; hemiSky: string; hemiGround: string; key: string; keyI: number; stars: number };
+const THEME: Record<Weather | "sunrise" | "day" | "sunset", SkyTheme> = {
+  sunrise: { cloud: "#ffc2a0", cloudOpacity: 0.26, fog: "#5a3048", hemiSky: "#ffd9b8", hemiGround: "#2a1a30", key: "#ffb98a", keyI: 2.4, stars: 0 },
+  day: { cloud: "#ffffff", cloudOpacity: 0.3, fog: "#7ea6d8", hemiSky: "#ffffff", hemiGround: "#6a7b90", key: "#fff6e8", keyI: 2.8, stars: 0 },
+  sunset: { cloud: "#ff9a6a", cloudOpacity: 0.28, fog: "#5a2034", hemiSky: "#ffc7a0", hemiGround: "#301020", key: "#ff9a5a", keyI: 2.4, stars: 0.1 },
   night: { cloud: "#5b76bd", cloudOpacity: 0.26, fog: "#0b1a45", hemiSky: "#9db4ff", hemiGround: "#0b1026", key: "#c7d6ff", keyI: 1.6, stars: 1 },
   winter: { cloud: "#dde7f5", cloudOpacity: 0.3, fog: "#2a3a55", hemiSky: "#eef4ff", hemiGround: "#3a4a66", key: "#ffffff", keyI: 1.9, stars: 0.7 },
   summer: { cloud: "#ffb08a", cloudOpacity: 0.26, fog: "#5a1d3c", hemiSky: "#ffd2a8", hemiGround: "#3a1030", key: "#ffc27a", keyI: 2.4, stars: 0.25 },
@@ -326,7 +334,7 @@ export default function Hero3D({ weather }: { weather: Weather }) {
     renderer.domElement.style.cssText = "position:absolute;inset:0;width:100%;height:100%;";
 
     const scene = new THREE.Scene();
-    const t0 = THEME[weatherRef.current];
+    const t0 = THEME[themeKey(weatherRef.current)];
     scene.fog = new THREE.FogExp2(t0.fog, 0.006);
     const pmrem = new THREE.PMREMGenerator(renderer);
     const envTex = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
@@ -351,7 +359,6 @@ export default function Hero3D({ weather }: { weather: Weather }) {
     const skyGroup = new THREE.Group();
     scene.add(skyGroup);
     const starMat = makeStarMaterial();
-    const milkyMat = makeStarMaterial();
     const onSphere = (dir: THREE.Vector3, r = 300) => dir.normalize().multiplyScalar(r);
     {
       const pos: number[] = [];
@@ -365,67 +372,6 @@ export default function Hero3D({ weather }: { weather: Weather }) {
       }
       skyGroup.add(new THREE.Points(starPoints(pos, size, col), starMat));
     }
-    // Milky Way: tilted band of faint dense stars + soft nebula glow
-    {
-      const pos: number[] = [];
-      const size: number[] = [];
-      const col: number[] = [];
-      const tilt = new THREE.Matrix4().makeRotationZ(-0.55).multiply(new THREE.Matrix4().makeRotationX(0.25));
-      for (let i = 0; i < 4200; i++) {
-        const a = Math.random() * Math.PI - Math.PI;
-        const lat = (Math.random() + Math.random() + Math.random() - 1.5) * 0.14;
-        const v = new THREE.Vector3(Math.cos(a), lat, Math.sin(a)).applyMatrix4(tilt);
-        if (v.z > -0.05) continue;
-        onSphere(v, 320);
-        pos.push(v.x, v.y, v.z);
-        size.push(1 + Math.random() * 2.2);
-        col.push(0.72 + Math.random() * 0.2, 0.78 + Math.random() * 0.15, 1);
-      }
-      skyGroup.add(new THREE.Points(starPoints(pos, size, col), milkyMat));
-      for (let i = 0; i < 14; i++) {
-        const a = -Math.PI * 0.15 - (i / 14) * Math.PI * 0.7;
-        const v = onSphere(new THREE.Vector3(Math.cos(a), (Math.random() - 0.5) * 0.08, Math.sin(a)).applyMatrix4(tilt), 330);
-        const neb = new THREE.Sprite(
-          new THREE.SpriteMaterial({ map: glow, color: i % 3 === 0 ? "#8b5cf6" : "#60a5fa", transparent: true, opacity: 0.07, blending: THREE.AdditiveBlending, depthWrite: false, fog: false })
-        );
-        neb.position.copy(v);
-        neb.scale.setScalar(60 + Math.random() * 50);
-        skyGroup.add(neb);
-      }
-    }
-    // Constellations that slowly glow in and out
-    const constellations: { lines: THREE.LineSegments; phase: number }[] = [];
-    const addConstellation = (center: THREE.Vector3, scale: number, stars: [number, number][], edges: [number, number][], phase: number) => {
-      const c = center.clone().normalize();
-      const right = new THREE.Vector3().crossVectors(c, new THREE.Vector3(0, 1, 0)).normalize();
-      const up = new THREE.Vector3().crossVectors(right, c).normalize();
-      const pts = stars.map(([u, v]) => onSphere(c.clone().add(right.clone().multiplyScalar(u * scale)).add(up.clone().multiplyScalar(v * scale)), 290));
-      const segs: number[] = [];
-      for (const [a, b] of edges) segs.push(pts[a].x, pts[a].y, pts[a].z, pts[b].x, pts[b].y, pts[b].z);
-      const geo = new THREE.BufferGeometry();
-      geo.setAttribute("position", new THREE.Float32BufferAttribute(segs, 3));
-      const lines = new THREE.LineSegments(geo, new THREE.LineBasicMaterial({ color: "#9fc2ff", transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false, fog: false }));
-      skyGroup.add(lines);
-      const p: number[] = [];
-      pts.forEach((v) => p.push(v.x, v.y, v.z));
-      skyGroup.add(new THREE.Points(starPoints(p, pts.map(() => 11), pts.flatMap(() => [0.9, 0.95, 1])), starMat));
-      constellations.push({ lines, phase });
-    };
-    addConstellation(
-      new THREE.Vector3(-0.55, 0.42, -1),
-      0.075,
-      [[-1.0, 1.2], [0.9, 1.1], [-0.3, 0.0], [0.0, 0.1], [0.3, 0.2], [-0.8, -1.3], [1.0, -1.2], [0.05, 1.7]],
-      [[0, 1], [0, 2], [1, 4], [2, 3], [3, 4], [2, 5], [4, 6], [0, 7], [1, 7]],
-      0
-    ); // Orion
-    addConstellation(
-      new THREE.Vector3(0.55, 0.5, -1),
-      0.06,
-      [[-1.7, -0.2], [-0.8, 0.15], [0.0, 0.25], [0.75, 0.1], [1.45, 0.7], [1.55, -0.2], [0.8, -0.6]],
-      [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [6, 3]],
-      Math.PI
-    ); // Big Dipper
-
     // ---- clouds ----
     const clouds: { s: THREE.Sprite; v: number; baseOpacity: number }[] = [];
     const placeCloud = (s: THREE.Sprite, zStart?: number) => {
@@ -523,7 +469,6 @@ export default function Hero3D({ weather }: { weather: Weather }) {
       camera.updateProjectionMatrix();
       const sc = dpr * Math.min(1.2, h / 900);
       starMat.uniforms.uScale.value = sc;
-      milkyMat.uniforms.uScale.value = sc;
     };
     resize();
     const ro = new ResizeObserver(resize);
@@ -552,7 +497,7 @@ export default function Hero3D({ weather }: { weather: Weather }) {
       }
       const dt = Math.min(clock.getDelta(), 0.05);
       const t = clock.elapsedTime;
-      const th = THEME[weatherRef.current];
+      const th = THEME[themeKey(weatherRef.current)];
 
       // cross-fade theme
       cloudCol.lerp(target.cloud.set(th.cloud), 0.03);
@@ -572,15 +517,11 @@ export default function Hero3D({ weather }: { weather: Weather }) {
       camera.position.set(mouse.x * 3, -mouse.y * 1.6 + scrollP * 2, 18 - scrollP * 14);
       camera.lookAt(mouse.x * 1.2, -mouse.y * 0.6, -20);
 
-      // stars: slow sidereal drift + twinkle; constellations glow in and out
+      // stars (night only): slow sidereal drift + twinkle
       skyGroup.rotation.y = t * 0.0035;
       starMat.uniforms.uTime.value = t;
-      milkyMat.uniforms.uTime.value = t;
       starMat.uniforms.uOpacity.value = starOp;
-      milkyMat.uniforms.uOpacity.value = starOp * 0.55;
-      for (const c of constellations) {
-        (c.lines.material as THREE.LineBasicMaterial).opacity = starOp * Math.max(0, Math.sin(t * 0.25 + c.phase)) * 0.45;
-      }
+      skyGroup.visible = starOp > 0.01;
 
       // lightning
       flash *= 0.88;

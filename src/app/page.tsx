@@ -50,7 +50,7 @@ export default function Home() {
           <GlobalMission />
         </div>
 
-        <div id="projects" data-world="cyber">
+        <div id="projects" data-world="city">
           <Projects />
         </div>
 
@@ -77,23 +77,23 @@ export default function Home() {
         </div>
 
 
-        <div id="achievements" data-world="crystal">
+        <div id="achievements" data-world="summit">
           <ScrollScene>
             <Achievements />
           </ScrollScene>
         </div>
 
-        <div id="certifications" data-world="asteroid">
+        <div id="certifications" data-world="alpine">
           <Certifications />
         </div>
 
-        <div id="game" data-world="synthwave">
+        <div id="game" data-world="desert">
           <ScrollScene>
             <BugHunt />
           </ScrollScene>
         </div>
 
-        <div data-world="galaxy">
+        <div data-world="beach">
           <Contact />
           <Footer />
         </div>

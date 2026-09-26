@@ -1,7 +1,16 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { onLightning, PALETTES, type Weather } from "@/components/weather/WeatherContext";
+import { onLightning, PALETTES, type SkyPalette, type Weather } from "@/components/weather/WeatherContext";
+import { celestial, localHour, phaseForHour, type SkyPhase } from "@/components/ui/timeOfDay";
+
+/* Sky colours for the visitor's local time of day (rain overrides with a storm sky). */
+const PHASE_PALETTES: Record<SkyPhase, SkyPalette> = {
+  sunrise: { gap: [0.2, 0.12, 0.26], sky: [0.62, 0.45, 0.66], cloud: [1.0, 0.64, 0.52], rim: [1.0, 0.86, 0.62], stars: 0.05, cover: -0.03, glow: [1.0, 0.55, 0.25], glowAmt: 1.0 },
+  day: { gap: [0.2, 0.4, 0.7], sky: [0.32, 0.6, 0.95], cloud: [0.95, 0.97, 1.0], rim: [1.0, 1.0, 1.0], stars: 0, cover: -0.06, glow: [0.85, 0.93, 1.0], glowAmt: 0.35 },
+  sunset: { gap: [0.14, 0.05, 0.14], sky: [0.46, 0.2, 0.38], cloud: [0.92, 0.42, 0.3], rim: [1.0, 0.72, 0.36], stars: 0.15, cover: 0, glow: [1.0, 0.45, 0.14], glowAmt: 1.1 },
+  night: PALETTES.night,
+};
 
 /*
  * Animated night sky rendered with a WebGL fragment shader:
@@ -22,6 +31,8 @@ uniform float uTime;
 uniform vec2 uMouse;
 uniform vec3 uGap, uSky, uCloud, uRim, uGlow;
 uniform float uStars, uCover, uGlowAmt, uFlash, uFlashX;
+uniform vec3 uSun; // xy = position (p-space), z = 1 sun / 2 moon
+uniform vec3 uSunCol;
 
 float hash(vec2 p) { p = fract(p * vec2(123.34, 456.21)); p += dot(p, p + 45.32); return fract(p.x * p.y); }
 
@@ -111,14 +122,30 @@ void main() {
   // (edges keep their clouds lower down, so the banks read as extending the full height)
   col *= smoothstep(0.0, mix(0.42, 0.2, edge), uv.y);
 
+  // sun / moon, softened where clouds pass in front
+  float sd = length(p - uSun.xy);
+  float veil = 1.0 - smoothstep(0.35, 0.95, d);
+  if (uSun.z < 1.5) {
+    col += uSunCol * (smoothstep(0.05, 0.043, sd) * 3.0 + exp(-sd * 9.0) * 1.1 + exp(-sd * 2.6) * 0.45 + exp(-abs(p.y - uSun.y) * 18.0) * exp(-abs(p.x - uSun.x) * 1.5) * 0.18) * veil;
+  } else {
+    float disc = smoothstep(0.036, 0.032, sd);
+    float mare = fbm((p - uSun.xy) * 55.0 + 3.0);
+    col = mix(col, vec3(0.93, 0.94, 1.0) * (0.72 + 0.3 * mare), disc * veil);
+    col += vec3(0.55, 0.65, 1.0) * exp(-sd * 6.0) * 0.22 * veil;
+  }
+
   gl_FragColor = vec4(col, 1.0);
 }
 `;
 
+const paletteFor = (weather: Weather) => (weather === "rain" ? PALETTES.rain : PHASE_PALETTES[phaseForHour(localHour())]);
+
 export default function SkyCanvas({ className = "", weather = "night" }: { className?: string; weather?: Weather }) {
   const ref = useRef<HTMLCanvasElement>(null);
-  const targetRef = useRef(PALETTES[weather]);
-  targetRef.current = PALETTES[weather];
+  const weatherRef = useRef(weather);
+  weatherRef.current = weather;
+  const targetRef = useRef(paletteFor(weather));
+  targetRef.current = paletteFor(weather);
 
   useEffect(() => {
     const canvas = ref.current;
@@ -154,6 +181,9 @@ export default function SkyCanvas({ className = "", weather = "night" }: { class
     const uTime = gl.getUniformLocation(prog, "uTime");
     const uMouse = gl.getUniformLocation(prog, "uMouse");
     const U = (n: string) => gl.getUniformLocation(prog, n);
+    const uSun = U("uSun");
+    const uSunCol = U("uSunCol");
+    let sunT = -1;
     const uni = { gap: U("uGap"), sky: U("uSky"), cloud: U("uCloud"), rim: U("uRim"), glow: U("uGlow"), stars: U("uStars"), cover: U("uCover"), glowAmt: U("uGlowAmt"), flash: U("uFlash"), flashX: U("uFlashX") };
     // current (animated) palette, eased toward the theme target every frame
     const cur = JSON.parse(JSON.stringify(targetRef.current));
@@ -203,6 +233,21 @@ export default function SkyCanvas({ className = "", weather = "night" }: { class
       gl.uniform2f(uRes, canvas.width, canvas.height);
       gl.uniform1f(uTime, reduce ? 20 : (now - start) / 1000 + 20);
       gl.uniform2f(uMouse, mouse.x, mouse.y);
+      // follow the real clock: re-read every 30s
+      if (now - sunT > 30000 || sunT < 0) {
+        sunT = now;
+        targetRef.current = paletteFor(weatherRef.current);
+        const h = localHour();
+        const c = celestial(h);
+        const aspect = canvas.width / canvas.height;
+        const sx = c.x * aspect * 0.42;
+        // portrait screens: keep the sun/moon in the band above the headline
+        const sy = aspect < 0.8 ? 0.3 + c.y * 0.1 : -0.32 + c.y * 0.72;
+        const ph = phaseForHour(h);
+        const col = c.kind === "moon" ? [0, 0, 0] : ph === "day" ? [1.0, 0.97, 0.88] : [1.0, 0.62, 0.3];
+        gl.uniform3f(uSun, sx, sy, c.kind === "sun" ? 1 : 2);
+        gl.uniform3f(uSunCol, col[0], col[1], col[2]);
+      }
       const tgt = targetRef.current as any;
       for (const k of ["gap", "sky", "cloud", "rim", "glow"]) {
         for (let i = 0; i < 3; i++) cur[k][i] += (tgt[k][i] - cur[k][i]) * 0.04;

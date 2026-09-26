@@ -4,11 +4,19 @@ import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import * as THREE from "three";
 import { WORLD_META, type World, type WorldId } from "./worlds/common";
-import { aurora, cyber, ocean } from "./worlds/worldsA";
-import { crystal, jungle, sakura } from "./worlds/worldsB";
-import { asteroid, galaxy, synthwave } from "./worlds/worldsC";
+import { ocean } from "./worlds/worldsA";
+import { city } from "./worlds/city";
+import { alpine, aurora, summit } from "./worlds/mountains";
+import { jungle, sakura } from "./worlds/forest";
+import { beach, desert } from "./worlds/coast";
 
-const FACTORIES: Record<WorldId, typeof aurora> = { aurora, cyber, ocean, jungle, sakura, crystal, asteroid, synthwave, galaxy };
+const FACTORIES: Record<WorldId, typeof ocean> = { aurora, city, ocean, jungle, sakura, summit, alpine, desert, beach };
+
+/* ?world=city previews a single world full-screen (handy for design work). */
+const forcedWorld = () => {
+  const w = new URLSearchParams(window.location.search).get("world");
+  return w && w in FACTORIES ? (w as WorldId) : null;
+};
 
 /* Which [data-world] section crosses the middle of the viewport. */
 function activeWorld(): WorldId | "none" {
@@ -47,7 +55,7 @@ export default function ThemeWorld() {
     const scene = new THREE.Scene();
     const fog = new THREE.FogExp2("#000000", 0.02);
     scene.fog = fog;
-    const camera = new THREE.PerspectiveCamera(60, 1, 0.1, 400);
+    const camera = new THREE.PerspectiveCamera(60, 1, 0.1, 600);
     camera.position.set(0, 0.6, 9);
 
     const worlds = new Map<WorldId, World & { f: number }>();
@@ -86,6 +94,10 @@ export default function ThemeWorld() {
     const clock = new THREE.Clock();
     let raf = 0;
     let checkT = 0;
+    const viewPos = new THREE.Vector3(),
+      viewLook = new THREE.Vector3();
+    const camPos = new THREE.Vector3(0, 0.6, 9),
+      camLook = new THREE.Vector3(0, 0.4, -8);
 
     const loop = () => {
       raf = requestAnimationFrame(loop);
@@ -98,7 +110,7 @@ export default function ThemeWorld() {
       checkT += fdt;
       if (checkT > 0.15) {
         checkT = 0;
-        active = activeWorld();
+        active = forcedWorld() ?? activeWorld();
         if (active !== "none") ensure(active);
         if (active !== lastLabel) {
           lastLabel = active;
@@ -141,8 +153,16 @@ export default function ThemeWorld() {
 
       mouse.x += (mouse.tx - mouse.x) * 0.04;
       mouse.y += (mouse.ty - mouse.y) * 0.04;
-      camera.position.set(mouse.x * 1.4 + Math.sin(t * 0.15) * 0.3, 0.6 - mouse.y * 0.6 + Math.sin(t * 0.2) * 0.15, 9);
-      camera.lookAt(mouse.x * 0.5, 0.4, -8);
+      // camera: ease toward the active world's own path, plus pointer sway
+      viewPos.set(0, 0.6, 9);
+      viewLook.set(0, 0.4, -8);
+      const aw = active !== "none" ? worlds.get(active) : undefined;
+      aw?.view?.(t, viewPos, viewLook);
+      const k = Math.min(1, fdt * 1.5);
+      camPos.lerp(viewPos, k);
+      camLook.lerp(viewLook, k);
+      camera.position.set(camPos.x + mouse.x * 1.4 + Math.sin(t * 0.15) * 0.3, camPos.y - mouse.y * 0.6 + Math.sin(t * 0.2) * 0.15, camPos.z);
+      camera.lookAt(camLook.x + mouse.x * 0.5, camLook.y, camLook.z);
       renderer.render(scene, camera);
     };
     loop();
@@ -166,7 +186,7 @@ export default function ThemeWorld() {
 
   return (
     <>
-      <div ref={mountRef} aria-hidden="true" className="pointer-events-none fixed inset-0 -z-10 opacity-0 transition-none no-print" />
+      <div ref={mountRef} aria-hidden="true" className="theme-world-root pointer-events-none fixed inset-0 -z-10 opacity-0 transition-none no-print" />
       {/* dim + vignette so content stays readable over every world */}
       <div aria-hidden="true" className="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.05)_0%,rgba(0,0,0,0.35)_70%,rgba(0,0,0,0.7)_100%)] no-print" />
       <AnimatePresence>

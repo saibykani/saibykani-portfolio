@@ -1,9 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef, useState } from "react";
-import { ArrowRight, Check, Copy, FileCheck2, FileText, Mail } from "lucide-react";
+import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { ArrowRight, Check, Copy, FileText, Mail, MapPin } from "lucide-react";
+import { formatTime, localHour, PHASE_META, phaseForHour, type SkyPhase } from "@/components/ui/timeOfDay";
 import resumeData from "@/data/resumeData.json";
 import { ShinyButton } from "@/components/ui/primitives";
 import SkyCanvas from "@/components/ui/SkyCanvas";
@@ -33,8 +34,112 @@ function Words({ text, delay = 0, className = "" }: { text: string; delay?: numb
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
+const HEADLINES = [
+  "I help teams ship payment systems",
+  "I break software before users do",
+  "I turn flaky suites into green pipelines",
+  "I guard every transaction end to end",
+];
+const TAGLINES = ["zero-defect confidence", "bulletproof automation", "production-ready quality", "lightning-fast regression", "rock-solid reliability"];
+const ROLES = [
+  "Software Development Engineer in Test",
+  "QA Automation Engineer",
+  "API Automation Engineer",
+  "Performance Test Engineer",
+  "Payment Systems QA Engineer",
+  "FinTech Quality Engineer",
+  "Automation Framework Architect",
+  "Selenium & Cucumber BDD Specialist",
+  "JMeter Load Testing Specialist",
+  "CI/CD Test Automation Engineer",
+  "UPI & Card Transaction Tester",
+  "End-to-End Testing Architect",
+];
+
+/* Word/phrase that swaps with a vertical slide. */
+function Rotator({ items, ms, delay = 0, className = "" }: { items: string[]; ms: number; delay?: number; className?: string }) {
+  const [i, setI] = useState(0);
+  useEffect(() => {
+    let id: ReturnType<typeof setInterval>;
+    const start = setTimeout(() => (id = setInterval(() => setI((x) => (x + 1) % items.length), ms)), delay);
+    return () => {
+      clearTimeout(start);
+      clearInterval(id);
+    };
+  }, [items.length, ms, delay]);
+  return (
+    <span className="relative inline-grid overflow-hidden align-bottom">
+      <AnimatePresence mode="popLayout" initial={false}>
+        <motion.span
+          key={items[i]}
+          initial={{ y: "100%", opacity: 0 }}
+          animate={{ y: "0%", opacity: 1 }}
+          exit={{ y: "-100%", opacity: 0 }}
+          transition={{ duration: 0.55, ease }}
+          className={`col-start-1 row-start-1 ${className}`}
+        >
+          {items[i]}
+        </motion.span>
+      </AnimatePresence>
+    </span>
+  );
+}
+
+/* Typewriter: types a role, holds, deletes, next. */
+function Typewriter({ items, className = "" }: { items: string[]; className?: string }) {
+  const [idx, setIdx] = useState(0);
+  const [text, setText] = useState("");
+  const [del, setDel] = useState(false);
+  useEffect(() => {
+    const full = items[idx];
+    const ms = !del && text === full ? 1700 : del && text === "" ? 250 : del ? 28 : 55;
+    const id = setTimeout(() => {
+      if (!del && text === full) setDel(true);
+      else if (del && text === "") {
+        setDel(false);
+        setIdx((i) => (i + 1) % items.length);
+      } else setText(full.slice(0, text.length + (del ? -1 : 1)));
+    }, ms);
+    return () => clearTimeout(id);
+  }, [text, del, idx, items]);
+  return (
+    <span className={className}>
+      {text}
+      <span className="ml-0.5 inline-block h-[1em] w-[2px] translate-y-[0.12em] animate-pulse bg-sky-300" />
+    </span>
+  );
+}
+
+/* Greeting from the visitor's own clock + Sai's local time in Hyderabad. */
+function TimeBadge({ onPhase }: { onPhase: (p: SkyPhase) => void }) {
+  const [now, setNow] = useState<Date | null>(null);
+  useEffect(() => {
+    const tick = () => setNow(new Date());
+    tick();
+    const id = setInterval(tick, 30_000);
+    return () => clearInterval(id);
+  }, []);
+  const phase = now ? phaseForHour(localHour()) : null;
+  useEffect(() => {
+    if (phase) onPhase(phase);
+  }, [phase, onPhase]);
+  if (!now || !phase) return <span className="h-7" />;
+  const meta = PHASE_META[phase];
+  return (
+    <span className="flex flex-wrap items-center justify-center gap-2 font-mono text-[11px] uppercase tracking-[0.2em] text-white/85">
+      <span className="rounded-full bg-black/30 px-3 py-1 ring-1 ring-white/15">
+        {meta.emoji} {meta.greet} · {formatTime(now)}
+      </span>
+      <span className="inline-flex items-center gap-1.5 rounded-full bg-black/30 px-3 py-1 ring-1 ring-white/15">
+        <MapPin className="size-3 text-rose-300" /> Hyderabad · {formatTime(now, "Asia/Kolkata")} IST
+      </span>
+    </span>
+  );
+}
+
 export default function Hero() {
   const [copied, setCopied] = useState(false);
+  const [phase, setPhase] = useState<SkyPhase | null>(null);
   const { weather } = useWeather();
   const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end start"] });
@@ -69,11 +174,12 @@ export default function Hero() {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease }}
-          className="mb-8 hidden md:block"
+          className="mb-8 flex flex-col items-center gap-3"
         >
+          <TimeBadge onPhase={setPhase} />
           <button
             onClick={() => scrollTo("projects")}
-            className="group relative inline-flex animate-bounce items-center gap-2 overflow-hidden rounded-full border border-white/10 bg-white/[0.04] px-1 py-1 pr-3 transition-all hover:bg-white/10"
+            className="group relative hidden animate-bounce items-center md:inline-flex gap-2 overflow-hidden rounded-full border border-white/10 bg-white/[0.04] px-1 py-1 pr-3 transition-all hover:bg-white/10"
           >
             <span className="relative inline-flex shrink-0 items-center justify-center rounded-full bg-blue-700 px-3 py-1 text-xs font-medium text-white">
               Open to Work
@@ -86,16 +192,11 @@ export default function Hero() {
 
         {/* Headline */}
         <h2 className="mt-2 text-center font-outfit text-4xl leading-tight text-zinc-100/90 sm:text-5xl md:mt-5 lg:text-6xl">
-          <span className="md:whitespace-nowrap">
-            <Words text="I help teams ship payment systems" delay={0.15} />
-          </span>
-          <br className="hidden md:block" />
+          <motion.span initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.15, ease }} className="block">
+            <Rotator items={HEADLINES} ms={4200} delay={3500} className="md:whitespace-nowrap" />
+          </motion.span>
           <Words text="with" delay={0.5} />
-          <Words
-            text="zero-defect confidence"
-            delay={0.6}
-            className="bg-gradient-to-b from-zinc-400 via-zinc-100 to-white bg-clip-text pr-1 font-instrument italic tracking-tight text-transparent"
-          />
+          <Rotator items={TAGLINES} ms={2800} delay={2000} className="whitespace-nowrap pr-1 font-instrument italic tracking-tight text-white" />
         </h2>
 
         {/* Intro line */}
@@ -105,7 +206,7 @@ export default function Hero() {
           transition={{ duration: 0.9, delay: 0.85, ease }}
           className="relative z-20 mt-10 flex flex-col items-center justify-center text-center text-xl tracking-tight sm:flex-row lg:text-2xl"
         >
-          <span className="flex items-center justify-center bg-gradient-to-t from-gray-600 to-white bg-clip-text text-transparent">
+          <span className="flex items-center justify-center text-white">
             Hello, I&apos;m {name}
             <span className="group relative z-30">
               <span className="relative mx-2 block aspect-[854/425] w-16 cursor-pointer overflow-hidden rounded-3xl border border-white/10 transition-all duration-500 group-hover:w-24 md:w-20 lg:mx-3">
@@ -126,9 +227,9 @@ export default function Hero() {
               </span>
             </span>
           </span>
-          <span className="bg-gradient-to-t from-gray-600 to-white bg-clip-text leading-relaxed text-transparent">
+          <span className="leading-relaxed text-zinc-200">
             {" "}
-            a Software Development Engineer in Test
+            a <Typewriter items={ROLES} className="font-semibold text-sky-200" />
           </span>
         </motion.h1>
 
@@ -151,19 +252,11 @@ export default function Hero() {
                 </span>
               </ShinyButton>
             </a>
-            <a href="/Sai_Krishna_Bykani_Resume.pdf" download="Sai_Krishna_Bykani_Resume.pdf">
-              <ShinyButton>
-                <span className="flex items-center justify-center gap-2">
-                  <FileCheck2 className="size-4 text-emerald-400" />
-                  <span>View CV</span>
-                </span>
-              </ShinyButton>
-            </a>
           </div>
           <button
             type="button"
             onClick={copyEmail}
-            className="flex cursor-pointer items-center gap-2 rounded-full px-3 py-1.5 text-sm font-light text-zinc-400 transition-all duration-300 hover:bg-white/5 hover:text-white"
+            className="flex cursor-pointer items-center gap-2 rounded-full bg-black/25 px-3 py-1.5 text-sm text-white/85 transition-all duration-300 hover:bg-black/40 hover:text-white"
           >
             {copied ? <Check className="size-4 text-emerald-400" /> : <Mail className="size-4" />}
             {copied ? "Copied to clipboard!" : email}
@@ -176,6 +269,7 @@ export default function Hero() {
       <motion.div style={{ scale: skyScale }} className="pointer-events-none absolute inset-0 z-0 select-none overflow-hidden">
         <SkyCanvas weather={weather} />
         <Hero3D weather={weather} />
+        <div className={`absolute inset-0 transition-colors duration-1000 ${phase === "day" ? "bg-[#06122a]/30" : phase === "sunrise" || phase === "sunset" ? "bg-black/15" : "bg-transparent"}`} />
         <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-b from-transparent to-black" />
       </motion.div>
     </section>
