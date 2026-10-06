@@ -127,6 +127,46 @@ function Roll({ v }: { v: string }) {
   );
 }
 
+/* Odometer digit: a 0-9 strip that slides to the current value. */
+function OdoDigit({ d }: { d: number }) {
+  return (
+    <span className="relative inline-block h-[1.1em] w-[0.62em] overflow-hidden align-bottom">
+      <span className="absolute inset-x-0 top-0 flex flex-col transition-transform duration-700 ease-[cubic-bezier(.22,1,.36,1)]" style={{ transform: `translateY(-${d * 10}%)` }}>
+        {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => (
+          <span key={n} className="h-[1.1em] text-center leading-[1.1em]">
+            {n}
+          </span>
+        ))}
+      </span>
+    </span>
+  );
+}
+
+/* Big live rolling number: transactions validated (1M+/day since Jul 2023, per the resume). */
+function TxnCounter() {
+  const [v, setV] = useState<number | null>(null);
+  useEffect(() => {
+    const start = new Date(2023, 6, 1).getTime();
+    const tick = () => setV(Math.floor((Date.now() - start) * (1_000_000 / 86_400_000)));
+    tick();
+    const id = setInterval(tick, 400);
+    return () => clearInterval(id);
+  }, []);
+  if (v === null) return <div className="h-[72px]" />;
+  const str = v.toLocaleString("en-US");
+  return (
+    <div className="flex flex-col items-center">
+      <div className="flex items-end font-outfit text-4xl font-semibold tabular-nums tracking-tight text-white [text-shadow:0_0_30px_rgba(56,189,248,0.45)] sm:text-5xl md:text-6xl">
+        {str.split("").map((ch, i) => (ch === "," ? <span key={i} className="w-[0.3em] text-white/60">,</span> : <OdoDigit key={i} d={+ch} />))}
+      </div>
+      <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.25em] text-white/65 sm:text-[11px]">
+        <span className="mr-2 inline-block size-1.5 animate-pulse rounded-full bg-emerald-400 align-middle" />
+        payment transactions validated · live since Jul 2023
+      </p>
+    </div>
+  );
+}
+
 /* Live ticker under the headline: date, rolling clock, role, location, live experience, stats. */
 function LiveTicker() {
   const [now, setNow] = useState<Date | null>(null);
@@ -155,7 +195,9 @@ function LiveTicker() {
   const k = Math.floor(now.getTime() / 2600) % facts.length;
   const pill = "flex items-center gap-2 whitespace-nowrap rounded-full bg-black/35 px-4 py-2 font-mono text-[12px] uppercase tracking-[0.14em] text-white/90 ring-1 ring-white/15";
   return (
-    <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+    <div className="mt-8 flex flex-col items-center gap-4">
+      <TxnCounter />
+      <div className="flex flex-wrap items-center justify-center gap-3">
       <span className={pill}>
         <span className="text-sm normal-case">🕒</span>
         <Roll v={now.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", second: "2-digit" })} />
@@ -175,6 +217,7 @@ function LiveTicker() {
           </motion.span>
         </AnimatePresence>
       </span>
+      </div>
     </div>
   );
 }
