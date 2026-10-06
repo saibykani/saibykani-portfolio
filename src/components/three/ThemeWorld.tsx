@@ -4,19 +4,54 @@ import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import * as THREE from "three";
 import { adaptiveResolution } from "./adaptive";
-import { WORLD_META, type World, type WorldId } from "./worlds/common";
-import { balloons, galaxy } from "./worlds/extra";
-import { city } from "./worlds/city";
-import { alpine, aurora, summit } from "./worlds/mountains";
-import { jungle } from "./worlds/forest";
-import { beach, desert } from "./worlds/coast";
+import { WORLD_META, type Ctx, type World, type WorldId } from "./worlds/common";
 
-const FACTORIES: Record<WorldId, typeof city> = { aurora, city, galaxy, jungle, balloons, summit, alpine, desert, beach };
+/* Each world's code is its own chunk: downloaded only when its section gets close. */
+type Factory = (ctx: Ctx) => World;
+const LOADERS: Record<WorldId, () => Promise<Factory>> = {
+  aurora: () => import("./worlds/mountains").then((m) => m.aurora),
+  summit: () => import("./worlds/mountains").then((m) => m.summit),
+  alpine: () => import("./worlds/mountains").then((m) => m.alpine),
+  city: () => import("./worlds/city").then((m) => m.city),
+  jungle: () => import("./worlds/forest").then((m) => m.jungle),
+  desert: () => import("./worlds/coast").then((m) => m.desert),
+  beach: () => import("./worlds/coast").then((m) => m.beach),
+  galaxy: () => import("./worlds/extra").then((m) => m.galaxy),
+  balloons: () => import("./worlds/extra").then((m) => m.balloons),
+};
+
+/* Worlds whose sections are on screen or within ~1.5 screens: prepared ahead, everything else is freed. */
+function nearWorlds(): Set<WorldId> {
+  const vh = window.innerHeight;
+  const out = new Set<WorldId>();
+  document.querySelectorAll<HTMLElement>("[data-world]").forEach((el) => {
+    const id = el.dataset.world as WorldId | "none";
+    if (id === "none") return;
+    const r = el.getBoundingClientRect();
+    if (r.top < vh * 2.5 && r.bottom > -vh * 1.5) out.add(id);
+  });
+  return out;
+}
+
+function disposeObject(root: THREE.Object3D) {
+  root.traverse((o) => {
+    const m = o as THREE.Mesh;
+    m.geometry?.dispose?.();
+    const mats = (Array.isArray(m.material) ? m.material : m.material ? [m.material] : []) as THREE.Material[];
+    for (const mat of mats) {
+      for (const v of Object.values(mat as any)) if (v instanceof THREE.Texture) v.dispose();
+      const u = (mat as THREE.ShaderMaterial).uniforms;
+      if (u) for (const x of Object.values(u)) if (x?.value instanceof THREE.Texture) x.value.dispose();
+      mat.dispose();
+    }
+    (o as any).dispose?.(); // e.g. Reflector render targets
+  });
+}
 
 /* ?world=city previews a single world full-screen (handy for design work). */
 const forcedWorld = () => {
   const w = new URLSearchParams(window.location.search).get("world");
-  return w && w in FACTORIES ? (w as WorldId) : null;
+  return w && w in LOADERS ? (w as WorldId) : null;
 };
 
 /* Which [data-world] section crosses the middle of the viewport. */
@@ -65,15 +100,40 @@ export default function ThemeWorld() {
     camera.position.set(0, 0.6, 9);
 
     const worlds = new Map<WorldId, World & { f: number }>();
-    const ensure = (id: WorldId) => {
-      let w = worlds.get(id);
-      if (!w) {
-        w = Object.assign(FACTORIES[id]({ lite }), { f: 0 });
-        w.group.visible = false;
-        scene.add(w.group);
-        worlds.set(id, w);
-      }
-      return w;
+    const pending = new Set<WorldId>();
+    let alive = true;
+    let lastScroll = 0;
+    const onScroll = () => (lastScroll = performance.now());
+    window.addEventListener("scroll", onScroll, { passive: true });
+    const ric: (cb: () => void, o?: { timeout: number }) => number = (window as any).requestIdleCallback ?? ((cb: () => void) => window.setTimeout(cb, 120));
+    // load + build off the critical path; the visible world builds immediately once loaded
+    const ensure = (id: WorldId, urgent: boolean) => {
+      if (worlds.has(id) || pending.has(id)) return;
+      pending.add(id);
+      LOADERS[id]()
+        .then((factory) => {
+          const build = () => {
+            if (!alive) return;
+            const w = Object.assign(factory({ lite }), { f: 0 });
+            w.fade.set(0);
+            scene.add(w.group);
+            // compile shaders in parallel (KHR_parallel_shader_compile) instead of a blocking first draw
+            renderer
+              .compileAsync(scene, camera)
+              .catch(() => {})
+              .finally(() => {
+                if (!alive) return;
+                w.group.visible = false;
+                worlds.set(id, w);
+                pending.delete(id);
+              });
+          };
+          // prefetch builds wait until scrolling has paused, so they never stutter a scroll
+          const whenCalm = () => (performance.now() - lastScroll > 700 ? ric(build, { timeout: 1500 }) : window.setTimeout(whenCalm, 300));
+          if (urgent || id === active) build();
+          else whenCalm();
+        })
+        .catch(() => pending.delete(id));
     };
 
     const resize = () => {
@@ -100,6 +160,8 @@ export default function ThemeWorld() {
     const clock = new THREE.Clock();
     let raf = 0;
     let checkT = 0;
+    let frameAcc = 0;
+    const lowEnd = lite || (navigator.hardwareConcurrency || 8) <= 4;
     const viewPos = new THREE.Vector3(),
       viewLook = new THREE.Vector3();
     const camPos = new THREE.Vector3(0, 0.6, 9),
@@ -107,7 +169,10 @@ export default function ThemeWorld() {
 
     const loop = () => {
       raf = requestAnimationFrame(loop);
-      const raw = clock.getDelta();
+      frameAcc += clock.getDelta();
+      if (lowEnd && frameAcc < 1 / 31) return; // phones / low-core laptops: 30fps cap
+      const raw = frameAcc;
+      frameAcc = 0;
       const dt = Math.min(raw, 0.05); // animation step
       const fdt = Math.min(raw, 0.5); // fades follow real time, even on slow devices
       if (document.hidden) return;
@@ -118,7 +183,16 @@ export default function ThemeWorld() {
       if (checkT > 0.15) {
         checkT = 0;
         active = forcedWorld() ?? activeWorld();
-        if (active !== "none") ensure(active);
+        if (active !== "none") ensure(active, true);
+        const near = nearWorlds();
+        near.forEach((id) => ensure(id, false));
+        // free GPU memory of worlds far away (they rebuild quickly if you scroll back)
+        for (const [id, w] of worlds)
+          if (id !== active && w.f === 0 && !near.has(id)) {
+            scene.remove(w.group);
+            disposeObject(w.group);
+            worlds.delete(id);
+          }
         if (active !== lastLabel) {
           lastLabel = active;
           clearTimeout(labelTimer);
@@ -175,6 +249,8 @@ export default function ThemeWorld() {
     loop();
 
     return () => {
+      alive = false;
+      window.removeEventListener("scroll", onScroll);
       cancelAnimationFrame(raf);
       clearTimeout(labelTimer);
       window.removeEventListener("resize", resize);

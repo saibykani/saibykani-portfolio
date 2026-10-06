@@ -18,7 +18,6 @@ import Footer from "@/components/Footer";
 import AIChatbot from "@/components/AIChatbot";
 import SmoothScroll from "@/components/SmoothScroll";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
-import Preloader from "@/components/Preloader";
 import WeatherOverlay from "@/components/weather/WeatherOverlay";
 import { WeatherProvider } from "@/components/weather/WeatherContext";
 import ScrollProgress from "@/components/ScrollProgress";
@@ -27,7 +26,6 @@ import ThemeWorld from "@/components/three/ThemeWorldLazy";
 export default function Home() {
   return (
     <WeatherProvider>
-      <Preloader />
       <ThemeWorld />
       <SmoothScroll />
       <WeatherOverlay />

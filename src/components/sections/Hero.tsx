@@ -110,6 +110,75 @@ function Typewriter({ items, className = "" }: { items: string[]; className?: st
   );
 }
 
+/* Digits that roll vertically when they change (odometer style). */
+function Roll({ v }: { v: string }) {
+  return (
+    <span className="inline-flex tabular-nums">
+      {v.split("").map((ch, i) => (
+        <span key={i} className="relative inline-block h-[1.25em] overflow-hidden align-bottom">
+          <AnimatePresence mode="popLayout" initial={false}>
+            <motion.span key={ch} initial={{ y: "100%" }} animate={{ y: "0%" }} exit={{ y: "-100%" }} transition={{ duration: 0.35, ease }} className="block">
+              {ch === " " ? " " : ch}
+            </motion.span>
+          </AnimatePresence>
+        </span>
+      ))}
+    </span>
+  );
+}
+
+/* Live ticker under the headline: date, rolling clock, role, location, live experience, stats. */
+function LiveTicker() {
+  const [now, setNow] = useState<Date | null>(null);
+  useEffect(() => {
+    setNow(new Date());
+    const id = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(id);
+  }, []);
+  if (!now) return <div className="h-9" />;
+  const start = new Date(2023, 6, 1);
+  const months = (now.getFullYear() - start.getFullYear()) * 12 + now.getMonth() - start.getMonth();
+  const exp = `${Math.floor(months / 12)}y ${months % 12}m`;
+  const items: [string, React.ReactNode][] = [
+    ["📅", now.toLocaleDateString("en-US", { weekday: "short", day: "numeric", month: "short", year: "numeric" })],
+    ["🕒", <Roll key="t" v={now.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", second: "2-digit" })} />],
+    ["💼", "SDET @ Toucan Payments"],
+    ["📍", "Hyderabad, India"],
+    ["⏳", <span key="e">Experience <Roll v={exp} /></span>],
+    ["🧪", "1000+ test cases automated"],
+    ["⚡", "750+ APIs tested"],
+    ["📈", "40% faster regression"],
+    ["🟢", "Open to new roles"],
+  ];
+  // rolling counter: clock digits roll every second; the facts slot rolls to the next item every 2.6s
+  const facts = items.filter(([icon]) => icon !== "🕒");
+  const k = Math.floor(now.getTime() / 2600) % facts.length;
+  const pill = "flex items-center gap-2 whitespace-nowrap rounded-full bg-black/35 px-4 py-2 font-mono text-[12px] uppercase tracking-[0.14em] text-white/90 ring-1 ring-white/15";
+  return (
+    <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+      <span className={pill}>
+        <span className="text-sm normal-case">🕒</span>
+        <Roll v={now.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", second: "2-digit" })} />
+      </span>
+      <span className={`${pill} relative h-[38px] min-w-[260px] justify-center overflow-hidden`}>
+        <AnimatePresence mode="popLayout" initial={false}>
+          <motion.span
+            key={k}
+            initial={{ y: "120%", opacity: 0 }}
+            animate={{ y: "0%", opacity: 1 }}
+            exit={{ y: "-120%", opacity: 0 }}
+            transition={{ duration: 0.5, ease }}
+            className="flex items-center gap-2"
+          >
+            <span className="text-sm normal-case">{facts[k][0]}</span>
+            {facts[k][1]}
+          </motion.span>
+        </AnimatePresence>
+      </span>
+    </div>
+  );
+}
+
 /* Greeting from the visitor's own clock + Sai's local time in Hyderabad. */
 function TimeBadge({ onPhase }: { onPhase: (p: SkyPhase) => void }) {
   const [now, setNow] = useState<Date | null>(null);
@@ -206,6 +275,8 @@ export default function Hero() {
           <Words text="with" delay={0.5} />
           <Rotator items={TAGLINES} ms={2800} delay={2000} className="whitespace-nowrap pr-1 font-instrument italic tracking-tight text-white" />
         </h2>
+
+        <LiveTicker />
 
         {/* Intro line */}
         <motion.h1

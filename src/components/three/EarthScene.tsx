@@ -213,11 +213,11 @@ export default function EarthScene({ onLabels }: { onLabels?: (labels: SceneLabe
     if (!mount) return;
     let renderer: THREE.WebGLRenderer;
     try {
-      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
+      renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true, powerPreference: "high-performance" });
     } catch {
       return;
     }
-    const dpr = Math.min(window.devicePixelRatio || 1, 1.75);
+    const dpr = Math.min(window.devicePixelRatio || 1, 1.25);
     renderer.setPixelRatio(dpr);
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -291,13 +291,14 @@ export default function EarthScene({ onLabels }: { onLabels?: (labels: SceneLabe
         bumpMap: { value: bumpMap },
         sunDir: { value: sunDir },
         cloudOffset: { value: 0 },
+        uTime: { value: 0 },
       },
       vertexShader: `
         varying vec2 vUv; varying vec3 vN; varying vec3 vW;
         void main(){ vUv = uv; vN = normalize(mat3(modelMatrix)*normal); vec4 w = modelMatrix*vec4(position,1.0); vW = w.xyz;
           gl_Position = projectionMatrix*viewMatrix*w; }`,
       fragmentShader: `
-        uniform sampler2D dayMap, nightMap, waterMap, cloudMap, bumpMap; uniform vec3 sunDir; uniform float cloudOffset;
+        uniform sampler2D dayMap, nightMap, waterMap, cloudMap, bumpMap; uniform vec3 sunDir; uniform float cloudOffset, uTime;
         varying vec2 vUv; varying vec3 vN; varying vec3 vW;
         void main(){
           vec3 N = normalize(vN);
@@ -316,14 +317,25 @@ export default function EarthScene({ onLabels }: { onLabels?: (labels: SceneLabe
           // soft cloud shadows on the ground
           float cs = texture2D(cloudMap, vUv + vec2(cloudOffset - 0.003, 0.002)).r;
           col *= 1.0 - cs * 0.35 * day;
-          // ocean glint
+          // ocean: wind-driven swell (two crossing wave trains) perturbs the normal -> moving sun glitter
           float water = texture2D(waterMap, vUv).r;
+          vec3 T1 = normalize(cross(vec3(0.0, 1.0, 0.0), N) + 1e-4);
+          vec3 T2 = cross(N, T1);
+          vec2 wv = vUv * vec2(1400.0, 700.0);
+          float w1 = sin(wv.x * 0.8 + uTime * 1.7 + sin(wv.y * 0.6 + uTime * 0.4) * 2.2);
+          float w2 = sin(wv.y * 1.1 - uTime * 1.3 + sin(wv.x * 0.45) * 1.8);
+          float w3 = sin((wv.x + wv.y) * 2.3 + uTime * 2.6);
+          vec3 Nw = normalize(N + (T1 * (w1 + w3 * 0.4) + T2 * w2) * 0.05 * water);
           vec3 H = normalize(L + V);
-          float spec = pow(max(dot(N, H), 0.0), 380.0) * water * day;
-          col += vec3(1.0, 0.92, 0.78) * spec * 0.45;
+          float spec = pow(max(dot(Nw, H), 0.0), 140.0) * water * day;
+          float glit = pow(max(dot(Nw, H), 0.0), 900.0) * water * day;
+          col *= 1.0 + water * day * (w1 * w2 * 0.06 + 0.04);
+          col = mix(col, col * vec3(0.8, 0.95, 1.15), water * 0.35);
+          col += vec3(1.0, 0.92, 0.78) * (spec * 0.4 + glit * 1.6);
           // night side city lights (warm), fading in past the terminator
           vec3 lights = texture2D(nightMap, vUv).rgb;
-          lights = pow(lights, vec3(1.35)) * vec3(1.35, 1.05, 0.7) * 2.2;
+          vec3 halo = texture2D(nightMap, vUv + vec2(0.0012, 0.0)).rgb + texture2D(nightMap, vUv - vec2(0.0012, 0.0)).rgb + texture2D(nightMap, vUv + vec2(0.0, 0.0024)).rgb;
+          lights = pow(lights, vec3(1.25)) * vec3(1.4, 1.05, 0.65) * 3.2 + halo * vec3(0.9, 0.55, 0.25) * 0.35; // brighter cities + soft glow
           col = mix(lights + dayCol * 0.015, col, day);
 
           // atmospheric rim
@@ -334,7 +346,7 @@ export default function EarthScene({ onLabels }: { onLabels?: (labels: SceneLabe
           #include <colorspace_fragment>
         }`,
     });
-    const earth = new THREE.Mesh(new THREE.SphereGeometry(1, 128, 64), earthMat);
+    const earth = new THREE.Mesh(new THREE.SphereGeometry(1, 96, 48), earthMat);
     scene.add(earth);
 
     const cloudMat = new THREE.ShaderMaterial({
@@ -353,7 +365,7 @@ export default function EarthScene({ onLabels }: { onLabels?: (labels: SceneLabe
           #include <colorspace_fragment>
         }`,
     });
-    const clouds = new THREE.Mesh(new THREE.SphereGeometry(1.012, 96, 48), cloudMat);
+    const clouds = new THREE.Mesh(new THREE.SphereGeometry(1.012, 64, 32), cloudMat);
     scene.add(clouds);
 
     const atmo = new THREE.Mesh(
@@ -385,14 +397,14 @@ export default function EarthScene({ onLabels }: { onLabels?: (labels: SceneLabe
     sunHalo.scale.setScalar(26);
     scene.add(sunHalo);
 
-    const moon = new THREE.Mesh(new THREE.SphereGeometry(0.22, 64, 32), new THREE.MeshStandardMaterial({ map: moonMap, bumpMap: moonMap, bumpScale: 0.6, roughness: 0.95, metalness: 0 }));
+    const moon = new THREE.Mesh(new THREE.SphereGeometry(0.22, 32, 16), new THREE.MeshStandardMaterial({ map: moonMap, bumpMap: moonMap, bumpScale: 0.6, roughness: 0.95, metalness: 0 }));
     scene.add(moon);
 
     // ---- stars, Milky Way, galaxy ----
     const starsMat = starMaterial(1);
     const milkyMat = starMaterial(0.55);
-    scene.add(new THREE.Points(starField(3000, 800), starsMat));
-    scene.add(new THREE.Points(starField(8000, 820, true), milkyMat));
+    scene.add(new THREE.Points(starField(1500, 800), starsMat));
+    scene.add(new THREE.Points(starField(2500, 820, true), milkyMat));
     const galaxySprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: galaxy, transparent: true, opacity: 0.8, depthWrite: false, blending: THREE.AdditiveBlending }));
     galaxySprite.position.copy(new THREE.Vector3(-0.6, 0.45, -0.66).normalize().multiplyScalar(760));
     galaxySprite.scale.set(150, 82, 1);
@@ -449,9 +461,10 @@ export default function EarthScene({ onLabels }: { onLabels?: (labels: SceneLabe
       scene.add(line);
       const planes = [0, 0.5].map((off, i) => {
         const m = tinyPlane();
+        m.scale.setScalar(2.2);
         scene.add(m);
         const light = new THREE.Sprite(new THREE.SpriteMaterial({ map: glow, color: "#ff5a5a", blending: THREE.AdditiveBlending, depthWrite: false, transparent: true }));
-        light.scale.setScalar(0.022);
+        light.scale.setScalar(0.03);
         m.add(light);
         return { m, u: (Math.random() + off) % 1, speed: 0.035 + Math.random() * 0.03, dir: i === 0 ? 1 : -1, light };
       });
@@ -466,9 +479,10 @@ export default function EarthScene({ onLabels }: { onLabels?: (labels: SceneLabe
         const a = (i / 160) * Math.PI * 2;
         pts.push(new THREE.Vector3(Math.cos(a) * r, 0, Math.sin(a) * r).applyAxisAngle(new THREE.Vector3(1, 0, 0), incl).applyAxisAngle(new THREE.Vector3(0, 1, 0), node));
       }
-      scene.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), new THREE.LineBasicMaterial({ color, transparent: true, opacity: 0.16, depthWrite: false })));
+      scene.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), new THREE.LineBasicMaterial({ color, transparent: true, opacity: 0.28, depthWrite: false })));
     };
     const iss = station(glow);
+    iss.g.scale.setScalar(2.6);
     scene.add(iss.g);
     sats.push({ g: iss.g, light: iss.light, r: 1.14, incl: 51.6 * (Math.PI / 180), node: 0.6, speed: 0.12, ph: 0, blinkPh: 0 });
     orbitLine(1.14, 51.6 * (Math.PI / 180), 0.6, "#93c5fd");
@@ -480,6 +494,7 @@ export default function EarthScene({ onLabels }: { onLabels?: (labels: SceneLabe
     ];
     for (const d of satDefs) {
       const s = smallSat(glow, d.c);
+      s.g.scale.setScalar(2.6);
       scene.add(s.g);
       sats.push({ g: s.g, light: s.light, r: d.r, incl: d.incl, node: d.node, speed: d.speed, ph: Math.random() * Math.PI * 2, blinkPh: Math.random() * 5 });
       orbitLine(d.r, d.incl, d.node, d.c);
@@ -493,6 +508,7 @@ export default function EarthScene({ onLabels }: { onLabels?: (labels: SceneLabe
       { r: 1.18, incl: 0.9, node: 2.6, speed: 0.11, c: "#67e8f9" },
     ].forEach((d) => {
       const s = smallSat(glow, d.c);
+      s.g.scale.setScalar(2.2);
       scene.add(s.g);
       sats.push({ g: s.g, light: s.light, r: d.r, incl: d.incl, node: d.node, speed: d.speed, ph: Math.random() * Math.PI * 2, blinkPh: Math.random() * 5 });
       orbitLine(d.r, d.incl, d.node, d.c);
@@ -641,7 +657,7 @@ export default function EarthScene({ onLabels }: { onLabels?: (labels: SceneLabe
     }
     const planetMeshes = PLANETS.map((pl) => {
       if (pl.name === "Earth") return { pl, mesh: null as THREE.Mesh | null };
-      const mesh = new THREE.Mesh(new THREE.SphereGeometry(pl.size, 48, 24), new THREE.MeshStandardMaterial({ map: planetTex(pl.colors, pl.name === "Jupiter"), roughness: 0.9 }));
+      const mesh = new THREE.Mesh(new THREE.SphereGeometry(pl.size, 32, 16), new THREE.MeshStandardMaterial({ map: planetTex(pl.colors, pl.name === "Jupiter"), roughness: 0.9 }));
       solar.add(mesh);
       return { pl, mesh };
     });
@@ -793,7 +809,8 @@ export default function EarthScene({ onLabels }: { onLabels?: (labels: SceneLabe
       moon.rotation.y = Math.atan2(-moonDir.x, -moonDir.z); // tidally locked: same face toward Earth
 
       // clouds drift
-      const co = (t * 0.0022) % 1;
+      const co = (t * 0.0045) % 1; // stronger wind: clouds visibly stream
+      earthMat.uniforms.uTime.value = t;
       earthMat.uniforms.cloudOffset.value = co;
       cloudMat.uniforms.cloudOffset.value = co;
 
@@ -843,7 +860,7 @@ export default function EarthScene({ onLabels }: { onLabels?: (labels: SceneLabe
         tmp2.set(Math.cos(a) * s.r, 0, Math.sin(a) * s.r).applyAxisAngle(new THREE.Vector3(1, 0, 0), s.incl).applyAxisAngle(new THREE.Vector3(0, 1, 0), s.node);
         s.g.position.copy(tmp2);
         s.g.lookAt(0, 0, 0);
-        s.light.material.opacity = (t + s.blinkPh) % 1.4 < 0.1 ? 1 : 0.15;
+        s.light.material.opacity = (t + s.blinkPh) % 1.4 < 0.1 ? 1 : 0.45; // always visible, strobes
       }
 
       // ships sail their lanes

@@ -306,3 +306,8 @@ html.lenis body {
 .bg-gradient-accent {
   background-image: linear-gradient(to right, var(--accent-gradient-from), var(--accent-gradient-to)) !important;
 }
+
+@keyframes ticker {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
