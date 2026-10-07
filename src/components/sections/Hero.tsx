@@ -8,7 +8,6 @@ import { formatTime, greetForHour, localHour, PHASE_META, phaseForHour, type Sky
 import resumeData from "@/data/resumeData.json";
 import { ShinyButton } from "@/components/ui/primitives";
 import SkyCanvas from "@/components/ui/SkyCanvas";
-import RocketLaunch from "@/components/ui/RocketLaunch";
 import dynamic from "next/dynamic";
 import { useWeather } from "@/components/weather/WeatherContext";
 
@@ -353,7 +352,6 @@ export default function Hero() {
         <Hero3D weather={weather} />
         <div className={`absolute inset-0 transition-colors duration-1000 ${phase === "day" ? "bg-[#06122a]/30" : phase === "sunrise" || phase === "sunset" ? "bg-black/15" : "bg-transparent"}`} />
         <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-b from-transparent to-black" />
-        <RocketLaunch />
       </motion.div>
     </section>
   );
