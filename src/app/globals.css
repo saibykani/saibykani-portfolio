@@ -311,3 +311,7 @@ html.lenis body {
   from { transform: translate3d(0, 0, 0); }
   to { transform: translate3d(-50%, 0, 0); }
 }
+
+/* rocket exhaust flicker */
+.rocket-flame { animation: rocket-flame 0.12s ease-in-out infinite alternate; }
+@keyframes rocket-flame { from { transform: scaleY(0.92) scaleX(0.96); } to { transform: scaleY(1.08) scaleX(1.03); } }

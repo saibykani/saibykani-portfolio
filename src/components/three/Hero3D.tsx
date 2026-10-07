@@ -3,7 +3,6 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
-import { buildRocketLaunch } from "@/components/three/rocket";
 import { onLightning, type Weather } from "@/components/weather/WeatherContext";
 import { localHour, phaseForHour } from "@/components/ui/timeOfDay";
 
@@ -354,9 +353,6 @@ export default function Hero3D({ weather }: { weather: Weather }) {
     scene.add(bolt);
 
     const glow = makeGlowTexture();
-    // rocket launch cycle on the right of the headline (centre-bottom on phones)
-    const launch = buildRocketLaunch(glow, window.innerWidth < 768);
-    scene.add(launch.root);
     const cloudTex = [makeCloudTexture(), makeCloudTexture(), makeCloudTexture()];
 
     // ---- stargazing sky ----
@@ -473,10 +469,6 @@ export default function Hero3D({ weather }: { weather: Weather }) {
       camera.updateProjectionMatrix();
       const sc = dpr * Math.min(1.2, h / 900);
       starMat.uniforms.uScale.value = sc;
-      const narrow = w < 700;
-      launch.root.position.set(narrow ? 7 : Math.min(24, 14.5 * camera.aspect), narrow ? -20.5 : -13, -16);
-      launch.root.scale.setScalar(narrow ? 0.6 : 1.05);
-      launch.setScale((h * dpr) / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2))));
     };
     resize();
     const ro = new ResizeObserver(resize);
@@ -505,7 +497,6 @@ export default function Hero3D({ weather }: { weather: Weather }) {
       }
       const dt = Math.min(clock.getDelta(), 0.05);
       const t = clock.elapsedTime;
-      launch.update(t, dt);
       const th = THEME[themeKey(weatherRef.current)];
 
       // cross-fade theme
